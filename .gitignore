@@ -1,0 +1,21 @@
+# Local planning/runtime state
+.omx/
+
+# External reference material; keep out of this repo by default.
+reference/
+
+# Dependencies and build outputs
+node_modules/
+dist/
+build/
+.vite/
+
+# Local environment files
+.env
+.env.*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
