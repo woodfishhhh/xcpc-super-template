@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, Download, FileDown, FileText, Printer } fr
 import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
 import TextInput from '@/components/ui/TextInput.vue'
+import type { DraftCheckReport } from '@/lib/draftChecks'
 import type { PdfLayoutReport } from '@/lib/pdfReport'
 import type { OutputMode, PrintConfig, PrintLayout, SortMode } from '@/types/template'
 
@@ -15,6 +16,7 @@ const props = withDefaults(
     isExportingPdf: boolean
     isInspectingPdf: boolean
     pdfReport: PdfLayoutReport | null
+    draftCheckReport: DraftCheckReport
     showPreview?: boolean
   }>(),
   {
@@ -36,6 +38,8 @@ const titleModel = computed({
 
 const canDownloadMarkdown = computed(() => props.config.output === 'markdown' || props.config.output === 'both')
 const canDownloadPdf = computed(() => props.config.output === 'pdf' || props.config.output === 'both')
+const canExport = computed(() => props.selectedCount > 0 && props.draftCheckReport.errorCount === 0)
+const draftCheckPreviewIssues = computed(() => props.draftCheckReport.issues.slice(0, 6))
 const tocPreviewEntries = computed(() => props.pdfReport?.tocEntries.slice(0, 8) ?? [])
 const errorCount = computed(() => props.pdfReport?.warnings.filter((warning) => warning.severity === 'error').length ?? 0)
 const warningCount = computed(() => props.pdfReport?.warnings.filter((warning) => warning.severity === 'warning').length ?? 0)
@@ -44,6 +48,12 @@ const reportStatusLabel = computed(() => {
   if (!props.pdfReport) return '未检查'
   if (errorCount.value > 0) return '需要处理'
   if (warningCount.value > 0) return '建议复核'
+  return '可导出'
+})
+const draftCheckStatusLabel = computed(() => {
+  if (props.selectedCount === 0) return '未选择'
+  if (props.draftCheckReport.errorCount > 0) return '需要处理'
+  if (props.draftCheckReport.warningCount > 0) return '建议复核'
   return '可导出'
 })
 </script>
@@ -130,16 +140,46 @@ const reportStatusLabel = computed(() => {
           <Button
             v-if="canDownloadMarkdown"
             variant="outline"
-            :disabled="props.selectedCount === 0"
+            :disabled="!canExport"
             @click="emit('downloadMarkdown')"
           >
             <FileText class="h-4 w-4" />
             Markdown
           </Button>
-          <Button v-if="canDownloadPdf" :disabled="props.selectedCount === 0 || props.isExportingPdf" @click="emit('exportPdf')">
+          <Button v-if="canDownloadPdf" :disabled="!canExport || props.isExportingPdf" @click="emit('exportPdf')">
             <FileDown class="h-4 w-4" />
             {{ props.isExportingPdf ? '生成中' : 'PDF' }}
           </Button>
+        </div>
+
+        <div class="draft-check-report">
+          <div class="pdf-report__head">
+            <div>
+              <span class="field-label">生成前检查</span>
+              <strong>{{ draftCheckStatusLabel }}</strong>
+            </div>
+          </div>
+
+          <div class="pdf-report__body">
+            <div class="pdf-report__stats">
+              <span>{{ props.selectedCount }} 条</span>
+              <span>{{ props.draftCheckReport.errorCount }} 错误</span>
+              <span>{{ props.draftCheckReport.warningCount }} 警告</span>
+              <span>{{ props.draftCheckReport.infoCount }} 提示</span>
+            </div>
+
+            <ul v-if="draftCheckPreviewIssues.length > 0" class="pdf-report__warnings">
+              <li
+                v-for="issue in draftCheckPreviewIssues"
+                :key="`${issue.code}-${issue.templateId ?? 'global'}-${issue.message}`"
+                :data-severity="issue.severity"
+              >
+                <AlertTriangle v-if="issue.severity !== 'info'" class="h-3.5 w-3.5" />
+                <CheckCircle2 v-else class="h-3.5 w-3.5" />
+                <span>{{ issue.message }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div class="pdf-report">
@@ -151,7 +191,7 @@ const reportStatusLabel = computed(() => {
             <Button
               variant="outline"
               size="sm"
-              :disabled="props.selectedCount === 0 || props.isInspectingPdf || props.isExportingPdf"
+              :disabled="!canExport || props.isInspectingPdf || props.isExportingPdf"
               @click="emit('inspectPdf')"
             >
               <Printer class="h-4 w-4" />
@@ -207,7 +247,7 @@ const reportStatusLabel = computed(() => {
         <Button
           v-if="props.config.output === 'both'"
           class="w-full"
-          :disabled="props.selectedCount === 0 || props.isExportingPdf"
+          :disabled="!canExport || props.isExportingPdf"
           @click="
             emit('downloadMarkdown');
             emit('exportPdf')

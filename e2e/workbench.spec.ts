@@ -60,6 +60,23 @@ test('draft bulk actions affect only checked rows', async ({ page }) => {
   await expect(kmpRow.locator('select[aria-label="介绍详细度"]')).toHaveValue('brief')
 })
 
+test('generate-before checks block invalid draft exports', async ({ page }) => {
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await createPersonalTemplate(page, '空代码检查样本', '个人模板/检查')
+  await page.getByRole('button', { name: '我的', exact: true }).click()
+  await templateCard(page, '空代码检查样本').getByTitle('加入打印稿').click()
+  await nav('生成').click()
+
+  const report = page.locator('.draft-check-report')
+  await expect(report).toContainText('需要处理')
+  await expect(report).toContainText('空代码检查样本')
+  await expect(report).toContainText('代码为空')
+  await expect(report).toContainText('缺少时间复杂度')
+  await expect(page.getByRole('button', { name: 'Markdown', exact: true })).toBeDisabled()
+  await expect(page.getByRole('button', { name: 'PDF', exact: true })).toBeDisabled()
+})
+
 test('pdf inspection reports paged toc before download', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 

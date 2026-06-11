@@ -640,7 +640,8 @@ button:disabled {
   color: #fffcf5;
 }
 
-.pdf-report {
+.pdf-report,
+.draft-check-report {
   border: 1px solid var(--ink);
   background: rgba(255, 252, 245, 0.78);
 }

@@ -12,6 +12,7 @@ import SplitPane from '@/components/ui/SplitPane.vue'
 import { usePersonalTemplates } from '@/composables/usePersonalTemplates'
 import { loadPublicTemplates } from '@/data/publicTemplates'
 import { downloadTextFile } from '@/lib/download'
+import { canExportDraft, inspectDraftComposition } from '@/lib/draftChecks'
 import { exportSingleTemplate } from '@/lib/importExport'
 import { generateMarkdown } from '@/lib/markdown'
 import { resolvePrintSections } from '@/lib/printDocument'
@@ -102,6 +103,7 @@ const draftItems = computed<DraftItem[]>(() =>
   }))
 )
 
+const draftCheckReport = computed(() => inspectDraftComposition(allTemplates.value, selections.value))
 const markdown = computed(() => generateMarkdown(config, allTemplates.value, selections.value))
 
 function addTemplate(templateId: string, detailLevel: DetailLevel = 'brief'): void {
@@ -247,10 +249,18 @@ function exportTemplateJson(templateId: string): void {
 }
 
 function downloadMarkdown(): void {
+  if (!canExportDraft(draftCheckReport.value)) {
+    status.value = '生成前检查未通过'
+    return
+  }
   downloadTextFile(`${sanitizeFilename(config.title)}.md`, markdown.value)
 }
 
 async function downloadPdf(): Promise<void> {
+  if (!canExportDraft(draftCheckReport.value)) {
+    status.value = '生成前检查未通过'
+    return
+  }
   isExportingPdf.value = true
   status.value = '正在分页并生成 PDF'
   try {
@@ -268,6 +278,10 @@ async function downloadPdf(): Promise<void> {
 }
 
 async function inspectPdf(): Promise<void> {
+  if (!canExportDraft(draftCheckReport.value)) {
+    status.value = '生成前检查未通过'
+    return
+  }
   isInspectingPdf.value = true
   status.value = '正在检查 PDF 分页'
   try {
@@ -462,6 +476,7 @@ watch(
               :is-exporting-pdf="isExportingPdf"
               :is-inspecting-pdf="isInspectingPdf"
               :pdf-report="pdfReport"
+              :draft-check-report="draftCheckReport"
               :show-preview="false"
               @update-config="updateConfig"
               @download-markdown="downloadMarkdown"

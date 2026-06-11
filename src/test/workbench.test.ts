@@ -7,6 +7,7 @@ import {
   importPersonalLibraryWithReport
 } from '@/lib/importExport'
 import { generateMarkdown } from '@/lib/markdown'
+import { inspectDraftComposition } from '@/lib/draftChecks'
 import { normalizeEditorDraftState } from '@/lib/editorDraftStore'
 import { stripCodeFence } from '@/lib/code'
 import {
@@ -299,5 +300,41 @@ describe('workbench document model', () => {
     expect(normalized?.drafts[0]?.templateId).toBe('graph.dijkstra')
     expect(normalized?.drafts[0]?.draft.title).toBe('Dijkstra 草稿版')
     expect(normalized?.drafts[0]?.draft.code).toBe('void draft();')
+  })
+
+  it('reports generate-before draft issues for empty code, duplicate templates, missing complexity, and long code', () => {
+    const report = inspectDraftComposition(
+      [
+        {
+          ...templates[0],
+          id: 'broken.empty-code',
+          title: '空代码模板',
+          timeComplexity: '未注明',
+          code: '```cpp\n```'
+        },
+        {
+          ...templates[1],
+          id: 'heavy.long-code',
+          title: '超长代码模板',
+          code: Array.from({ length: 220 }, (_, index) => `int line_${index};`).join('\n')
+        }
+      ],
+      [
+        { templateId: 'broken.empty-code', detailLevel: 'brief' },
+        { templateId: 'broken.empty-code', detailLevel: 'detail' },
+        { templateId: 'missing.template', detailLevel: 'brief' },
+        { templateId: 'heavy.long-code', detailLevel: 'none' }
+      ]
+    )
+
+    expect(report.errorCount).toBe(3)
+    expect(report.warningCount).toBe(2)
+    expect(report.issues.map((issue) => issue.code)).toEqual([
+      'duplicate-template',
+      'missing-template',
+      'empty-code',
+      'missing-complexity',
+      'long-code'
+    ])
   })
 })
