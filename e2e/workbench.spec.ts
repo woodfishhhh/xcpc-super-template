@@ -60,6 +60,27 @@ test('draft bulk actions affect only checked rows', async ({ page }) => {
   await expect(kmpRow.locator('select[aria-label="介绍详细度"]')).toHaveValue('brief')
 })
 
+test('draft batch move controls move checked rows as a group', async ({ page }) => {
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await selectFirstTemplates(page, 3)
+  await nav('打印稿').click()
+
+  const headingLocator = page.locator('article.draft-row h3')
+  const initialTitles = await headingLocator.allInnerTexts()
+  expect(initialTitles).toHaveLength(3)
+
+  await draftRow(page, initialTitles[0] ?? '').locator('input[type="checkbox"]').check()
+  await draftRow(page, initialTitles[2] ?? '').locator('input[type="checkbox"]').check()
+
+  await page.getByRole('button', { name: '置底', exact: true }).click()
+  await expect(headingLocator).toHaveText([initialTitles[1] ?? '', initialTitles[0] ?? '', initialTitles[2] ?? ''])
+  await expect(page.locator('select[aria-label="排序方式"]')).toHaveValue('manual')
+
+  await page.getByRole('button', { name: '置顶', exact: true }).click()
+  await expect(headingLocator).toHaveText([initialTitles[0] ?? '', initialTitles[2] ?? '', initialTitles[1] ?? ''])
+})
+
 test('chapter controls move whole draft sections', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 
@@ -353,6 +374,13 @@ function templateCard(page: Page, title: string) {
 
 function categoryFilterButton(page: Page, title: string) {
   return page.locator(`.category-filter__item[title="${title}"]`).first()
+}
+
+function draftRow(page: Page, title: string) {
+  return page
+    .locator('article.draft-row')
+    .filter({ has: page.locator('h3', { hasText: new RegExp(`^${escapeRegExp(title)}$`) }) })
+    .first()
 }
 
 async function selectFirstTemplates(page: Page, count: number): Promise<void> {

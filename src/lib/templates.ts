@@ -63,6 +63,20 @@ export function moveSelection(
   return next
 }
 
+export function moveCheckedSelections(
+  selections: PrintSelection[],
+  checkedIds: ReadonlySet<string>,
+  direction: Extract<MoveDirection, 'top' | 'bottom'>
+): PrintSelection[] {
+  if (checkedIds.size === 0) return [...selections]
+
+  const moving = selections.filter((selection) => checkedIds.has(selection.templateId))
+  if (moving.length === 0) return [...selections]
+
+  const remaining = selections.filter((selection) => !checkedIds.has(selection.templateId))
+  return direction === 'top' ? [...moving, ...remaining] : [...remaining, ...moving]
+}
+
 export function buildSelectionChapters(
   templates: TemplateEntry[],
   selections: PrintSelection[]

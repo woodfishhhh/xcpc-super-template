@@ -14,6 +14,7 @@ import {
   buildTemplateCategoryOptions,
   cloneTemplateAsPersonal,
   filterTemplatesForLibrary,
+  moveCheckedSelections,
   moveSelectionChapter,
   mergeTemplateOverrides,
   moveSelection,
@@ -90,6 +91,29 @@ describe('workbench document model', () => {
       'c',
       'b'
     ])
+  })
+
+  it('moves checked entries as a stable group for large draft batch edits', () => {
+    const selections: PrintSelection[] = [
+      { templateId: 'a', detailLevel: 'brief' },
+      { templateId: 'b', detailLevel: 'detail' },
+      { templateId: 'c', detailLevel: 'none' },
+      { templateId: 'd', detailLevel: 'brief' }
+    ]
+
+    expect(moveCheckedSelections(selections, new Set(['b', 'd']), 'top').map((item) => item.templateId)).toEqual([
+      'b',
+      'd',
+      'a',
+      'c'
+    ])
+    expect(moveCheckedSelections(selections, new Set(['b', 'd']), 'bottom').map((item) => item.templateId)).toEqual([
+      'a',
+      'c',
+      'b',
+      'd'
+    ])
+    expect(moveCheckedSelections(selections, new Set<string>(), 'top')).toEqual(selections)
   })
 
   it('moves whole draft chapters while preserving item order inside each chapter', () => {

@@ -21,6 +21,7 @@ import {
   cloneTemplateAsPersonal,
   hasDefaultTemplate,
   mergeTemplateOverrides,
+  moveCheckedSelections,
   moveSelection,
   moveSelectionChapter,
   sortTemplates
@@ -135,6 +136,13 @@ function moveDraft(templateId: string, direction: MoveDirection): void {
 
 function moveDraftChapter(chapterKey: string, direction: MoveDirection): void {
   const next = moveSelectionChapter(allTemplates.value, selections.value, chapterKey, direction)
+  if (hasSameSelectionOrder(selections.value, next)) return
+  config.sortMode = 'manual'
+  selections.value = next
+}
+
+function moveCheckedDrafts(direction: Extract<MoveDirection, 'top' | 'bottom'>): void {
+  const next = moveCheckedSelections(selections.value, checkedDraftIds.value, direction)
   if (hasSameSelectionOrder(selections.value, next)) return
   config.sortMode = 'manual'
   selections.value = next
@@ -464,6 +472,7 @@ watch(
           @reorder="reorderDraft"
           @move="moveDraft"
           @move-chapter="moveDraftChapter"
+          @move-checked="moveCheckedDrafts"
           @remove="removeTemplate"
           @detail-change="changeDetail"
           @toggle-check="toggleDraftCheck"

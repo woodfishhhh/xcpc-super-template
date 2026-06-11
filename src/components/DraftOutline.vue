@@ -6,6 +6,8 @@ import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
 import type { DetailLevel, MoveDirection, PrintSelection, TemplateEntry } from '@/types/template'
 
+type CheckedMoveDirection = Extract<MoveDirection, 'top' | 'bottom'>
+
 export interface DraftItem {
   selection: PrintSelection
   template: TemplateEntry
@@ -21,6 +23,7 @@ const emit = defineEmits<{
   reorder: [items: PrintSelection[]]
   move: [templateId: string, direction: MoveDirection]
   moveChapter: [chapterKey: string, direction: MoveDirection]
+  moveChecked: [direction: CheckedMoveDirection]
   remove: [templateId: string]
   detailChange: [templateId: string, detailLevel: DetailLevel]
   toggleCheck: [templateId: string]
@@ -109,6 +112,12 @@ const chapters = computed(() => {
         <div class="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" :disabled="checkedCount === 0" @click="emit('removeChecked')">
             删除
+          </Button>
+          <Button variant="outline" size="sm" :disabled="checkedCount === 0" @click="emit('moveChecked', 'top')">
+            置顶
+          </Button>
+          <Button variant="outline" size="sm" :disabled="checkedCount === 0" @click="emit('moveChecked', 'bottom')">
+            置底
           </Button>
           <Button variant="outline" size="sm" :disabled="checkedCount === 0" @click="emit('bulkDetail', 'brief')">
             简略
