@@ -12,6 +12,7 @@ build/
 .vite/
 test-results/
 playwright-report/
+output/
 
 # Local environment files
 .env

@@ -35,8 +35,13 @@ npm run validate:templates
 npm test
 npm run build
 npm run test:e2e
+npm run qa:pdf
 npm audit --audit-level=high
 ```
+
+`npm run qa:pdf` writes paginated visual QA samples to `output/pdf-qa/`, including
+compact/book PNG page screenshots and a `report.json` with TOC page numbers and
+layout warnings.
 
 ## Project Docs
 
