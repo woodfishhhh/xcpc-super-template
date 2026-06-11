@@ -49,6 +49,7 @@ const requiredPackageScripts = [
   'build',
   'test:e2e',
   'qa:pdf',
+  'verify:live',
   'release:preflight',
   'release:preflight:final'
 ]
@@ -117,6 +118,7 @@ export function runReleasePreflight(options: ReleasePreflightOptions = {}): Rele
     'PDF Export Contract',
     'Release Freeze Checklist',
     'npm run qa:pdf',
+    'npm run verify:live',
     '#9'
   ]) {
     add(releaseContracts.includes(needle) ? 'pass' : 'fail', `release contracts mention ${needle}`)

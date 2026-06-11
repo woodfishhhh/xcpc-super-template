@@ -29,6 +29,7 @@ describe('v1.0 release contracts', () => {
     expect(contracts).toContain('tocDepth')
     expect(contracts).toContain('detailLevel')
     expect(contracts).toContain('npm run qa:pdf')
+    expect(contracts).toContain('npm run verify:live')
   })
 
   it('keeps a changelog entry ready for the first stable release', () => {
@@ -46,5 +47,18 @@ describe('v1.0 release contracts', () => {
     expect(workflow).toContain('npm run release:preflight')
     expect(workflow).toContain('npm run qa:pdf')
     expect(contracts).toContain('GitHub CI runs both `npm run release:preflight` and `npm run qa:pdf`')
+  })
+
+  it('keeps live deployed PWA verification available before release', () => {
+    const packageJson = JSON.parse(readWorkspaceFile('package.json')) as {
+      scripts?: Record<string, string>
+    }
+    const workflow = readWorkspaceFile('.github/workflows/live-smoke.yml')
+    const releaseNotes = readWorkspaceFile('docs/RELEASE_NOTES_DRAFT.md')
+
+    expect(packageJson.scripts?.['verify:live']).toBe('tsx scripts/verifyLivePwa.ts')
+    expect(workflow).toContain('workflow_dispatch')
+    expect(workflow).toContain('npm run verify:live')
+    expect(releaseNotes).toContain('npm run verify:live')
   })
 })

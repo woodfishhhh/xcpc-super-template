@@ -12,6 +12,7 @@ describe('release preflight', () => {
     expect(result.checks).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ status: 'pass', message: 'docs/RELEASE_NOTES_DRAFT.md exists' }),
+        expect.objectContaining({ status: 'pass', message: 'package script verify:live is defined' }),
         expect.objectContaining({ status: 'pass', message: 'package script release:preflight is defined' }),
         expect.objectContaining({ status: 'warn', message: expect.stringContaining('#9 beta feedback') })
       ])

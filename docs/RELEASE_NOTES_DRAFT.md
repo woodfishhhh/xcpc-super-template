@@ -43,6 +43,7 @@ npm test
 npm run build
 npm run test:e2e
 npm run qa:pdf
+npm run verify:live
 npm audit --audit-level=high
 npm run release:preflight:final -- --confirm-beta-triaged --confirm-ci-green --confirm-pages-live
 ```

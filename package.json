@@ -10,6 +10,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "validate:templates": "tsx scripts/validateTemplates.ts",
     "qa:pdf": "tsx scripts/renderPdfQaSamples.ts",
+    "verify:live": "tsx scripts/verifyLivePwa.ts",
     "release:preflight": "tsx scripts/releasePreflight.ts",
     "release:preflight:final": "tsx scripts/releasePreflight.ts --final",
     "test": "vitest run",
