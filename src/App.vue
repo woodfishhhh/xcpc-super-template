@@ -22,6 +22,7 @@ import {
   hasDefaultTemplate,
   mergeTemplateOverrides,
   moveSelection,
+  moveSelectionChapter,
   sortTemplates
 } from '@/lib/templates'
 import { sanitizeFilename } from '@/lib/utils'
@@ -127,6 +128,13 @@ function reorderDraft(next: PrintSelection[]): void {
 
 function moveDraft(templateId: string, direction: MoveDirection): void {
   const next = moveSelection(selections.value, templateId, direction)
+  if (hasSameSelectionOrder(selections.value, next)) return
+  config.sortMode = 'manual'
+  selections.value = next
+}
+
+function moveDraftChapter(chapterKey: string, direction: MoveDirection): void {
+  const next = moveSelectionChapter(allTemplates.value, selections.value, chapterKey, direction)
   if (hasSameSelectionOrder(selections.value, next)) return
   config.sortMode = 'manual'
   selections.value = next
@@ -455,6 +463,7 @@ watch(
           :density="draftDensity"
           @reorder="reorderDraft"
           @move="moveDraft"
+          @move-chapter="moveDraftChapter"
           @remove="removeTemplate"
           @detail-change="changeDetail"
           @toggle-check="toggleDraftCheck"

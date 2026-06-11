@@ -60,6 +60,19 @@ test('draft bulk actions affect only checked rows', async ({ page }) => {
   await expect(kmpRow.locator('select[aria-label="介绍详细度"]')).toHaveValue('brief')
 })
 
+test('chapter controls move whole draft sections', async ({ page }) => {
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await templateCard(page, 'Dijkstra').getByTitle('加入打印稿').click()
+  await templateCard(page, 'KMP').getByTitle('加入打印稿').click()
+  await nav('打印稿').click()
+
+  await expect(page.locator('article.draft-row h3')).toHaveText(['Dijkstra', 'KMP'])
+  await page.getByTitle('图论 下移').click()
+  await expect(page.locator('article.draft-row h3')).toHaveText(['KMP', 'Dijkstra'])
+  await expect(page.locator('select[aria-label="排序方式"]')).toHaveValue('manual')
+})
+
 test('generate-before checks block invalid draft exports', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 

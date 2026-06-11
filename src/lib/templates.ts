@@ -18,6 +18,12 @@ export interface TemplateLibraryFilter {
   query?: string
 }
 
+export interface SelectionChapter {
+  key: string
+  title: string
+  selections: PrintSelection[]
+}
+
 export const ALL_CATEGORY_KEY = '__all__'
 
 const collator = new Intl.Collator('zh-CN', {
@@ -55,6 +61,53 @@ export function moveSelection(
   const targetIndex = getMoveIndex(index, next.length, direction)
   next.splice(targetIndex, 0, item)
   return next
+}
+
+export function buildSelectionChapters(
+  templates: TemplateEntry[],
+  selections: PrintSelection[]
+): SelectionChapter[] {
+  const byId = new Map(templates.map((template) => [template.id, template]))
+  const chapters = new Map<string, SelectionChapter>()
+
+  for (const selection of selections) {
+    const template = byId.get(selection.templateId)
+    const title = cleanCategory(template?.category ?? [])[0] ?? '未分类'
+    const key = title
+    const chapter = chapters.get(key)
+
+    if (chapter) {
+      chapter.selections.push(selection)
+      continue
+    }
+
+    chapters.set(key, {
+      key,
+      title,
+      selections: [selection]
+    })
+  }
+
+  return [...chapters.values()]
+}
+
+export function moveSelectionChapter(
+  templates: TemplateEntry[],
+  selections: PrintSelection[],
+  chapterKey: string,
+  direction: MoveDirection
+): PrintSelection[] {
+  const chapters = buildSelectionChapters(templates, selections)
+  const index = chapters.findIndex((chapter) => chapter.key === chapterKey)
+  if (index === -1) return [...selections]
+
+  const next = [...chapters]
+  const [chapter] = next.splice(index, 1)
+  if (!chapter) return [...selections]
+
+  const targetIndex = getMoveIndex(index, next.length, direction)
+  next.splice(targetIndex, 0, chapter)
+  return next.flatMap((item) => item.selections)
 }
 
 export function getSelectedTemplates(

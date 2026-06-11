@@ -20,6 +20,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   reorder: [items: PrintSelection[]]
   move: [templateId: string, direction: MoveDirection]
+  moveChapter: [chapterKey: string, direction: MoveDirection]
   remove: [templateId: string]
   detailChange: [templateId: string, detailLevel: DetailLevel]
   toggleCheck: [templateId: string]
@@ -50,6 +51,20 @@ const densityClass = computed(() => ({
   comfortable: 'draft-row-comfortable',
   large: 'draft-row-large'
 })[props.density])
+
+const chapters = computed(() => {
+  const groups = new Map<string, { key: string; title: string; count: number }>()
+  for (const item of props.items) {
+    const title = item.template.category[0]?.trim() || '未分类'
+    const group = groups.get(title)
+    if (group) {
+      group.count += 1
+      continue
+    }
+    groups.set(title, { key: title, title, count: 1 })
+  }
+  return [...groups.values()]
+})
 </script>
 
 <template>
@@ -105,6 +120,33 @@ const densityClass = computed(() => ({
             无介绍
           </Button>
         </div>
+      </div>
+
+      <div v-if="chapters.length > 1" class="mt-4 grid gap-2" aria-label="章节顺序">
+        <article
+          v-for="(chapter, index) in chapters"
+          :key="chapter.key"
+          class="flex flex-wrap items-center justify-between gap-2 border border-primary bg-background px-3 py-2"
+        >
+          <div class="min-w-0">
+            <h3 class="truncate text-sm font-semibold">{{ chapter.title }}</h3>
+            <p class="text-[11px] text-muted-foreground">{{ chapter.count }} 条</p>
+          </div>
+          <div class="grid grid-cols-4 gap-1">
+            <Button variant="ghost" size="icon" :title="`${chapter.title} 置顶`" :disabled="index === 0" @click="emit('moveChapter', chapter.key, 'top')">
+              <ArrowUpToLine class="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" :title="`${chapter.title} 上移`" :disabled="index === 0" @click="emit('moveChapter', chapter.key, 'up')">
+              <ArrowUp class="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" :title="`${chapter.title} 下移`" :disabled="index === chapters.length - 1" @click="emit('moveChapter', chapter.key, 'down')">
+              <ArrowDown class="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" :title="`${chapter.title} 置底`" :disabled="index === chapters.length - 1" @click="emit('moveChapter', chapter.key, 'bottom')">
+              <ArrowDownToLine class="h-4 w-4" />
+            </Button>
+          </div>
+        </article>
       </div>
     </div>
 

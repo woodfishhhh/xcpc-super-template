@@ -14,6 +14,7 @@ import {
   buildTemplateCategoryOptions,
   cloneTemplateAsPersonal,
   filterTemplatesForLibrary,
+  moveSelectionChapter,
   mergeTemplateOverrides,
   moveSelection,
   sortTemplates
@@ -89,6 +90,39 @@ describe('workbench document model', () => {
       'c',
       'b'
     ])
+  })
+
+  it('moves whole draft chapters while preserving item order inside each chapter', () => {
+    const chapterTemplates: TemplateEntry[] = [
+      templates[0],
+      templates[1],
+      {
+        ...templates[0],
+        id: 'string.kmp',
+        title: 'KMP',
+        category: ['字符串', '字符串匹配']
+      },
+      {
+        ...templates[0],
+        id: 'math.comb',
+        title: '组合数',
+        category: ['数学与数论', '组合数']
+      }
+    ]
+    const selections: PrintSelection[] = [
+      { templateId: 'graph.dijkstra', detailLevel: 'brief' },
+      { templateId: 'string.kmp', detailLevel: 'brief' },
+      { templateId: 'graph.bipartite', detailLevel: 'detail' },
+      { templateId: 'math.comb', detailLevel: 'none' }
+    ]
+
+    expect(
+      moveSelectionChapter(chapterTemplates, selections, '图论', 'down').map((item) => item.templateId)
+    ).toEqual(['string.kmp', 'graph.dijkstra', 'graph.bipartite', 'math.comb'])
+
+    expect(
+      moveSelectionChapter(chapterTemplates, selections, '数学与数论', 'top').map((item) => item.templateId)
+    ).toEqual(['math.comb', 'graph.dijkstra', 'graph.bipartite', 'string.kmp'])
   })
 
   it('generates markdown with title, toc, complexity, selected detail and code', () => {
