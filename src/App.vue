@@ -12,6 +12,7 @@ import SplitPane from '@/components/ui/SplitPane.vue'
 import { usePersonalTemplates } from '@/composables/usePersonalTemplates'
 import { loadPublicTemplates } from '@/data/publicTemplates'
 import { downloadTextFile } from '@/lib/download'
+import { exportSingleTemplate } from '@/lib/importExport'
 import { generateMarkdown } from '@/lib/markdown'
 import { resolvePrintSections } from '@/lib/printDocument'
 import {
@@ -219,10 +220,30 @@ async function importPersonalJson(json: string): Promise<void> {
     result.renamedCount > 0
       ? `已导入 ${result.importedCount} 个个人模板，${result.renamedCount} 个已自动改名`
       : `已导入 ${result.importedCount} 个个人模板`
+  if (result.templates.length === 1 && result.templates[0]) {
+    activeTemplateId.value = result.templates[0].id
+  }
 }
 
 function exportPersonalJson(): void {
   downloadTextFile('personal-template-library.json', personalLibrary.exportJson(), 'application/json')
+}
+
+function exportTemplateJson(templateId: string): void {
+  const template =
+    activeTemplate.value?.id === templateId
+      ? activeTemplate.value
+      : allTemplates.value.find((item) => item.id === templateId)
+  if (!template) {
+    status.value = '导出失败：找不到当前模板'
+    return
+  }
+
+  downloadTextFile(
+    `${sanitizeFilename(template.title)}.template.json`,
+    exportSingleTemplate(template),
+    'application/json'
+  )
 }
 
 function downloadMarkdown(): void {
@@ -406,6 +427,7 @@ watch(
               @revert="revertTemplate"
               @import-json="importPersonalJson"
               @export-json="exportPersonalJson"
+              @export-template-json="exportTemplateJson"
             />
           </template>
         </SplitPane>

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { PersonalLibraryExport, TemplateEntry } from '@/types/template'
+import type { PersonalLibraryExport, SingleTemplateExport, TemplateEntry } from '@/types/template'
 import { stripCodeFence } from '@/lib/code'
 import { createPersonalTemplateId } from '@/lib/templates'
 
@@ -40,14 +40,29 @@ const librarySchema = z.object({
   templates: z.array(templateSchema)
 })
 
+const singleTemplateSchema = z.object({
+  schemaVersion: z.literal(1).default(1),
+  exportedAt: z.string().optional(),
+  template: templateSchema
+})
+
+type ImportedTemplate = z.infer<typeof templateSchema>
+
 export function exportPersonalLibrary(templates: TemplateEntry[]): string {
   const payload: PersonalLibraryExport = {
     schemaVersion: 1,
     exportedAt: new Date().toISOString(),
-    templates: templates.map((template) => ({
-      ...template,
-      source: 'personal'
-    }))
+    templates: templates.map(serializePersonalTemplate)
+  }
+
+  return JSON.stringify(payload, null, 2)
+}
+
+export function exportSingleTemplate(template: TemplateEntry): string {
+  const payload: SingleTemplateExport = {
+    schemaVersion: 1,
+    exportedAt: new Date().toISOString(),
+    template: serializePersonalTemplate(template)
   }
 
   return JSON.stringify(payload, null, 2)
@@ -74,21 +89,52 @@ export function importPersonalLibraryWithReport(
     }
   }
 
-  const parsed = librarySchema.safeParse(payload)
-  if (!parsed.success) {
-    return {
-      ok: false,
-      templates: [],
-      importedCount: 0,
-      renamedCount: 0,
-      errors: ['个人模板 JSON 格式不正确']
+  const parsedLibrary = librarySchema.safeParse(payload)
+  let rawTemplates: ImportedTemplate[]
+
+  if (parsedLibrary.success) {
+    rawTemplates = parsedLibrary.data.templates
+  } else {
+    const parsedSingleTemplate = singleTemplateSchema.safeParse(payload)
+    if (!parsedSingleTemplate.success) {
+      return {
+        ok: false,
+        templates: [],
+        importedCount: 0,
+        renamedCount: 0,
+        errors: ['个人模板 JSON 格式不正确']
+      }
     }
+    rawTemplates = [parsedSingleTemplate.data.template]
   }
 
+  const { templates, renamedCount } = normalizeImportedTemplates(rawTemplates, existingIds)
+
+  return {
+    ok: true,
+    templates,
+    importedCount: templates.length,
+    renamedCount,
+    errors: []
+  }
+}
+
+function serializePersonalTemplate(template: TemplateEntry): TemplateEntry {
+  return {
+    ...template,
+    code: stripCodeFence(template.code),
+    source: 'personal'
+  }
+}
+
+function normalizeImportedTemplates(
+  rawTemplates: ImportedTemplate[],
+  existingIds: Set<string>
+): Pick<PersonalLibraryImportResult, 'templates' | 'renamedCount'> {
   const usedIds = new Set(existingIds)
   let renamedCount = 0
 
-  const templates = parsed.data.templates.map((template) => {
+  const templates = rawTemplates.map((template) => {
     const hasConflict = usedIds.has(template.id)
     const id = usedIds.has(template.id)
       ? createPersonalTemplateId(template.title, usedIds)
@@ -105,11 +151,5 @@ export function importPersonalLibraryWithReport(
     }
   })
 
-  return {
-    ok: true,
-    templates,
-    importedCount: templates.length,
-    renamedCount,
-    errors: []
-  }
+  return { templates, renamedCount }
 }

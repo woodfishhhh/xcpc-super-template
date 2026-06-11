@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { PrintConfig, PrintSelection, TemplateEntry } from '@/types/template'
 import {
   exportPersonalLibrary,
+  exportSingleTemplate,
   importPersonalLibrary,
   importPersonalLibraryWithReport
 } from '@/lib/importExport'
@@ -118,6 +119,21 @@ describe('workbench document model', () => {
     expect(imported[0]?.title).toBe('Dijkstra')
     expect(imported[0]?.source).toBe('personal')
     expect(imported[0]?.code).toBe('void dijkstra();')
+  })
+
+  it('round-trips a single template JSON and resolves id conflicts through the import entrypoint', () => {
+    const exported = exportSingleTemplate(templates[0])
+    const payload = JSON.parse(exported) as { template?: TemplateEntry; templates?: TemplateEntry[] }
+    const report = importPersonalLibraryWithReport(exported, new Set(['graph.dijkstra']))
+
+    expect(payload.template?.title).toBe('Dijkstra')
+    expect(payload.templates).toBeUndefined()
+    expect(report.ok).toBe(true)
+    expect(report.importedCount).toBe(1)
+    expect(report.renamedCount).toBe(1)
+    expect(report.templates[0]?.id).not.toBe('graph.dijkstra')
+    expect(report.templates[0]?.source).toBe('personal')
+    expect(report.templates[0]?.code).toBe('void dijkstra();')
   })
 
   it('rejects bad personal library JSON without producing imported templates', () => {

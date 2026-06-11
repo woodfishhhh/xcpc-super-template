@@ -28,6 +28,7 @@ const emit = defineEmits<{
   revert: [templateId: string]
   importJson: [json: string]
   exportJson: []
+  exportTemplateJson: [templateId: string]
 }>()
 
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
@@ -47,6 +48,7 @@ const form = reactive({
 const canDelete = computed(() => Boolean(form.id) && !props.isDefaultTemplate)
 const canRevert = computed(() => Boolean(form.id) && props.isDefaultTemplate && props.isOverride)
 const canCopy = computed(() => Boolean(form.id) && props.isDefaultTemplate)
+const canExportCurrent = computed(() => Boolean(form.id))
 const visibleCategorySuggestions = computed(() =>
   props.categorySuggestions.filter((path) => path !== form.categoryPath).slice(0, 8)
 )
@@ -223,14 +225,18 @@ async function readImportFile(event: Event): Promise<void> {
           </Button>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <Button variant="outline" @click="openImport">
             <FileInput class="h-4 w-4" />
             导入
           </Button>
+          <Button variant="outline" :disabled="!canExportCurrent" @click="form.id && emit('exportTemplateJson', form.id)">
+            <FileOutput class="h-4 w-4" />
+            导出当前
+          </Button>
           <Button variant="outline" :disabled="props.standalonePersonalCount === 0" @click="emit('exportJson')">
             <FileOutput class="h-4 w-4" />
-            导出
+            导出库
           </Button>
         </div>
       </div>

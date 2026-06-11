@@ -53,4 +53,10 @@ export interface PersonalLibraryExport {
   templates: TemplateEntry[]
 }
 
+export interface SingleTemplateExport {
+  schemaVersion: 1
+  exportedAt: string
+  template: TemplateEntry
+}
+
 export type MoveDirection = 'up' | 'down' | 'top' | 'bottom'

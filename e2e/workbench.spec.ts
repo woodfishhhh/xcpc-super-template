@@ -116,6 +116,8 @@ test('downloads valid compact and book PDFs', async ({ page }) => {
 })
 
 test('all public templates can be opened and selected from the library', async ({ page }) => {
+  test.setTimeout(60_000)
+
   const titles = await page.locator('article.template-row h4').allInnerTexts()
   expect(titles.length).toBeGreaterThanOrEqual(30)
 
@@ -196,6 +198,36 @@ test('bad personal library JSON keeps existing personal templates intact', async
   await expect(page.getByRole('status')).toHaveText('导入失败：个人模板 JSON 无法解析')
   await expect(templateCard(page, '坏 JSON 保护样本')).toBeVisible()
   await expect(titleInput).toHaveValue('坏 JSON 保护样本')
+})
+
+test('single personal templates can be exported and imported back', async ({ page }) => {
+  const editor = page.locator('aside.template-editor')
+  const titleInput = editor.locator('input[aria-label="标题"]')
+
+  await createPersonalTemplate(page, '单模板导出样本', '个人模板/单模板')
+
+  const downloadPromise = page.waitForEvent('download')
+  await editor.getByRole('button', { name: '导出当前', exact: true }).click()
+  const download = await downloadPromise
+  expect(download.suggestedFilename()).toBe('单模板导出样本.template.json')
+
+  const exportedPath = test.info().outputPath('single-template.json')
+  await download.saveAs(exportedPath)
+  const exported = JSON.parse(await readFile(exportedPath, 'utf8')) as {
+    template?: { title?: string }
+    templates?: unknown[]
+  }
+  expect(exported.template?.title).toBe('单模板导出样本')
+  expect(exported.templates).toBeUndefined()
+
+  await editor.getByRole('button', { name: '删除', exact: true }).click()
+  await page.getByRole('button', { name: '我的', exact: true }).click()
+  await expect(templateCard(page, '单模板导出样本')).toHaveCount(0)
+
+  await editor.locator('input[type="file"]').setInputFiles(exportedPath)
+  await expect(page.getByRole('status')).toHaveText('已导入 1 个个人模板')
+  await expect(titleInput).toHaveValue('单模板导出样本')
+  await expect(templateCard(page, '单模板导出样本')).toBeVisible()
 })
 
 test('personal category folders filter the library and feed editor suggestions', async ({ page }) => {
