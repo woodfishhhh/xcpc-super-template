@@ -17,6 +17,7 @@ const props = defineProps<{
   isDefaultTemplate: boolean
   isOverride: boolean
   standalonePersonalCount: number
+  categorySuggestions: string[]
 }>()
 
 const emit = defineEmits<{
@@ -44,6 +45,9 @@ const form = reactive({
 
 const canDelete = computed(() => Boolean(form.id) && !props.isDefaultTemplate)
 const canRevert = computed(() => Boolean(form.id) && props.isDefaultTemplate && props.isOverride)
+const visibleCategorySuggestions = computed(() =>
+  props.categorySuggestions.filter((path) => path !== form.categoryPath).slice(0, 8)
+)
 
 watch(
   () => props.template,
@@ -80,6 +84,10 @@ function resetForm(): void {
 function createNew(): void {
   resetForm()
   emit('new')
+}
+
+function applyCategorySuggestion(path: string): void {
+  form.categoryPath = path
 }
 
 function save(): void {
@@ -137,6 +145,17 @@ async function readImportFile(event: Event): Promise<void> {
 
         <FieldControl label="分类路径">
           <TextInput v-model="form.categoryPath" aria-label="分类路径" placeholder="图论/最短路" />
+          <div v-if="visibleCategorySuggestions.length > 0" class="category-suggestions">
+            <button
+              v-for="path in visibleCategorySuggestions"
+              :key="path"
+              type="button"
+              :title="`套用分类 ${path}`"
+              @click="applyCategorySuggestion(path)"
+            >
+              {{ path }}
+            </button>
+          </div>
         </FieldControl>
 
         <div class="editor-field-grid">

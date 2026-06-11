@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { computed, shallowRef } from 'vue'
+import { computed, shallowRef, watch } from 'vue'
 import { Edit3, Plus, Search, X } from '@lucide/vue'
 import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
 import TextInput from '@/components/ui/TextInput.vue'
+import {
+  ALL_CATEGORY_KEY,
+  buildTemplateCategoryOptions,
+  categoryKey,
+  filterTemplatesForLibrary,
+  type TemplateSourceFilter
+} from '@/lib/templates'
 import type { DetailLevel, TemplateEntry } from '@/types/template'
 
 const props = defineProps<{
@@ -21,31 +28,58 @@ const emit = defineEmits<{
 }>()
 
 const query = shallowRef('')
-const sourceFilter = shallowRef<'all' | 'public' | 'personal'>('all')
+const sourceFilter = shallowRef<TemplateSourceFilter>('all')
+const activeCategoryKey = shallowRef(ALL_CATEGORY_KEY)
 const detailDrafts = shallowRef<Record<string, DetailLevel>>({})
 
+const categoryOptions = computed(() => buildTemplateCategoryOptions(props.templates, sourceFilter.value))
+const activeCategoryPath = computed(
+  () => categoryOptions.value.find((option) => option.key === activeCategoryKey.value)?.path ?? []
+)
+const sourceQueryTemplates = computed(() =>
+  filterTemplatesForLibrary(props.templates, {
+    source: sourceFilter.value,
+    query: query.value
+  })
+)
+const visibleTemplates = computed(() =>
+  filterTemplatesForLibrary(sourceQueryTemplates.value, { categoryPath: activeCategoryPath.value })
+)
+
 const filteredGroups = computed(() => {
-  const normalized = query.value.trim().toLowerCase()
   const groups = new Map<string, TemplateEntry[]>()
 
-  for (const template of props.templates) {
-    if (sourceFilter.value !== 'all' && template.source !== sourceFilter.value) continue
-    const haystack = [
-      template.title,
-      template.category.join('/'),
-      template.tags.join(' '),
-      template.timeComplexity
-    ]
-      .join(' ')
-      .toLowerCase()
-
-    if (normalized && !haystack.includes(normalized)) continue
-    const category = template.source === 'personal' ? '我的' : (template.category[0] ?? '未分类')
+  for (const template of visibleTemplates.value) {
+    const category = groupLabel(template)
     groups.set(category, [...(groups.get(category) ?? []), template])
   }
 
   return [...groups].map(([category, templates]) => ({ category, templates }))
 })
+
+watch(categoryOptions, (options) => {
+  if (activeCategoryKey.value === ALL_CATEGORY_KEY) return
+  if (!options.some((option) => option.key === activeCategoryKey.value)) {
+    activeCategoryKey.value = ALL_CATEGORY_KEY
+  }
+})
+
+function setSourceFilter(source: TemplateSourceFilter): void {
+  sourceFilter.value = source
+  activeCategoryKey.value = ALL_CATEGORY_KEY
+}
+
+function setCategory(path: string[]): void {
+  activeCategoryKey.value = path.length > 0 ? categoryKey(path) : ALL_CATEGORY_KEY
+}
+
+function groupLabel(template: TemplateEntry): string {
+  if (template.source === 'personal') {
+    return template.category.length > 0 ? template.category.join(' / ') : '我的'
+  }
+
+  return template.category[0] ?? '未分类'
+}
 
 function isSelected(id: string): boolean {
   return props.selectedIds.has(id)
@@ -105,7 +139,7 @@ function editFromKeyboard(event: KeyboardEvent, templateId: string): void {
 
       <div class="relative mt-5">
         <Search class="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <TextInput v-model="query" aria-label="搜索模板" input-class="pl-9" placeholder="搜索标题、分类、复杂度" />
+        <TextInput v-model="query" aria-label="搜索模板" input-class="pl-9" placeholder="搜索标题、分类、标签、复杂度、代码" />
       </div>
 
       <div class="segmented mt-3 grid grid-cols-3 text-xs">
@@ -113,7 +147,7 @@ function editFromKeyboard(event: KeyboardEvent, templateId: string): void {
           class="px-2 py-2"
           :class="sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'"
           type="button"
-          @click="sourceFilter = 'all'"
+          @click="setSourceFilter('all')"
         >
           全部
         </button>
@@ -121,7 +155,7 @@ function editFromKeyboard(event: KeyboardEvent, templateId: string): void {
           class="px-2 py-2"
           :class="sourceFilter === 'public' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'"
           type="button"
-          @click="sourceFilter = 'public'"
+          @click="setSourceFilter('public')"
         >
           公共
         </button>
@@ -129,9 +163,34 @@ function editFromKeyboard(event: KeyboardEvent, templateId: string): void {
           class="px-2 py-2"
           :class="sourceFilter === 'personal' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'"
           type="button"
-          @click="sourceFilter = 'personal'"
+          @click="setSourceFilter('personal')"
         >
           我的
+        </button>
+      </div>
+
+      <div class="category-filter mt-3" aria-label="分类筛选">
+        <button
+          class="category-filter__item"
+          :class="{ active: activeCategoryKey === ALL_CATEGORY_KEY }"
+          type="button"
+          @click="setCategory([])"
+        >
+          <span>全部分类</span>
+          <strong>{{ sourceQueryTemplates.length }}</strong>
+        </button>
+        <button
+          v-for="option in categoryOptions"
+          :key="option.key"
+          class="category-filter__item"
+          :class="{ active: activeCategoryKey === option.key }"
+          :style="{ paddingLeft: `${0.65 + (option.depth - 1) * 0.75}rem` }"
+          type="button"
+          :title="option.label"
+          @click="setCategory(option.path)"
+        >
+          <span>{{ option.label }}</span>
+          <strong>{{ option.count }}</strong>
         </button>
       </div>
     </div>

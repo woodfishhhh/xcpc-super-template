@@ -7,7 +7,13 @@ import {
 } from '@/lib/importExport'
 import { generateMarkdown } from '@/lib/markdown'
 import { stripCodeFence } from '@/lib/code'
-import { mergeTemplateOverrides, moveSelection, sortTemplates } from '@/lib/templates'
+import {
+  buildTemplateCategoryOptions,
+  filterTemplatesForLibrary,
+  mergeTemplateOverrides,
+  moveSelection,
+  sortTemplates
+} from '@/lib/templates'
 import { normalizeWorkbenchState } from '@/lib/workbenchStore'
 
 const templates: TemplateEntry[] = [
@@ -146,6 +152,64 @@ describe('workbench document model', () => {
     expect(merged).toHaveLength(2)
     expect(merged.find((item) => item.id === 'graph.dijkstra')?.title).toBe('Dijkstra 队内版')
     expect(merged.find((item) => item.id === 'graph.dijkstra')?.source).toBe('personal')
+  })
+
+  it('builds folder-style category filters and filters by category prefix', () => {
+    const personalTemplates: TemplateEntry[] = [
+      {
+        ...templates[0],
+        id: 'personal.flow.dinic',
+        title: 'Dinic 队内版',
+        category: ['个人模板', '图论', '网络流'],
+        code: 'int dinic();',
+        source: 'personal'
+      },
+      {
+        ...templates[1],
+        id: 'personal.math.extgcd',
+        title: 'exgcd 队内版',
+        category: ['个人模板', '数学'],
+        code: 'long long exgcd();',
+        source: 'personal'
+      }
+    ]
+
+    const options = buildTemplateCategoryOptions(personalTemplates, 'personal')
+    expect(options.map((option) => `${option.label}:${option.count}`)).toEqual([
+      '个人模板:2',
+      '个人模板 / 图论:1',
+      '个人模板 / 图论 / 网络流:1',
+      '个人模板 / 数学:1'
+    ])
+
+    expect(
+      filterTemplatesForLibrary(personalTemplates, {
+        source: 'personal',
+        categoryPath: ['个人模板', '图论']
+      }).map((template) => template.title)
+    ).toEqual(['Dinic 队内版'])
+  })
+
+  it('searches title, category, tags, complexity, and code content', () => {
+    expect(filterTemplatesForLibrary(templates, { query: 'match' }).map((item) => item.id)).toEqual([
+      'graph.bipartite'
+    ])
+    expect(filterTemplatesForLibrary(templates, { query: 'priority_queue' })).toEqual([])
+    expect(
+      filterTemplatesForLibrary(
+        [
+          ...templates,
+          {
+            ...templates[0],
+            id: 'personal.heap-dijkstra',
+            title: '堆优化最短路',
+            code: 'priority_queue<pair<int, int>> pq;',
+            source: 'personal'
+          }
+        ],
+        { query: 'priority_queue' }
+      ).map((item) => item.id)
+    ).toEqual(['personal.heap-dijkstra'])
   })
 
   it('normalizes persisted workbench state before restoring it', () => {

@@ -1,6 +1,24 @@
 import type { MoveDirection, SortMode, TemplateEntry } from '@/types/template'
 import type { PrintSelection } from '@/types/template'
 
+export type TemplateSourceFilter = 'all' | 'public' | 'personal'
+
+export interface TemplateCategoryOption {
+  key: string
+  path: string[]
+  label: string
+  count: number
+  depth: number
+}
+
+export interface TemplateLibraryFilter {
+  source?: TemplateSourceFilter
+  categoryPath?: readonly string[]
+  query?: string
+}
+
+export const ALL_CATEGORY_KEY = '__all__'
+
 const collator = new Intl.Collator('zh-CN', {
   numeric: true,
   sensitivity: 'base'
@@ -65,6 +83,61 @@ export function hasDefaultTemplate(publicTemplates: TemplateEntry[], templateId:
   return publicTemplates.some((template) => template.id === templateId)
 }
 
+export function buildTemplateCategoryOptions(
+  templates: TemplateEntry[],
+  source: TemplateSourceFilter = 'all'
+): TemplateCategoryOption[] {
+  const byKey = new Map<string, TemplateCategoryOption>()
+
+  for (const template of templates) {
+    if (!matchesSource(template, source)) continue
+    const category = cleanCategory(template.category)
+
+    for (let depth = 1; depth <= category.length; depth += 1) {
+      const path = category.slice(0, depth)
+      const key = categoryKey(path)
+      const existing = byKey.get(key)
+
+      if (existing) {
+        existing.count += 1
+        continue
+      }
+
+      byKey.set(key, {
+        key,
+        path,
+        label: path.join(' / '),
+        count: 1,
+        depth
+      })
+    }
+  }
+
+  return [...byKey.values()]
+}
+
+export function filterTemplatesForLibrary(
+  templates: TemplateEntry[],
+  filter: TemplateLibraryFilter = {}
+): TemplateEntry[] {
+  const source = filter.source ?? 'all'
+  const categoryPath = cleanFilterCategory(filter.categoryPath)
+  const query = normalizeSearch(filter.query ?? '')
+
+  return templates.filter((template) => {
+    if (!matchesSource(template, source)) return false
+    if (categoryPath.length > 0 && !matchesCategoryPrefix(template, categoryPath)) return false
+    if (query && !matchesTemplateSearch(template, query)) return false
+
+    return true
+  })
+}
+
+export function categoryKey(path: readonly string[]): string {
+  const category = cleanFilterCategory(path)
+  return category.length > 0 ? category.join('/') : ALL_CATEGORY_KEY
+}
+
 export function createPersonalTemplateId(title: string, existingIds: Set<string>): string {
   const slug = title
     .trim()
@@ -106,6 +179,45 @@ function compareTitle(a: string, b: string): number {
   }
 
   return collator.compare(a, b)
+}
+
+function matchesSource(template: TemplateEntry, source: TemplateSourceFilter): boolean {
+  return source === 'all' || template.source === source
+}
+
+function matchesCategoryPrefix(template: TemplateEntry, categoryPath: readonly string[]): boolean {
+  const category = cleanCategory(template.category)
+  return categoryPath.every((part, index) => category[index] === part)
+}
+
+function matchesTemplateSearch(template: TemplateEntry, query: string): boolean {
+  const haystack = normalizeSearch(
+    [
+      template.title,
+      template.category.join('/'),
+      template.tags.join(' '),
+      template.timeComplexity,
+      template.spaceComplexity,
+      template.brief,
+      template.detail,
+      template.code
+    ].join(' ')
+  )
+
+  return haystack.includes(query)
+}
+
+function cleanCategory(category: readonly string[]): string[] {
+  const cleaned = category.map((part) => part.trim()).filter(Boolean)
+  return cleaned.length > 0 ? cleaned : ['未分类']
+}
+
+function cleanFilterCategory(category: readonly string[] = []): string[] {
+  return category.map((part) => part.trim()).filter(Boolean)
+}
+
+function normalizeSearch(value: string): string {
+  return value.trim().toLowerCase()
 }
 
 function cryptoRandomId(): string {

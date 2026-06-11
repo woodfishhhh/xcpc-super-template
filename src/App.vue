@@ -14,7 +14,13 @@ import { loadPublicTemplates } from '@/data/publicTemplates'
 import { downloadTextFile } from '@/lib/download'
 import { generateMarkdown } from '@/lib/markdown'
 import { resolvePrintSections } from '@/lib/printDocument'
-import { hasDefaultTemplate, mergeTemplateOverrides, moveSelection, sortTemplates } from '@/lib/templates'
+import {
+  buildTemplateCategoryOptions,
+  hasDefaultTemplate,
+  mergeTemplateOverrides,
+  moveSelection,
+  sortTemplates
+} from '@/lib/templates'
 import { sanitizeFilename } from '@/lib/utils'
 import { loadWorkbenchState, saveWorkbenchState, type DraftDensity } from '@/lib/workbenchStore'
 import type { PdfLayoutReport } from '@/lib/pdfReport'
@@ -79,6 +85,9 @@ const isActiveOverride = computed(() =>
 )
 const standalonePersonalTemplates = computed(() =>
   personalTemplates.value.filter((template) => !hasDefaultTemplate(publicTemplates, template.id))
+)
+const personalCategorySuggestions = computed(() =>
+  buildTemplateCategoryOptions(personalTemplates.value, 'personal').map((option) => option.label)
 )
 
 const draftItems = computed<DraftItem[]>(() =>
@@ -372,6 +381,7 @@ watch(
               :is-default-template="isActiveDefaultTemplate"
               :is-override="isActiveOverride"
               :standalone-personal-count="standalonePersonalTemplates.length"
+              :category-suggestions="personalCategorySuggestions"
               @new="createTemplate"
               @save="saveTemplate"
               @delete="deleteTemplate"

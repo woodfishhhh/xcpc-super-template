@@ -165,6 +165,35 @@ test('bad personal library JSON keeps existing personal templates intact', async
   await expect(titleInput).toHaveValue('坏 JSON 保护样本')
 })
 
+test('personal category folders filter the library and feed editor suggestions', async ({ page }) => {
+  const titleInput = page.locator('aside.template-editor input[aria-label="标题"]')
+  const categoryInput = page.locator('aside.template-editor input[aria-label="分类路径"]')
+
+  await createPersonalTemplate(page, '队内 Dinic', '个人模板/图论/网络流')
+
+  await page.getByRole('button', { name: '新建' }).click()
+  await page.getByTitle('套用分类 个人模板 / 图论 / 网络流').click()
+  await expect(categoryInput).toHaveValue('个人模板 / 图论 / 网络流')
+  await titleInput.fill('队内 ISAP')
+  await page.getByRole('button', { name: '保存' }).click()
+
+  await createPersonalTemplate(page, '队内 exgcd', '个人模板/数学')
+
+  await page.getByRole('button', { name: '我的', exact: true }).click()
+  await categoryFilterButton(page, '个人模板 / 图论').click()
+  await expect(templateCard(page, '队内 Dinic')).toBeVisible()
+  await expect(templateCard(page, '队内 ISAP')).toBeVisible()
+  await expect(templateCard(page, '队内 exgcd')).toHaveCount(0)
+
+  await categoryFilterButton(page, '个人模板 / 数学').click()
+  await expect(templateCard(page, '队内 exgcd')).toBeVisible()
+  await expect(templateCard(page, '队内 Dinic')).toHaveCount(0)
+
+  await page.getByRole('button', { name: '全部', exact: true }).click()
+  await page.locator('input[aria-label="搜索模板"]').fill('priority_queue')
+  await expect(templateCard(page, 'Dijkstra')).toBeVisible()
+})
+
 test('app reopens offline after the first successful load', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 
@@ -207,6 +236,10 @@ function templateCard(page: Page, title: string) {
     .first()
 }
 
+function categoryFilterButton(page: Page, title: string) {
+  return page.locator(`.category-filter__item[title="${title}"]`).first()
+}
+
 async function selectFirstTemplates(page: Page, count: number): Promise<void> {
   const titles = await page.locator('article.template-row h4').allInnerTexts()
   const sampleTitles = titles.slice(0, count)
@@ -234,6 +267,13 @@ async function assertPdfDownload(
 
 async function clickTemplateBody(page: Page, title: string): Promise<void> {
   await templateCard(page, title).locator('h4').click()
+}
+
+async function createPersonalTemplate(page: Page, title: string, categoryPath: string): Promise<void> {
+  await page.getByRole('button', { name: '新建' }).click()
+  await page.locator('aside.template-editor input[aria-label="标题"]').fill(title)
+  await page.locator('aside.template-editor input[aria-label="分类路径"]').fill(categoryPath)
+  await page.getByRole('button', { name: '保存' }).click()
 }
 
 async function waitForServiceWorkerControl(page: Page): Promise<void> {
