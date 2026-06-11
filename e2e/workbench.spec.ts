@@ -1,4 +1,5 @@
-import { expect, test, type Page } from '@playwright/test'
+import { readFile } from 'node:fs/promises'
+import { expect, test, type Download, type Page } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.context().setOffline(false)
@@ -75,6 +76,45 @@ test('pdf inspection reports paged toc before download', async ({ page }) => {
   await expect(report.locator('.pdf-report__toc')).toContainText('KMP')
 })
 
+test('large draft reports paged compact and book layouts without blocking errors', async ({ page }) => {
+  test.setTimeout(90_000)
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await selectFirstTemplates(page, 18)
+  await nav('生成').click()
+
+  for (const layout of ['compact', 'book'] as const) {
+    await page.locator('select[aria-label="版式"]').selectOption(layout)
+    await page.getByRole('button', { name: '检查', exact: true }).click()
+
+    const report = page.locator('.pdf-report')
+    await expect(report).toContainText(/可导出|建议复核/, { timeout: 45_000 })
+    await expect(report.locator('.pdf-report__stats')).toContainText('0 错误')
+    await expect(report.locator('.pdf-report__toc li')).toHaveCount(8)
+
+    const pageCountText = await report.locator('.pdf-report__stats span').first().innerText()
+    const pageCount = Number(pageCountText.match(/\d+/)?.[0] ?? 0)
+    expect(pageCount).toBeGreaterThan(2)
+  }
+})
+
+test('downloads valid compact and book PDFs', async ({ page }) => {
+  test.setTimeout(150_000)
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await selectFirstTemplates(page, 8)
+  await nav('生成').click()
+
+  for (const layout of ['compact', 'book'] as const) {
+    await page.locator('input[aria-label="打印稿标题"]').fill(`E2E ${layout} PDF`)
+    await page.locator('select[aria-label="版式"]').selectOption(layout)
+
+    const download = page.waitForEvent('download', { timeout: 90_000 })
+    await page.getByRole('button', { name: /^PDF$/ }).click()
+    await assertPdfDownload(await download, `E2E-${layout}-PDF.pdf`, test.info().outputPath(`${layout}.pdf`), 3)
+  }
+})
+
 test('all public templates can be opened and selected from the library', async ({ page }) => {
   const titles = await page.locator('article.template-row h4').allInnerTexts()
   expect(titles.length).toBeGreaterThanOrEqual(30)
@@ -143,6 +183,31 @@ function templateCard(page: Page, title: string) {
     .locator('article.template-row')
     .filter({ has: page.locator('h4', { hasText: new RegExp(`^${escapeRegExp(title)}$`) }) })
     .first()
+}
+
+async function selectFirstTemplates(page: Page, count: number): Promise<void> {
+  const titles = await page.locator('article.template-row h4').allInnerTexts()
+  const sampleTitles = titles.slice(0, count)
+  expect(sampleTitles.length).toBeGreaterThanOrEqual(count)
+
+  for (const title of sampleTitles) {
+    await templateCard(page, title).getByTitle('加入打印稿').click()
+  }
+}
+
+async function assertPdfDownload(
+  download: Download,
+  expectedFilename: string,
+  outputPath: string,
+  minPageCount: number
+): Promise<void> {
+  expect(download.suggestedFilename()).toBe(expectedFilename)
+  await download.saveAs(outputPath)
+  const content = await readFile(outputPath)
+  expect(content.byteLength).toBeGreaterThan(20_000)
+  expect(content.subarray(0, 5).toString('ascii')).toBe('%PDF-')
+  const pageCount = content.toString('latin1').match(/\/Type\s*\/Page\b/g)?.length ?? 0
+  expect(pageCount).toBeGreaterThanOrEqual(minPageCount)
 }
 
 async function clickTemplateBody(page: Page, title: string): Promise<void> {
