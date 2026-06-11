@@ -143,6 +143,39 @@ test('public template overrides can be saved and reverted', async ({ page }) => 
   await expect(page.getByRole('button', { name: '默认' })).toBeDisabled()
 })
 
+test('public templates can be copied into editable personal templates', async ({ page }) => {
+  const titleInput = page.locator('aside.template-editor input[aria-label="标题"]')
+  const categoryInput = page.locator('aside.template-editor input[aria-label="分类路径"]')
+
+  await clickTemplateBody(page, 'Dijkstra')
+  await expect(titleInput).toHaveValue('Dijkstra')
+
+  await page.getByRole('button', { name: '复制', exact: true }).click()
+  await expect(page.getByRole('status')).toHaveText('已复制为个人模板：Dijkstra 副本')
+  await expect(titleInput).toHaveValue('Dijkstra 副本')
+  await expect(categoryInput).toHaveValue('个人模板/图论/最短路')
+  await expect(page.getByRole('button', { name: '默认', exact: true })).toBeDisabled()
+
+  await titleInput.fill('Dijkstra 队伍副本')
+  await page.getByRole('button', { name: '保存', exact: true }).click()
+  await expect(page.getByRole('status')).toHaveText('已保存：Dijkstra 队伍副本')
+
+  await page.getByRole('button', { name: '我的', exact: true }).click()
+  await expect(templateCard(page, 'Dijkstra 队伍副本')).toBeVisible()
+
+  await page.getByRole('button', { name: '全部', exact: true }).click()
+  await clickTemplateBody(page, 'Dijkstra')
+  await expect(titleInput).toHaveValue('Dijkstra')
+
+  await page.getByRole('button', { name: '我的', exact: true }).click()
+  await clickTemplateBody(page, 'Dijkstra 队伍副本')
+  await page.locator('aside.template-editor').getByRole('button', { name: '删除', exact: true }).click()
+  await expect(templateCard(page, 'Dijkstra 队伍副本')).toHaveCount(0)
+
+  await page.getByRole('button', { name: '全部', exact: true }).click()
+  await expect(templateCard(page, 'Dijkstra')).toBeVisible()
+})
+
 test('bad personal library JSON keeps existing personal templates intact', async ({ page }) => {
   const titleInput = page.locator('aside.template-editor input[aria-label="标题"]')
 

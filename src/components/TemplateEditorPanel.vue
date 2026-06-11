@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, reactive, shallowRef, watch, useTemplateRef } from 'vue'
-import { FileInput, FileOutput, Plus, RotateCcw, Save, Trash2 } from '@lucide/vue'
+import { Copy, FileInput, FileOutput, Plus, RotateCcw, Save, Trash2 } from '@lucide/vue'
 import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
 import TextInput from '@/components/ui/TextInput.vue'
@@ -22,6 +22,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   new: []
+  copy: [templateId: string]
   save: [template: TemplateDraft]
   delete: [templateId: string]
   revert: [templateId: string]
@@ -45,6 +46,7 @@ const form = reactive({
 
 const canDelete = computed(() => Boolean(form.id) && !props.isDefaultTemplate)
 const canRevert = computed(() => Boolean(form.id) && props.isDefaultTemplate && props.isOverride)
+const canCopy = computed(() => Boolean(form.id) && props.isDefaultTemplate)
 const visibleCategorySuggestions = computed(() =>
   props.categorySuggestions.filter((path) => path !== form.categoryPath).slice(0, 8)
 )
@@ -204,9 +206,20 @@ async function readImportFile(event: Event): Promise<void> {
             <Save class="h-4 w-4" />
             保存
           </Button>
+          <Button variant="outline" :disabled="!canCopy" @click="form.id && emit('copy', form.id)">
+            <Copy class="h-4 w-4" />
+            复制
+          </Button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
           <Button variant="outline" :disabled="!canRevert" @click="form.id && emit('revert', form.id)">
             <RotateCcw class="h-4 w-4" />
             默认
+          </Button>
+          <Button variant="destructive" :disabled="!canDelete" @click="form.id && emit('delete', form.id)">
+            <Trash2 class="h-4 w-4" />
+            删除
           </Button>
         </div>
 
@@ -220,11 +233,6 @@ async function readImportFile(event: Event): Promise<void> {
             导出
           </Button>
         </div>
-
-        <Button variant="destructive" :disabled="!canDelete" @click="form.id && emit('delete', form.id)">
-          <Trash2 class="h-4 w-4" />
-          删除
-        </Button>
       </div>
     </div>
 

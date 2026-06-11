@@ -16,6 +16,7 @@ import { generateMarkdown } from '@/lib/markdown'
 import { resolvePrintSections } from '@/lib/printDocument'
 import {
   buildTemplateCategoryOptions,
+  cloneTemplateAsPersonal,
   hasDefaultTemplate,
   mergeTemplateOverrides,
   moveSelection,
@@ -85,6 +86,9 @@ const isActiveOverride = computed(() =>
 )
 const standalonePersonalTemplates = computed(() =>
   personalTemplates.value.filter((template) => !hasDefaultTemplate(publicTemplates, template.id))
+)
+const existingTemplateIds = computed(
+  () => new Set([...publicTemplates, ...personalTemplates.value].map((template) => template.id))
 )
 const personalCategorySuggestions = computed(() =>
   buildTemplateCategoryOptions(personalTemplates.value, 'personal').map((option) => option.label)
@@ -176,6 +180,19 @@ async function saveTemplate(template: TemplateDraft): Promise<void> {
   const saved = await personalLibrary.save(template)
   activeTemplateId.value = saved.id
   status.value = `已保存：${saved.title}`
+}
+
+async function copyTemplate(templateId: string): Promise<void> {
+  const source =
+    activeTemplate.value?.id === templateId
+      ? activeTemplate.value
+      : publicTemplates.find((template) => template.id === templateId)
+  if (!source) return
+
+  const copied = cloneTemplateAsPersonal(source, existingTemplateIds.value)
+  const saved = await personalLibrary.save(copied)
+  activeTemplateId.value = saved.id
+  status.value = `已复制为个人模板：${saved.title}`
 }
 
 async function deleteTemplate(templateId: string): Promise<void> {
@@ -383,6 +400,7 @@ watch(
               :standalone-personal-count="standalonePersonalTemplates.length"
               :category-suggestions="personalCategorySuggestions"
               @new="createTemplate"
+              @copy="copyTemplate"
               @save="saveTemplate"
               @delete="deleteTemplate"
               @revert="revertTemplate"

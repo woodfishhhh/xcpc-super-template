@@ -1,5 +1,6 @@
 import type { MoveDirection, SortMode, TemplateEntry } from '@/types/template'
 import type { PrintSelection } from '@/types/template'
+import { stripCodeFence } from '@/lib/code'
 
 export type TemplateSourceFilter = 'all' | 'public' | 'personal'
 
@@ -131,6 +132,22 @@ export function filterTemplatesForLibrary(
 
     return true
   })
+}
+
+export function cloneTemplateAsPersonal(
+  template: TemplateEntry,
+  existingIds: Set<string>
+): TemplateEntry {
+  const title = `${template.title} 副本`
+
+  return {
+    ...template,
+    id: createPersonalTemplateId(title, existingIds),
+    title,
+    category: ['个人模板', ...template.category],
+    code: stripCodeFence(template.code),
+    source: 'personal'
+  }
 }
 
 export function categoryKey(path: readonly string[]): string {

@@ -9,6 +9,7 @@ import { generateMarkdown } from '@/lib/markdown'
 import { stripCodeFence } from '@/lib/code'
 import {
   buildTemplateCategoryOptions,
+  cloneTemplateAsPersonal,
   filterTemplatesForLibrary,
   mergeTemplateOverrides,
   moveSelection,
@@ -152,6 +153,17 @@ describe('workbench document model', () => {
     expect(merged).toHaveLength(2)
     expect(merged.find((item) => item.id === 'graph.dijkstra')?.title).toBe('Dijkstra 队内版')
     expect(merged.find((item) => item.id === 'graph.dijkstra')?.source).toBe('personal')
+  })
+
+  it('copies a public template into a standalone personal template draft', () => {
+    const copy = cloneTemplateAsPersonal(templates[0], new Set(['graph.dijkstra']))
+
+    expect(copy.id).not.toBe('graph.dijkstra')
+    expect(copy.id).toMatch(/^personal\./)
+    expect(copy.title).toBe('Dijkstra 副本')
+    expect(copy.category).toEqual(['个人模板', '图论', '最短路'])
+    expect(copy.source).toBe('personal')
+    expect(copy.code).toBe('void dijkstra();')
   })
 
   it('builds folder-style category filters and filters by category prefix', () => {
