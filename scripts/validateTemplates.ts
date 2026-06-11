@@ -1,13 +1,16 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { validateTemplatePackages, type TemplatePackage } from '../src/lib/templateValidation'
+import { templateTopCategories } from '../src/lib/templateTaxonomy'
 
 const workspaceRoot = process.cwd()
 const templateRoot = path.join(workspaceRoot, '板子')
 
 async function main(): Promise<void> {
   const packages = await readTemplatePackages(templateRoot)
-  const result = validateTemplatePackages(packages)
+  const result = validateTemplatePackages(packages, {
+    requiredTopCategories: templateTopCategories
+  })
 
   if (!result.ok) {
     console.error(`Template validation failed with ${result.errors.length} issue(s):`)

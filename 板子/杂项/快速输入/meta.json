@@ -1,0 +1,17 @@
+{
+  "id": "misc.fast-io",
+  "title": "快速输入",
+  "category": ["杂项", "快速输入"],
+  "learningOrder": 910,
+  "tags": ["misc", "io", "fast-input"],
+  "timeComplexity": "O(total input size)",
+  "spaceComplexity": "O(1)",
+  "brief": "在大量整数输入时减少标准流开销。",
+  "detail": "普通题优先使用 ios::sync_with_stdio(false)。当输入量极大且标准流仍然吃紧时，可以切换 fread 版扫描器；注意它只处理整数和空白分隔。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

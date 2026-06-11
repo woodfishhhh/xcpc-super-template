@@ -1,0 +1,17 @@
+{
+  "id": "ds.sparse-table",
+  "title": "ST 表",
+  "category": ["数据结构", "ST表"],
+  "learningOrder": 160,
+  "tags": ["data-structure", "sparse-table", "rmq"],
+  "timeComplexity": "预处理 O(n log n)，查询 O(1)",
+  "spaceComplexity": "O(n log n)",
+  "brief": "静态区间幂等查询，例如区间最大值、最小值或 gcd。",
+  "detail": "ST 表适合不修改的数组。查询函数要求 merge 操作满足幂等性，例如 max/min/gcd；如果是区间和，不能用两个重叠块直接合并。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

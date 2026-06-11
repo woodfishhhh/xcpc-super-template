@@ -31,6 +31,22 @@
     "category": {
       "type": "array",
       "minItems": 1,
+      "prefixItems": [
+        {
+          "type": "string",
+          "enum": [
+            "基础算法",
+            "数据结构",
+            "图论",
+            "字符串",
+            "数学与数论",
+            "动态规划",
+            "几何",
+            "网络流",
+            "杂项"
+          ]
+        }
+      ],
       "items": {
         "type": "string",
         "minLength": 1

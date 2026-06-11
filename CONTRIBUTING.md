@@ -41,7 +41,7 @@ npx playwright install chromium
       code.md
 ```
 
-`meta.json` 必须符合 `板子/meta.schema.json`。其中 `category` 必须和 `板子/` 下的目录路径一致。
+`meta.json` 必须符合 `板子/meta.schema.json`。其中 `category` 必须和 `板子/` 下的目录路径一致，`learningOrder` 必须落在 [`板子/TAXONOMY.md`](板子/TAXONOMY.md) 定义的顶级分类范围内。
 
 示例：
 

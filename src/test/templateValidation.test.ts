@@ -61,4 +61,54 @@ describe('template package validation', () => {
       ])
     )
   })
+
+  it('reports unsupported top-level categories and learning order ranges', () => {
+    const result = validateTemplatePackages([
+      {
+        directory: '板子/不存在的分类/示例',
+        meta: {
+          ...baseMeta,
+          id: 'unknown.sample',
+          category: ['不存在的分类', '示例'],
+          learningOrder: 42
+        },
+        code: '```cpp\nvoid sample();\n```'
+      },
+      {
+        directory: '板子/图论/错误顺序',
+        meta: {
+          ...baseMeta,
+          id: 'graph.bad-order',
+          title: '错误顺序',
+          category: ['图论', '错误顺序'],
+          learningOrder: 610
+        },
+        code: '```cpp\nvoid graph();\n```'
+      }
+    ])
+
+    expect(result.ok).toBe(false)
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('unsupported top-level category'),
+        expect.stringContaining('learningOrder')
+      ])
+    )
+  })
+
+  it('can require top-level category coverage for the public catalog', () => {
+    const result = validateTemplatePackages(
+      [
+        {
+          directory: '板子/图论/最短路',
+          meta: baseMeta,
+          code: '```cpp\nvoid dijkstra();\n```'
+        }
+      ],
+      { requiredTopCategories: ['图论', '字符串'] }
+    )
+
+    expect(result.ok).toBe(false)
+    expect(result.errors).toEqual([expect.stringContaining('missing top-level category "字符串"')])
+  })
 })

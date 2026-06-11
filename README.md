@@ -44,6 +44,7 @@ npm audit --audit-level=high
 - Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - Public template schema: [`板子/meta.schema.json`](板子/meta.schema.json)
+- Public template taxonomy: [`板子/TAXONOMY.md`](板子/TAXONOMY.md)
 
 ## License
 

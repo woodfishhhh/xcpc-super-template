@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { getCategoryBand, isLearningOrderInBand, templateTopCategories } from '@/lib/templateTaxonomy'
 import type { TemplateMeta } from '@/types/template'
 
 export interface TemplatePackage {
@@ -10,6 +11,10 @@ export interface TemplatePackage {
 export interface TemplateValidationResult {
   ok: boolean
   errors: string[]
+}
+
+export interface TemplateValidationOptions {
+  requiredTopCategories?: readonly string[]
 }
 
 const sourceSchema = z.object({
@@ -33,9 +38,13 @@ export const publicTemplateMetaSchema = z.object({
   updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
 })
 
-export function validateTemplatePackages(packages: TemplatePackage[]): TemplateValidationResult {
+export function validateTemplatePackages(
+  packages: TemplatePackage[],
+  options: TemplateValidationOptions = {}
+): TemplateValidationResult {
   const errors: string[] = []
   const seenIds = new Map<string, string>()
+  const coveredTopCategories = new Set<string>()
 
   for (const item of packages) {
     const parsed = publicTemplateMetaSchema.safeParse(item.meta)
@@ -47,6 +56,8 @@ export function validateTemplatePackages(packages: TemplatePackage[]): TemplateV
     }
 
     const meta = parsed.data satisfies TemplateMeta
+    const topCategory = meta.category[0] ?? ''
+    coveredTopCategories.add(topCategory)
     const previousDirectory = seenIds.get(meta.id)
     if (previousDirectory) {
       errors.push(`${item.directory}: duplicate id "${meta.id}" also used by ${previousDirectory}`)
@@ -61,8 +72,26 @@ export function validateTemplatePackages(packages: TemplatePackage[]): TemplateV
       )
     }
 
+    const categoryBand = getCategoryBand(topCategory)
+    if (!categoryBand) {
+      errors.push(
+        `${item.directory}: unsupported top-level category "${topCategory}". Expected one of ${templateTopCategories.join(', ')}`
+      )
+    } else if (!isLearningOrderInBand(topCategory, meta.learningOrder)) {
+      const [min, max] = categoryBand.range
+      errors.push(
+        `${item.directory}: learningOrder ${meta.learningOrder} is outside ${topCategory} range ${min}-${max}`
+      )
+    }
+
     if (item.code.trim().length === 0) {
       errors.push(`${item.directory}: code.md is empty`)
+    }
+  }
+
+  for (const topCategory of options.requiredTopCategories ?? []) {
+    if (!coveredTopCategories.has(topCategory)) {
+      errors.push(`public catalog: missing top-level category "${topCategory}"`)
     }
   }
 
