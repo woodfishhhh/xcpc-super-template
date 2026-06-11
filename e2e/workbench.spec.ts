@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
+  await page.context().setOffline(false)
   await page.goto('/')
   await resetBrowserState(page)
   await page.goto('/')
@@ -58,6 +59,25 @@ test('draft bulk actions affect only checked rows', async ({ page }) => {
   await expect(kmpRow.locator('select[aria-label="介绍详细度"]')).toHaveValue('brief')
 })
 
+test('app reopens offline after the first successful load', async ({ page }) => {
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await waitForServiceWorkerControl(page)
+  await templateCard(page, 'Dijkstra').getByTitle('加入打印稿').click()
+  await nav('生成').click()
+  await expect(page.locator('textarea.markdown-preview')).toHaveValue(/Dijkstra/)
+
+  await page.context().setOffline(true)
+  try {
+    await page.reload({ waitUntil: 'domcontentloaded' })
+    await expect(page.locator('article.template-row').first()).toBeVisible()
+    await nav('生成').click()
+    await expect(page.locator('textarea.markdown-preview')).toHaveValue(/Dijkstra/)
+  } finally {
+    await page.context().setOffline(false)
+  }
+})
+
 test('mobile layout avoids horizontal overflow and keeps split handle touchable', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.reload()
@@ -83,6 +103,22 @@ function templateCard(page: Page, title: string) {
 
 async function clickTemplateBody(page: Page, title: string): Promise<void> {
   await templateCard(page, title).locator('h4').click()
+}
+
+async function waitForServiceWorkerControl(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    if (!('serviceWorker' in navigator)) {
+      throw new Error('service worker is not supported')
+    }
+
+    await navigator.serviceWorker.ready
+    if (!navigator.serviceWorker.controller) {
+      await new Promise<void>((resolve) => {
+        navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true })
+      })
+    }
+  })
+  await page.reload({ waitUntil: 'networkidle' })
 }
 
 async function resetBrowserState(page: Page): Promise<void> {
