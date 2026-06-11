@@ -171,6 +171,25 @@ button:disabled {
   line-height: 1.2;
 }
 
+.status-toast {
+  position: fixed;
+  top: 5.4rem;
+  right: 1.25rem;
+  z-index: 20;
+  max-width: min(27rem, calc(100vw - 2.5rem));
+  border: 1px solid var(--ink);
+  border-radius: 7px;
+  background: rgba(255, 252, 245, 0.94);
+  padding: 0.7rem 0.85rem;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 760;
+  line-height: 1.45;
+  box-shadow: 6px 6px 0 var(--ink);
+  backdrop-filter: blur(14px);
+  animation: soft-enter 320ms var(--motion-ease) both;
+}
+
 .page-tabs {
   display: inline-grid;
   grid-template-columns: repeat(3, auto);

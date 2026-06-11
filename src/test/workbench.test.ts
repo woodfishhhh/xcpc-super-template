@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import type { PrintConfig, PrintSelection, TemplateEntry } from '@/types/template'
-import { exportPersonalLibrary, importPersonalLibrary } from '@/lib/importExport'
+import {
+  exportPersonalLibrary,
+  importPersonalLibrary,
+  importPersonalLibraryWithReport
+} from '@/lib/importExport'
 import { generateMarkdown } from '@/lib/markdown'
 import { stripCodeFence } from '@/lib/code'
 import { mergeTemplateOverrides, moveSelection, sortTemplates } from '@/lib/templates'
@@ -96,13 +100,32 @@ describe('workbench document model', () => {
 
   it('round-trips personal library JSON and resolves id conflicts', () => {
     const exported = exportPersonalLibrary([templates[0]])
+    const report = importPersonalLibraryWithReport(exported, new Set(['graph.dijkstra']))
     const imported = importPersonalLibrary(exported, new Set(['graph.dijkstra']))
 
+    expect(report.ok).toBe(true)
+    expect(report.importedCount).toBe(1)
+    expect(report.renamedCount).toBe(1)
     expect(imported).toHaveLength(1)
     expect(imported[0]?.id).not.toBe('graph.dijkstra')
     expect(imported[0]?.title).toBe('Dijkstra')
     expect(imported[0]?.source).toBe('personal')
     expect(imported[0]?.code).toBe('void dijkstra();')
+  })
+
+  it('rejects bad personal library JSON without producing imported templates', () => {
+    const brokenSyntax = importPersonalLibraryWithReport('{ broken', new Set(['graph.dijkstra']))
+    const brokenShape = importPersonalLibraryWithReport('{"templates":[{"id":""}]}', new Set())
+
+    expect(brokenSyntax.ok).toBe(false)
+    expect(brokenSyntax.templates).toEqual([])
+    expect(brokenSyntax.importedCount).toBe(0)
+    expect(brokenSyntax.renamedCount).toBe(0)
+    expect(brokenSyntax.errors).toEqual(['个人模板 JSON 无法解析'])
+
+    expect(brokenShape.ok).toBe(false)
+    expect(brokenShape.templates).toEqual([])
+    expect(brokenShape.errors).toEqual(['个人模板 JSON 格式不正确'])
   })
 
   it('normalizes markdown fenced code for editor storage', () => {

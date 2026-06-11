@@ -3,6 +3,14 @@ import type { PersonalLibraryExport, TemplateEntry } from '@/types/template'
 import { stripCodeFence } from '@/lib/code'
 import { createPersonalTemplateId } from '@/lib/templates'
 
+export interface PersonalLibraryImportResult {
+  ok: boolean
+  templates: TemplateEntry[]
+  importedCount: number
+  renamedCount: number
+  errors: string[]
+}
+
 const templateSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
@@ -46,13 +54,46 @@ export function exportPersonalLibrary(templates: TemplateEntry[]): string {
 }
 
 export function importPersonalLibrary(json: string, existingIds: Set<string>): TemplateEntry[] {
-  const parsed = librarySchema.parse(JSON.parse(json))
-  const usedIds = new Set(existingIds)
+  return importPersonalLibraryWithReport(json, existingIds).templates
+}
 
-  return parsed.templates.map((template) => {
+export function importPersonalLibraryWithReport(
+  json: string,
+  existingIds: Set<string>
+): PersonalLibraryImportResult {
+  let payload: unknown
+  try {
+    payload = JSON.parse(json)
+  } catch {
+    return {
+      ok: false,
+      templates: [],
+      importedCount: 0,
+      renamedCount: 0,
+      errors: ['个人模板 JSON 无法解析']
+    }
+  }
+
+  const parsed = librarySchema.safeParse(payload)
+  if (!parsed.success) {
+    return {
+      ok: false,
+      templates: [],
+      importedCount: 0,
+      renamedCount: 0,
+      errors: ['个人模板 JSON 格式不正确']
+    }
+  }
+
+  const usedIds = new Set(existingIds)
+  let renamedCount = 0
+
+  const templates = parsed.data.templates.map((template) => {
+    const hasConflict = usedIds.has(template.id)
     const id = usedIds.has(template.id)
       ? createPersonalTemplateId(template.title, usedIds)
       : template.id
+    if (hasConflict) renamedCount += 1
     usedIds.add(id)
 
     return {
@@ -63,4 +104,12 @@ export function importPersonalLibrary(json: string, existingIds: Set<string>): T
       updatedAt: template.updatedAt ?? new Date().toISOString()
     }
   })
+
+  return {
+    ok: true,
+    templates,
+    importedCount: templates.length,
+    renamedCount,
+    errors: []
+  }
 }

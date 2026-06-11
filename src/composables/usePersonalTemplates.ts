@@ -1,5 +1,9 @@
 import { computed, onMounted, readonly, shallowRef } from 'vue'
-import { importPersonalLibrary, exportPersonalLibrary } from '@/lib/importExport'
+import {
+  exportPersonalLibrary,
+  importPersonalLibraryWithReport,
+  type PersonalLibraryImportResult
+} from '@/lib/importExport'
 import { stripCodeFence } from '@/lib/code'
 import {
   deletePersonalTemplate,
@@ -49,11 +53,17 @@ export function usePersonalTemplates(publicTemplates: TemplateEntry[]) {
     templates.value = templates.value.filter((item) => item.id !== id)
   }
 
-  async function importJson(json: string): Promise<number> {
-    const imported = importPersonalLibrary(json, existingIds.value)
-    await saveManyPersonalTemplates(imported)
-    templates.value = [...imported, ...templates.value]
-    return imported.length
+  async function importJson(json: string): Promise<PersonalLibraryImportResult> {
+    const result = importPersonalLibraryWithReport(json, existingIds.value)
+    if (!result.ok) {
+      error.value = result.errors[0] ?? '个人模板 JSON 无法解析'
+      return result
+    }
+
+    await saveManyPersonalTemplates(result.templates)
+    templates.value = [...result.templates, ...templates.value]
+    error.value = ''
+    return result
   }
 
   function exportJson(): string {

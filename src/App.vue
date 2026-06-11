@@ -36,7 +36,7 @@ const defaultConfig: PrintConfig = {
 const config = reactive<PrintConfig>({ ...defaultConfig })
 
 const selections = shallowRef<PrintSelection[]>([])
-const status = shallowRef('准备就绪')
+const status = shallowRef('')
 const isExportingPdf = shallowRef(false)
 const isInspectingPdf = shallowRef(false)
 const pdfReport = shallowRef<PdfLayoutReport | null>(null)
@@ -183,8 +183,16 @@ async function revertTemplate(templateId: string): Promise<void> {
 }
 
 async function importPersonalJson(json: string): Promise<void> {
-  const count = await personalLibrary.importJson(json)
-  status.value = `已导入 ${count} 个个人模板`
+  const result = await personalLibrary.importJson(json)
+  if (!result.ok) {
+    status.value = `导入失败：${result.errors[0] ?? 'JSON 无法解析'}`
+    return
+  }
+
+  status.value =
+    result.renamedCount > 0
+      ? `已导入 ${result.importedCount} 个个人模板，${result.renamedCount} 个已自动改名`
+      : `已导入 ${result.importedCount} 个个人模板`
 }
 
 function exportPersonalJson(): void {
@@ -330,6 +338,8 @@ watch(
         </div>
       </div>
     </header>
+
+    <p v-if="status" class="status-toast" role="status" aria-live="polite">{{ status }}</p>
 
     <Swiper
       class="work-swiper min-h-0 flex-1"

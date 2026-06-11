@@ -143,6 +143,28 @@ test('public template overrides can be saved and reverted', async ({ page }) => 
   await expect(page.getByRole('button', { name: '默认' })).toBeDisabled()
 })
 
+test('bad personal library JSON keeps existing personal templates intact', async ({ page }) => {
+  const titleInput = page.locator('aside.template-editor input[aria-label="标题"]')
+
+  await page.getByRole('button', { name: '新建' }).click()
+  await titleInput.fill('坏 JSON 保护样本')
+  await page.locator('aside.template-editor input[aria-label="分类路径"]').fill('个人模板/导入测试')
+  await page.getByRole('button', { name: '保存' }).click()
+
+  await page.getByRole('button', { name: '我的', exact: true }).click()
+  await expect(templateCard(page, '坏 JSON 保护样本')).toBeVisible()
+
+  await page.locator('aside.template-editor input[type="file"]').setInputFiles({
+    name: 'broken-personal-library.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from('{ broken')
+  })
+
+  await expect(page.getByRole('status')).toHaveText('导入失败：个人模板 JSON 无法解析')
+  await expect(templateCard(page, '坏 JSON 保护样本')).toBeVisible()
+  await expect(titleInput).toHaveValue('坏 JSON 保护样本')
+})
+
 test('app reopens offline after the first successful load', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 
