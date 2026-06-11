@@ -1,0 +1,17 @@
+{
+  "id": "graph.scc.tarjan",
+  "title": "Tarjan 强连通分量",
+  "category": ["图论", "强连通分量"],
+  "learningOrder": 265,
+  "tags": ["graph", "scc", "tarjan"],
+  "timeComplexity": "O(n + m)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "将有向图缩成强连通分量 DAG。",
+  "detail": "dfn 是访问时间，low 是能追溯到的最小 dfn。只有栈内点可以更新 low；当 dfn[u] == low[u] 时，u 是一个 SCC 的根。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

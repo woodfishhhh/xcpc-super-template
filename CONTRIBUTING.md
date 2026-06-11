@@ -79,7 +79,7 @@ npx playwright install chromium
 - `learningOrder` 越小越靠前，默认按学习顺序排序。
 - `brief` 适合打印在代码前的一句话。
 - `detail` 写使用条件、关键注意事项、常见坑。
-- `source` 必须记录来源和许可证。
+- `source` 必须记录来源和许可证；当前公共库只接受 `GPL-3.0-only`。
 - 不提交来源不明、许可证不兼容的代码。
 
 提交前运行：

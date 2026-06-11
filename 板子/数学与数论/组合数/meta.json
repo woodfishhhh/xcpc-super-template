@@ -1,0 +1,17 @@
+{
+  "id": "math.combination.factorial",
+  "title": "组合数预处理",
+  "category": ["数学与数论", "组合数"],
+  "learningOrder": 445,
+  "tags": ["math", "combination", "modular"],
+  "timeComplexity": "预处理 O(n)，查询 O(1)",
+  "spaceComplexity": "O(n)",
+  "brief": "预处理阶乘和逆元阶乘，快速计算 C(n, k)。",
+  "detail": "适用于模数为质数且 n 上界已知的组合数查询。若模数不是质数或 n 很大，需要 Lucas、扩展 Lucas 或其他方法。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

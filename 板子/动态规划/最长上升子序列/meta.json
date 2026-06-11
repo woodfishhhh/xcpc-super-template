@@ -1,0 +1,17 @@
+{
+  "id": "dp.lis",
+  "title": "最长上升子序列",
+  "category": ["动态规划", "最长上升子序列"],
+  "learningOrder": 520,
+  "tags": ["dp", "lis", "binary-search"],
+  "timeComplexity": "O(n log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "用贪心加二分求 LIS 长度。",
+  "detail": "tail[len] 表示长度为 len+1 的上升子序列的最小可能结尾。严格上升使用 lower_bound，非降子序列改用 upper_bound。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "graph.tree.lca-binary-lifting",
+  "title": "倍增 LCA",
+  "category": ["图论", "LCA"],
+  "learningOrder": 275,
+  "tags": ["graph", "tree", "lca", "binary-lifting"],
+  "timeComplexity": "预处理 O(n log n)，查询 O(log n)",
+  "spaceComplexity": "O(n log n)",
+  "brief": "在树上快速查询两个点的最近公共祖先。",
+  "detail": "先 DFS/BFS 得到深度和 2^k 祖先。查询时先把深度拉平，再从高位到低位同时跳；适合树上距离、路径信息合并等问题。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "basic.dfs",
+  "title": "深度优先搜索",
+  "category": ["基础算法", "深度优先搜索"],
+  "learningOrder": 45,
+  "tags": ["basic", "dfs", "backtracking"],
+  "timeComplexity": "O(number of states)",
+  "spaceComplexity": "O(depth)",
+  "brief": "按一条路径深入搜索，常用于连通块、回溯和树形遍历。",
+  "detail": "DFS 重点是状态定义和回溯恢复。递归深度很大时要考虑改成显式栈或调高栈空间；图上 DFS 必须明确访问标记的生命周期。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

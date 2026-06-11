@@ -101,6 +101,7 @@
         },
         "license": {
           "type": "string",
+          "enum": ["GPL-3.0-only"],
           "minLength": 1
         }
       }

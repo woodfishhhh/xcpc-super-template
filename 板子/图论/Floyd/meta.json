@@ -1,0 +1,17 @@
+{
+  "id": "graph.shortest-path.floyd",
+  "title": "Floyd 全源最短路",
+  "category": ["图论", "Floyd"],
+  "learningOrder": 250,
+  "tags": ["graph", "shortest-path", "floyd"],
+  "timeComplexity": "O(n^3)",
+  "spaceComplexity": "O(n^2)",
+  "brief": "求稠密小图的任意两点最短路。",
+  "detail": "Floyd 枚举中转点 k，并保证每轮只使用前 k 个点作为中转。适合 n 较小的图；可处理负边，但若 dist[i][i] < 0 则存在负环。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

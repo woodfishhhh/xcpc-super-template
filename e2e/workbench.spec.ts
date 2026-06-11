@@ -59,6 +59,34 @@ test('draft bulk actions affect only checked rows', async ({ page }) => {
   await expect(kmpRow.locator('select[aria-label="介绍详细度"]')).toHaveValue('brief')
 })
 
+test('all public templates can be opened and selected from the library', async ({ page }) => {
+  const titles = await page.locator('article.template-row h4').allInnerTexts()
+  expect(titles.length).toBeGreaterThanOrEqual(30)
+
+  for (const title of titles) {
+    const card = templateCard(page, title)
+    await card.locator('h4').click()
+    await expect(page.locator('aside.template-editor input[aria-label="标题"]')).toHaveValue(title)
+    await card.getByTitle('加入打印稿').click()
+    await expect(card.getByTitle('移出打印稿')).toBeVisible()
+    await card.getByTitle('移出打印稿').click()
+    await expect(card.getByTitle('加入打印稿')).toBeVisible()
+  }
+})
+
+test('public template overrides can be saved and reverted', async ({ page }) => {
+  await clickTemplateBody(page, 'Dijkstra')
+  const titleInput = page.locator('aside.template-editor input[aria-label="标题"]')
+  await titleInput.fill('Dijkstra 队内版')
+  await page.getByRole('button', { name: '保存' }).click()
+  await expect(titleInput).toHaveValue('Dijkstra 队内版')
+  await expect(page.getByRole('button', { name: '默认' })).toBeEnabled()
+
+  await page.getByRole('button', { name: '默认' }).click()
+  await expect(titleInput).toHaveValue('Dijkstra')
+  await expect(page.getByRole('button', { name: '默认' })).toBeDisabled()
+})
+
 test('app reopens offline after the first successful load', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 

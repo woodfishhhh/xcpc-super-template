@@ -1,0 +1,17 @@
+{
+  "id": "misc.coordinate-compression",
+  "title": "离散化",
+  "category": ["杂项", "离散化"],
+  "learningOrder": 920,
+  "tags": ["misc", "coordinate-compression"],
+  "timeComplexity": "O(n log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "把大值域映射到连续小整数下标。",
+  "detail": "离散化只保留相对大小和相等关系，不保留原始差值。若后续需要区间长度，应额外保存原坐标或相邻坐标差。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

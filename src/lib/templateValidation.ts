@@ -2,6 +2,8 @@ import { z } from 'zod'
 import { getCategoryBand, isLearningOrderInBand, templateTopCategories } from '@/lib/templateTaxonomy'
 import type { TemplateMeta } from '@/types/template'
 
+export const supportedTemplateLicenses = ['GPL-3.0-only'] as const
+
 export interface TemplatePackage {
   directory: string
   meta: unknown
@@ -84,8 +86,16 @@ export function validateTemplatePackages(
       )
     }
 
+    if (!isSupportedLicense(meta.source.license)) {
+      errors.push(
+        `${item.directory}: unsupported license "${meta.source.license}". Expected one of ${supportedTemplateLicenses.join(', ')}`
+      )
+    }
+
     if (item.code.trim().length === 0) {
       errors.push(`${item.directory}: code.md is empty`)
+    } else if (!hasMatchingCodeFence(item.code, meta.codeLanguage)) {
+      errors.push(`${item.directory}: code fence language does not match codeLanguage "${meta.codeLanguage}"`)
     }
   }
 
@@ -110,4 +120,13 @@ function getCategoryFromDirectory(directory: string): string[] {
 
 function hasSamePath(left: readonly string[], right: readonly string[]): boolean {
   return left.length === right.length && left.every((part, index) => part === right[index])
+}
+
+function isSupportedLicense(license: string): boolean {
+  return supportedTemplateLicenses.includes(license as (typeof supportedTemplateLicenses)[number])
+}
+
+function hasMatchingCodeFence(code: string, language: string): boolean {
+  const match = code.trimStart().match(/^```([^\s`]*)/)
+  return Boolean(match && match[1] === language)
 }

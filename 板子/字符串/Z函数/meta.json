@@ -1,0 +1,17 @@
+{
+  "id": "string.z-function",
+  "title": "Z 函数",
+  "category": ["字符串", "Z函数"],
+  "learningOrder": 355,
+  "tags": ["string", "z-function", "matching"],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(n)",
+  "brief": "z[i] 表示从 i 开始与整个串前缀的最长公共前缀长度。",
+  "detail": "Z 函数可做字符串匹配、周期判断和前缀匹配统计。匹配模式串 p 和文本 t 时，通常构造 p + '#' + t，检查对应位置 z 值是否至少为 |p|。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

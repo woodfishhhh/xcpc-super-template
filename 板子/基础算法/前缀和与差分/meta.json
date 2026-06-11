@@ -1,0 +1,17 @@
+{
+  "id": "basic.prefix-difference",
+  "title": "前缀和与差分",
+  "category": ["基础算法", "前缀和与差分"],
+  "learningOrder": 55,
+  "tags": ["basic", "prefix-sum", "difference"],
+  "timeComplexity": "O(n + q)",
+  "spaceComplexity": "O(n)",
+  "brief": "前缀和处理静态区间查询，差分处理批量区间加。",
+  "detail": "一维前缀和常用闭区间 [l, r] 写法，注意下标偏移。差分适合所有修改离线后统一还原；若需要在线区间修改和查询，应换成树状数组或线段树。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

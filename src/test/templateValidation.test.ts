@@ -111,4 +111,28 @@ describe('template package validation', () => {
     expect(result.ok).toBe(false)
     expect(result.errors).toEqual([expect.stringContaining('missing top-level category "字符串"')])
   })
+
+  it('reports unsupported licenses and mismatched code fence languages', () => {
+    const result = validateTemplatePackages([
+      {
+        directory: '板子/图论/最短路',
+        meta: {
+          ...baseMeta,
+          source: {
+            name: 'Unknown mirror',
+            license: 'Unknown'
+          }
+        },
+        code: '```python\nprint("wrong language")\n```'
+      }
+    ])
+
+    expect(result.ok).toBe(false)
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('unsupported license'),
+        expect.stringContaining('code fence language')
+      ])
+    )
+  })
 })
