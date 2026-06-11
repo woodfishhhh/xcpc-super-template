@@ -38,4 +38,13 @@ describe('v1.0 release contracts', () => {
     expect(changelog).toContain('v1.0')
     expect(changelog).toContain('docs/RELEASE_CONTRACTS.md')
   })
+
+  it('keeps release candidate gates wired into CI', () => {
+    const workflow = readWorkspaceFile('.github/workflows/ci.yml')
+    const contracts = readWorkspaceFile('docs/RELEASE_CONTRACTS.md')
+
+    expect(workflow).toContain('npm run release:preflight')
+    expect(workflow).toContain('npm run qa:pdf')
+    expect(contracts).toContain('GitHub CI runs both `npm run release:preflight` and `npm run qa:pdf`')
+  })
 })

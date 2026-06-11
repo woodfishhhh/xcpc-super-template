@@ -28,11 +28,17 @@ jobs:
       - name: Run unit tests
         run: npm test
 
+      - name: Run release candidate preflight
+        run: npm run release:preflight
+
       - name: Build app
         run: npm run build
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
+
+      - name: Run PDF QA
+        run: npm run qa:pdf
 
       - name: Run E2E tests
         run: npm run test:e2e
