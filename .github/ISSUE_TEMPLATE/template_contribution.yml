@@ -1,0 +1,31 @@
+name: Template contribution
+description: Propose a public ACM/XCPC template for the shared library.
+title: "[Template]: "
+labels: ["template"]
+body:
+  - type: input
+    id: category
+    attributes:
+      label: Category path
+      placeholder: "图论/最短路"
+    validations:
+      required: true
+  - type: input
+    id: complexity
+    attributes:
+      label: Complexity
+      placeholder: "time O(m log n), space O(n + m)"
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source and license
+      description: Include original source links and license information.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Mention edge cases, constraints, or known variants.

@@ -31,10 +31,19 @@ npm run preview -- --host 127.0.0.1 --port 4173
 Verification:
 
 ```bash
+npm run validate:templates
 npm test
 npm run build
+npm run test:e2e
 npm audit --audit-level=high
 ```
+
+## Project Docs
+
+- Product requirements: [`docs/PRD.md`](docs/PRD.md)
+- Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
+- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Public template schema: [`板子/meta.schema.json`](板子/meta.schema.json)
 
 ## License
 

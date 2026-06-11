@@ -1,0 +1,30 @@
+name: Bug report
+description: Report a broken workflow, export issue, or UI problem.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Describe the exact clicks or imported files needed to reproduce it.
+      placeholder: "1. Open template library\n2. Add Dijkstra\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: "Chrome 126 on Windows 11"
