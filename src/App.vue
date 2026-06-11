@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, shallowRef, watch } from 'vue'
-import { ChevronLeft, ChevronRight } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, MessageSquare } from '@lucide/vue'
 import type { Swiper as SwiperInstance } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import DraftOutline, { type DraftItem } from '@/components/DraftOutline.vue'
@@ -14,6 +14,7 @@ import { loadPublicTemplates } from '@/data/publicTemplates'
 import { downloadTextFile } from '@/lib/download'
 import { canExportDraft, inspectDraftComposition } from '@/lib/draftChecks'
 import { exportSingleTemplate } from '@/lib/importExport'
+import { feedbackIssueUrl } from '@/lib/links'
 import { generateMarkdown } from '@/lib/markdown'
 import { resolvePrintSections } from '@/lib/printDocument'
 import {
@@ -423,6 +424,15 @@ watch(
           <h1 class="brand-mark truncate">XCPC Super Template</h1>
         </div>
         <div class="flex shrink-0 items-center gap-2">
+          <a
+            class="inline-flex h-9 items-center justify-center gap-2 border border-primary bg-background px-3 text-sm font-semibold transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground"
+            :href="feedbackIssueUrl"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <MessageSquare class="h-4 w-4" />
+            反馈
+          </a>
           <Button variant="ghost" size="icon" title="上一页" @click="goToSlide(Math.max(0, activeSlide - 1))">
             <ChevronLeft class="h-4 w-4" />
           </Button>

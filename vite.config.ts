@@ -4,7 +4,10 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+const appBase = process.env.GITHUB_PAGES === 'true' ? '/xcpc-super-template/' : '/'
+
 export default defineConfig({
+  base: appBase,
   plugins: [
     vue(),
     tailwindcss(),
@@ -20,7 +23,7 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: '/pwa-icon.svg',
+            src: `${appBase}pwa-icon.svg`,
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any maskable'
@@ -30,7 +33,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,json,txt,woff2,ttf}'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
-        navigateFallback: '/index.html'
+        navigateFallback: `${appBase}index.html`
       }
     })
   ],

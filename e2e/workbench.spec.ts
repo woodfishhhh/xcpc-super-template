@@ -118,6 +118,13 @@ test('category sort mode groups the current draft by template category', async (
   await expect(page.locator('article.draft-row h3')).toHaveText(['二分查找', 'Dijkstra', 'KMP'])
 })
 
+test('header exposes a GitHub feedback link', async ({ page }) => {
+  const feedbackLink = page.getByRole('link', { name: '反馈', exact: true })
+
+  await expect(feedbackLink).toBeVisible()
+  await expect(feedbackLink).toHaveAttribute('href', 'https://github.com/woodfishhhh/xcpc-super-template/issues/new/choose')
+})
+
 test('chapter controls move whole draft sections', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 
