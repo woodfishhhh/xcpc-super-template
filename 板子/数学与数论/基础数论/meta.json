@@ -1,0 +1,17 @@
+{
+  "id": "math.number-theory.extgcd",
+  "title": "扩展欧几里得",
+  "category": ["数学与数论", "基础数论"],
+  "learningOrder": 410,
+  "tags": ["math", "gcd", "inverse"],
+  "timeComplexity": "O(log min(a, b))",
+  "spaceComplexity": "O(log min(a, b))",
+  "brief": "求 ax + by = gcd(a, b) 的一组整数解。",
+  "detail": "可用于线性同余方程、模逆元和 CRT 的基础步骤。注意只有 gcd(a, mod) = 1 时 a 在 mod 下才存在乘法逆元。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template sample",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-10"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "ds.fenwick",
+  "title": "树状数组",
+  "category": ["数据结构", "树状数组"],
+  "learningOrder": 120,
+  "tags": ["data-structure", "fenwick"],
+  "timeComplexity": "O(log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "维护前缀和，支持单点修改和区间查询。",
+  "detail": "Fenwick Tree 适合可逆前缀信息。下标通常使用 1-indexed，add 沿 lowbit 向上更新，sum 沿 lowbit 向下累计。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template sample",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-10"
+}

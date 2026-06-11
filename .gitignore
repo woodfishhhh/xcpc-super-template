@@ -1,5 +1,6 @@
 # Local planning/runtime state
 .omx/
+.playwright-mcp/
 
 # External reference material; keep out of this repo by default.
 reference/

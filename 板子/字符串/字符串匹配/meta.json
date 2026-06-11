@@ -1,0 +1,17 @@
+{
+  "id": "string.kmp",
+  "title": "KMP",
+  "category": ["字符串", "字符串匹配"],
+  "learningOrder": 310,
+  "tags": ["string", "matching"],
+  "timeComplexity": "O(n + m)",
+  "spaceComplexity": "O(m)",
+  "brief": "线性求模式串在文本串中的所有出现位置。",
+  "detail": "前缀函数 pi[i] 表示 s[0..i] 的最长真 border 长度。匹配时失配就沿 pi 回退，避免重复比较。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template sample",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-10"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "graph.bipartite.matching",
+  "title": "二分图最大匹配",
+  "category": ["图论", "二分图"],
+  "learningOrder": 210,
+  "tags": ["graph", "bipartite", "matching"],
+  "timeComplexity": "O(nm)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "用匈牙利算法在二分图中寻找最大匹配。",
+  "detail": "适合点数和边数中等的二分图匹配问题。左部点逐个增广，vis 数组防止一次增广中重复访问右部点，match[y] 记录右部点当前匹配的左部点。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template sample",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-10"
+}

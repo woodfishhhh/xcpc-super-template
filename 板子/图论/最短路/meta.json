@@ -1,0 +1,17 @@
+{
+  "id": "graph.shortest-path.dijkstra",
+  "title": "Dijkstra",
+  "category": ["图论", "最短路"],
+  "learningOrder": 220,
+  "tags": ["graph", "shortest-path", "priority-queue"],
+  "timeComplexity": "O(m log n)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "用于非负边权图的单源最短路。",
+  "detail": "每次从优先队列中取出当前距离最小的点进行松弛。遇到负边权时不要使用 Dijkstra，应切换 Bellman-Ford、SPFA 或 Johnson 等方案。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template sample",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-10"
+}

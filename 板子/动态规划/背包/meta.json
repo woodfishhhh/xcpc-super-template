@@ -1,0 +1,17 @@
+{
+  "id": "dp.knapsack.zero-one",
+  "title": "01 背包",
+  "category": ["动态规划", "背包"],
+  "learningOrder": 510,
+  "tags": ["dp", "knapsack"],
+  "timeComplexity": "O(nV)",
+  "spaceComplexity": "O(V)",
+  "brief": "每个物品最多选一次的背包问题。",
+  "detail": "一维优化时容量需要倒序枚举，避免同一个物品在本轮被重复选择。若是完全背包，容量枚举方向改为正序。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template sample",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-10"
+}
