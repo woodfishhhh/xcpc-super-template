@@ -14,18 +14,55 @@ body:
         - Other algorithm-template user
     validations:
       required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: "Chrome 126 on Windows 11"
+    validations:
+      required: true
+  - type: input
+    id: time_to_draft
+    attributes:
+      label: Time to usable draft
+      description: How long did it take to produce a draft you would consider printing?
+      placeholder: "About 4 minutes"
+    validations:
+      required: true
+  - type: checkboxes
+    id: trial_coverage
+    attributes:
+      label: Trial coverage
+      description: Check each task you attempted during the beta trial. If something failed, still check it and explain the failure below.
+      options:
+        - label: Browsed the public template library and selected public templates.
+          required: true
+        - label: Edited one template title, complexity, description, or code block.
+          required: true
+        - label: Added or imported one personal template under 我的.
+          required: true
+        - label: Reordered the draft with one automatic sort and one manual move.
+          required: true
+        - label: Switched at least one template between brief and detailed description.
+          required: true
+        - label: Exported Markdown.
+          required: true
+        - label: Exported PDF in compact style.
+          required: true
+        - label: Exported PDF in book style.
+          required: true
+        - label: Reopened the app after disconnecting from the network.
+          required: true
   - type: textarea
     id: workflow
     attributes:
       label: Workflow tried
-      description: Which tasks did you complete in the workbench?
+      description: Summarize what you built, which templates you selected, and where the workflow slowed down.
       placeholder: |
-        - Selected public templates
-        - Edited one template
-        - Imported personal templates
-        - Reordered the draft
-        - Exported Markdown or PDF
-        - Tested offline reopening
+        - Selected 8 public templates from 图论 and 字符串
+        - Edited KMP locally
+        - Imported one team template under 我的
+        - Exported Markdown + compact/book PDFs
     validations:
       required: true
   - type: textarea
@@ -40,13 +77,37 @@ body:
     attributes:
       label: Export quality
       description: If you generated Markdown or PDF, mention layout, TOC page numbers, code readability, and print readiness.
-  - type: input
-    id: browser
+    validations:
+      required: true
+  - type: dropdown
+    id: v1_blocker
     attributes:
-      label: Browser and OS
-      placeholder: "Chrome 126 on Windows 11"
+      label: v1.0 release blocker?
+      description: Choose yes if this would stop you from using the printed output in a contest.
+      options:
+        - "No blocker"
+        - "Maybe blocker"
+        - "Yes, release blocker"
+    validations:
+      required: true
+  - type: checkboxes
+    id: followup_kind
+    attributes:
+      label: Follow-up needed
+      description: Maintainers will split distinct findings into separate issues after triage.
+      options:
+        - label: Bug report needed
+        - label: Feature request needed
+        - label: Template contribution needed
+        - label: Documentation or wording improvement needed
+  - type: input
+    id: related_files
+    attributes:
+      label: Attachments or exported files
+      description: Link screenshots, Markdown, PDF, or notes when useful.
+      placeholder: "Paste links or say none"
   - type: textarea
     id: followups
     attributes:
       label: Suggested fixes
-      description: List the most important improvements you would want before a contest.
+      description: List the most important improvements you would want before a contest. Put separate bugs on separate lines.
