@@ -1,0 +1,52 @@
+name: Beta feedback
+description: Share feedback from a real ACM/XCPC template-print trial.
+title: "[Beta]: "
+labels: ["beta-feedback"]
+body:
+  - type: dropdown
+    id: role
+    attributes:
+      label: Trial role
+      options:
+        - ACM/XCPC contestant
+        - OI contestant
+        - Coach or teammate reviewer
+        - Other algorithm-template user
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow tried
+      description: Which tasks did you complete in the workbench?
+      placeholder: |
+        - Selected public templates
+        - Edited one template
+        - Imported personal templates
+        - Reordered the draft
+        - Exported Markdown or PDF
+        - Tested offline reopening
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Result
+      description: What worked, what failed, and what felt confusing?
+    validations:
+      required: true
+  - type: textarea
+    id: export_quality
+    attributes:
+      label: Export quality
+      description: If you generated Markdown or PDF, mention layout, TOC page numbers, code readability, and print readiness.
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: "Chrome 126 on Windows 11"
+  - type: textarea
+    id: followups
+    attributes:
+      label: Suggested fixes
+      description: List the most important improvements you would want before a contest.
