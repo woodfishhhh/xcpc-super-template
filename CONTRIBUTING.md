@@ -98,3 +98,17 @@ PR 请尽量保持主题单一：
 - 新增脚本或 schema 改动同步更新 README/文档。
 
 CI 会运行模板校验、单元测试、构建、E2E 和 high severity audit。
+
+## 来源与 GPL-3.0
+
+公共模板会随仓库一起以 GPL-3.0 分发。提交模板时请按下面规则处理来源：
+
+- 自己为本仓库原创的代码，`source.name` 写清楚来源，例如 `Team original implementation`，`source.license` 写 `GPL-3.0-only`。
+- 从外部 GPL-3.0 兼容项目改写的代码，必须保留原始链接、项目名和许可证。
+- 参考题解、博客或队内私有代码重新实现时，请确认原文允许复用；不确定时不要提交到公共库。
+- 不接受来源不明、仅供比赛现场内部使用、禁止转载或许可证不兼容的模板。
+- 如果模板来自第三方，PR 描述里也要写出 source URL 和 license，方便审查。
+
+## 样例 PR
+
+新增公共模板前可以参考 [`docs/SAMPLE_TEMPLATE_PR.md`](docs/SAMPLE_TEMPLATE_PR.md)。它展示了推荐的 PR 标题、说明、`meta.json`、`code.md` 和验证清单。

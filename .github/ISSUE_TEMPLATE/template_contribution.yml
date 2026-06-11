@@ -4,10 +4,26 @@ title: "[Template]: "
 labels: ["template"]
 body:
   - type: input
+    id: template_id
+    attributes:
+      label: Template id
+      placeholder: "graph.shortest-path.dijkstra"
+      description: Use lowercase letters, numbers, dots, and hyphens.
+    validations:
+      required: true
+  - type: input
     id: category
     attributes:
       label: Category path
       placeholder: "图论/最短路"
+    validations:
+      required: true
+  - type: input
+    id: learning_order
+    attributes:
+      label: Learning order
+      placeholder: "220"
+      description: Use the range from 板子/TAXONOMY.md.
     validations:
       required: true
   - type: input
@@ -21,9 +37,26 @@ body:
     id: source
     attributes:
       label: Source and license
-      description: Include original source links and license information.
+      description: Include source name, original URL if any, and GPL-3.0-compatible license information.
+      placeholder: |
+        Source name:
+        Source URL:
+        License:
     validations:
       required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: The template can be distributed under GPL-3.0.
+          required: true
+        - label: The template will include both meta.json and code.md.
+          required: true
+        - label: The category path matches the folder path under 板子/.
+          required: true
+        - label: I can run npm run validate:templates before opening a PR.
+          required: true
   - type: textarea
     id: notes
     attributes:
