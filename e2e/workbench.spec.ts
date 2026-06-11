@@ -1,5 +1,12 @@
+import { readdirSync, readFileSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { expect, test, type Download, type Page } from '@playwright/test'
+
+test.describe.configure({ timeout: 240_000 })
+
+const publicTemplateTitles = loadPublicTemplateTitles()
+const publicTemplateChunks = chunkArray(publicTemplateTitles, 12)
 
 test.beforeEach(async ({ page }) => {
   await page.context().setOffline(false)
@@ -210,21 +217,25 @@ test('downloads valid compact and book PDFs', async ({ page }) => {
   }
 })
 
-test('all public templates can be opened and selected from the library', async ({ page }) => {
-  test.setTimeout(60_000)
-
+test('public template library renders every repository template', async ({ page }) => {
   const titles = await page.locator('article.template-row h4').allInnerTexts()
-  expect(titles.length).toBeGreaterThanOrEqual(30)
+  expect(titles.toSorted()).toEqual(publicTemplateTitles.toSorted())
+  expect(titles.length).toBeGreaterThanOrEqual(50)
+})
 
-  for (const title of titles) {
-    const card = templateCard(page, title)
-    await card.locator('h4').click()
-    await expect(page.locator('aside.template-editor input[aria-label="标题"]')).toHaveValue(title)
-    await card.getByTitle('加入打印稿').click()
-    await expect(card.getByTitle('移出打印稿')).toBeVisible()
-    await card.getByTitle('移出打印稿').click()
-    await expect(card.getByTitle('加入打印稿')).toBeVisible()
-  }
+test.describe('public template library coverage', () => {
+  publicTemplateChunks.forEach((titles, index) => {
+    test(`opens and selects public template batch ${index + 1}`, async ({ page }) => {
+      for (const title of titles) {
+        const card = templateCard(page, title)
+        await card.scrollIntoViewIfNeeded()
+        await card.locator('h4').click()
+        await expect(page.locator('aside.template-editor input[aria-label="标题"]')).toHaveValue(title)
+        await card.getByTitle('加入打印稿').click()
+        await expect(card.getByTitle('移出打印稿')).toBeVisible()
+      }
+    })
+  })
 })
 
 test('public template overrides can be saved and reverted', async ({ page }) => {
@@ -495,4 +506,33 @@ async function resetBrowserState(page: Page): Promise<void> {
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function loadPublicTemplateTitles(directory = join(process.cwd(), '板子')): string[] {
+  const titles: string[] = []
+
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const absolutePath = join(directory, entry.name)
+
+    if (entry.isDirectory()) {
+      titles.push(...loadPublicTemplateTitles(absolutePath))
+    } else if (entry.name === 'meta.json') {
+      const meta = JSON.parse(readFileSync(absolutePath, 'utf8')) as { title?: unknown }
+      if (typeof meta.title === 'string') {
+        titles.push(meta.title)
+      }
+    }
+  }
+
+  return titles.sort((left, right) => left.localeCompare(right))
+}
+
+function chunkArray<T>(items: T[], size: number): T[][] {
+  const chunks: T[][] = []
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size))
+  }
+
+  return chunks
 }

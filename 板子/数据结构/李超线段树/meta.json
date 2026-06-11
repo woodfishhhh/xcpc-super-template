@@ -1,0 +1,23 @@
+{
+  "id": "ds.li-chao-tree",
+  "title": "李超线段树",
+  "category": [
+    "数据结构",
+    "李超线段树"
+  ],
+  "learningOrder": 190,
+  "tags": [
+    "li-chao-tree",
+    "convex-hull-trick"
+  ],
+  "timeComplexity": "插入/查询 O(log V)",
+  "spaceComplexity": "O(线段数 log V)",
+  "brief": "维护直线集合并查询指定横坐标处的最小值。",
+  "detail": "李超线段树适合动态加入一次函数并做单点最值查询，横坐标值域需要预先确定或离散化。比较直线时用区间中点决定保留哪条；若有线段插入，需要只递归覆盖线段所在区间。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

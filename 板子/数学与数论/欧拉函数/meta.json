@@ -1,0 +1,24 @@
+{
+  "id": "math.euler-phi",
+  "title": "欧拉函数",
+  "category": [
+    "数学与数论",
+    "欧拉函数"
+  ],
+  "learningOrder": 432,
+  "tags": [
+    "math",
+    "number-theory",
+    "phi"
+  ],
+  "timeComplexity": "单点 O(sqrt n)，线性筛 O(n)",
+  "spaceComplexity": "O(n)",
+  "brief": "计算小于等于 n 且与 n 互质的正整数个数。",
+  "detail": "欧拉函数是积性函数，若 p 是质因子，则 phi(n) 会乘上 (p-1)/p。单点分解适合少量查询，线性筛适合预处理 1..n；欧拉定理使用前要确认底数和模数互质。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

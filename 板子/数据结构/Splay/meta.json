@@ -1,0 +1,23 @@
+{
+  "id": "ds.splay",
+  "title": "Splay",
+  "category": [
+    "数据结构",
+    "Splay"
+  ],
+  "learningOrder": 184,
+  "tags": [
+    "balanced-tree",
+    "splay"
+  ],
+  "timeComplexity": "均摊 O(log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "通过旋转把访问节点伸展到根。",
+  "detail": "Splay 适合维护动态序列、区间翻转和需要频繁访问局部位置的集合。均摊复杂度依赖 zig-zig/zig-zag 旋转；实现中 parent、child 和 size 的更新顺序最容易出错。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

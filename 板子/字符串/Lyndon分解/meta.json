@@ -1,0 +1,24 @@
+{
+  "id": "string.lyndon",
+  "title": "Lyndon 分解",
+  "category": [
+    "字符串",
+    "Lyndon分解"
+  ],
+  "learningOrder": 390,
+  "tags": [
+    "string",
+    "lyndon",
+    "duval"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(1) 额外",
+  "brief": "把字符串唯一分解成非增 Lyndon 串序列。",
+  "detail": "Duval 算法线性扫描得到 Lyndon 分解，可用于最小表示、字符串周期和字典序结构分析。实现时 i 是当前段起点，j/k 用于比较；输出段长为 j-k，可能连续重复多次。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

@@ -1,13 +1,20 @@
 {
   "id": "ds.segment-tree",
   "title": "线段树",
-  "category": ["数据结构", "线段树"],
+  "category": [
+    "数据结构",
+    "线段树"
+  ],
   "learningOrder": 140,
-  "tags": ["data-structure", "segment-tree", "range-query"],
+  "tags": [
+    "data-structure",
+    "segment-tree",
+    "range-query"
+  ],
   "timeComplexity": "O(log n)",
   "spaceComplexity": "O(n)",
   "brief": "支持单点修改和区间查询的通用树形结构。",
-  "detail": "这份模板默认做区间和与单点加。改成最大值、最小值或 gcd 时，只需要替换 merge 逻辑和单位元；需要区间修改时再加入 lazy 标记。",
+  "detail": "线段树适合维护可合并的区间信息，能扩展到区间修改、区间查询和二分查找位置。模板默认维护区间和与单点加；改成 max/min/gcd 时要替换单位元和 merge，加入 lazy 时要严格定义标记含义和下推顺序。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

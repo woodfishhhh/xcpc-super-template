@@ -1,0 +1,23 @@
+{
+  "id": "ds.weighted-dsu",
+  "title": "带权并查集",
+  "category": [
+    "数据结构",
+    "带权并查集"
+  ],
+  "learningOrder": 112,
+  "tags": [
+    "dsu",
+    "potential"
+  ],
+  "timeComplexity": "均摊 O(alpha(n))",
+  "spaceComplexity": "O(n)",
+  "brief": "维护点到集合代表元的势能差。",
+  "detail": "带权并查集适合处理相对关系，例如距离差、同余关系或食物链类型约束。路径压缩时必须同步累计权值；合并前若两点已连通，可以用已有差值检查新约束是否矛盾。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

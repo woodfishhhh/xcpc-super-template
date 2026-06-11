@@ -1,13 +1,20 @@
 {
   "id": "string.trie",
   "title": "Trie 字典树",
-  "category": ["字符串", "Trie字典树"],
+  "category": [
+    "字符串",
+    "Trie字典树"
+  ],
   "learningOrder": 345,
-  "tags": ["string", "trie", "prefix"],
+  "tags": [
+    "string",
+    "trie",
+    "prefix"
+  ],
   "timeComplexity": "O(total length)",
   "spaceComplexity": "O(total length * alphabet)",
   "brief": "维护字符串集合，支持插入和前缀查询。",
-  "detail": "Trie 的每条边对应一个字符。字符集较小时可用数组，字符集大时换成 map/unordered_map；01 Trie 可用于最大异或。",
+  "detail": "Trie 维护字符串集合和前缀关系，适合字典查询、前缀统计和 01 最大异或。字符集小时可用定长数组，字符集大时用 map/unordered_map；删除字符串时需要维护经过次数，避免误删共享前缀。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

@@ -1,13 +1,20 @@
 {
   "id": "string.rolling-hash",
   "title": "字符串哈希",
-  "category": ["字符串", "字符串哈希"],
+  "category": [
+    "字符串",
+    "字符串哈希"
+  ],
   "learningOrder": 330,
-  "tags": ["string", "hash", "rolling-hash"],
+  "tags": [
+    "string",
+    "hash",
+    "rolling-hash"
+  ],
   "timeComplexity": "预处理 O(n)，查询 O(1)",
   "spaceComplexity": "O(n)",
   "brief": "把子串映射为数值，快速比较两个子串是否相同。",
-  "detail": "单哈希存在碰撞风险，关键题建议双哈希或配合实际比较。模板使用 unsigned long long 自然溢出，写法简洁但不要用于需要严格无碰撞证明的场景。",
+  "detail": "字符串哈希把子串映射成数值，用前缀哈希 O(1) 比较子串。单哈希有碰撞风险，关键题建议双哈希或回退到后缀数组/自动机；使用 unsigned long long 自然溢出时写法短，但不具备严格无碰撞保证。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

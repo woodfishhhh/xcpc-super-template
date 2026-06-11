@@ -1,13 +1,20 @@
 {
   "id": "ds.monotonic-queue",
   "title": "单调队列",
-  "category": ["数据结构", "单调队列"],
+  "category": [
+    "数据结构",
+    "单调队列"
+  ],
   "learningOrder": 175,
-  "tags": ["data-structure", "monotonic-queue", "sliding-window"],
+  "tags": [
+    "data-structure",
+    "monotonic-queue",
+    "sliding-window"
+  ],
   "timeComplexity": "O(n)",
   "spaceComplexity": "O(k)",
   "brief": "在线性时间维护滑动窗口最值。",
-  "detail": "队列中保存下标而不是值，便于判断是否滑出窗口。维护递减队列得到最大值，维护递增队列得到最小值；每个元素最多进出队一次。",
+  "detail": "单调队列在线性时间维护滑动窗口最值，每个下标最多进出队一次。队列中保存下标便于判断是否滑出窗口；维护最大值用递减队列，维护最小值用递增队列，窗口边界要和题目闭开区间保持一致。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

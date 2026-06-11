@@ -1,0 +1,25 @@
+{
+  "id": "graph.bridge-cut",
+  "title": "割点与桥",
+  "category": [
+    "图论",
+    "割点与桥"
+  ],
+  "learningOrder": 266,
+  "tags": [
+    "graph",
+    "tarjan",
+    "bridge",
+    "articulation"
+  ],
+  "timeComplexity": "O(n + m)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "在无向图中寻找割点和桥。",
+  "detail": "Tarjan 中 dfn 表示访问时间，low 表示能通过树边和返祖边到达的最早祖先。非根节点存在子节点 v 满足 low[v] >= dfn[u] 时 u 是割点；low[v] > dfn[u] 时边 u-v 是桥。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

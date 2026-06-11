@@ -1,0 +1,24 @@
+{
+  "id": "math.linear-basis",
+  "title": "线性基",
+  "category": [
+    "数学与数论",
+    "线性基"
+  ],
+  "learningOrder": 475,
+  "tags": [
+    "math",
+    "xor",
+    "linear-basis"
+  ],
+  "timeComplexity": "插入/查询 O(log V)",
+  "spaceComplexity": "O(log V)",
+  "brief": "维护异或空间的一组基向量。",
+  "detail": "线性基可判断一个数能否由集合异或得到，也可求最大异或值和第 k 小异或值。插入时从高位到低位消元；若最终变成 0，说明该数与已有基线性相关。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "graph.shortest-path.bellman-ford",
+  "title": "Bellman-Ford",
+  "category": [
+    "图论",
+    "Bellman-Ford"
+  ],
+  "learningOrder": 221,
+  "tags": [
+    "graph",
+    "shortest-path",
+    "negative-edge"
+  ],
+  "timeComplexity": "O(nm)",
+  "spaceComplexity": "O(n)",
+  "brief": "可处理负边的单源最短路并检测负环。",
+  "detail": "Bellman-Ford 通过连续 n-1 轮松弛得到无负环时的最短路，第 n 轮仍可松弛说明存在从源点可达的负环。它常用于约束系统、小图负边最短路和 SPFA 的稳妥替代。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

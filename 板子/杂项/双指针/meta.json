@@ -1,0 +1,23 @@
+{
+  "id": "misc.two-pointer",
+  "title": "双指针",
+  "category": [
+    "杂项",
+    "双指针"
+  ],
+  "learningOrder": 930,
+  "tags": [
+    "two-pointer",
+    "sliding-window"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(1)",
+  "brief": "维护左右端点单调移动的窗口。",
+  "detail": "双指针要求窗口可行性随端点移动呈单调变化，常用于最长/最短区间、去重合并和有序数组配对。每个指针最多移动 n 次；若判定条件不单调，应改用二分、数据结构或离线算法。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

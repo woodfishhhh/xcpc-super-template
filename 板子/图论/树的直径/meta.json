@@ -1,0 +1,23 @@
+{
+  "id": "graph.tree-diameter",
+  "title": "树的直径",
+  "category": [
+    "图论",
+    "树的直径"
+  ],
+  "learningOrder": 270,
+  "tags": [
+    "tree",
+    "diameter"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(n)",
+  "brief": "求树上距离最远的两个点。",
+  "detail": "树的直径可两次 DFS/BFS：从任意点找最远点 a，再从 a 找最远点 b。带权树同样适用但要用距离累加；若需要直径路径，可记录父亲从 b 回溯到 a。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

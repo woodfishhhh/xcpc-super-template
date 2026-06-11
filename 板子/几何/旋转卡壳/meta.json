@@ -1,0 +1,24 @@
+{
+  "id": "geometry.rotating-calipers",
+  "title": "旋转卡壳",
+  "category": [
+    "几何",
+    "旋转卡壳"
+  ],
+  "learningOrder": 640,
+  "tags": [
+    "geometry",
+    "convex-hull",
+    "diameter"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(1)",
+  "brief": "在线性时间求凸包直径等对踵点问题。",
+  "detail": "旋转卡壳通常建立在逆时针凸包上，通过面积或叉积单调性移动另一端指针。求直径时比较距离平方即可；若凸包点数小于 2 要单独处理，共线点保留策略会影响边界情况。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

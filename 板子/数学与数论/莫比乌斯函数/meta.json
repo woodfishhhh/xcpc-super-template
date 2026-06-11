@@ -1,0 +1,24 @@
+{
+  "id": "math.mobius",
+  "title": "莫比乌斯函数",
+  "category": [
+    "数学与数论",
+    "莫比乌斯函数"
+  ],
+  "learningOrder": 435,
+  "tags": [
+    "math",
+    "mobius",
+    "sieve"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(n)",
+  "brief": "线性筛预处理莫比乌斯函数。",
+  "detail": "mu(n) 根据质因子平方和质因子个数取 0、1 或 -1，常用于莫比乌斯反演和互质计数。线性筛中遇到 i % p == 0 时 mu[i*p]=0 并停止；否则符号取反。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

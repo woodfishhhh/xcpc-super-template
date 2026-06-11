@@ -1,0 +1,24 @@
+{
+  "id": "basic.enumeration",
+  "title": "枚举",
+  "category": [
+    "基础算法",
+    "枚举"
+  ],
+  "learningOrder": 8,
+  "tags": [
+    "basic",
+    "enumeration",
+    "bruteforce"
+  ],
+  "timeComplexity": "O(状态数)",
+  "spaceComplexity": "O(1)",
+  "brief": "按题目约束枚举候选状态并检查可行性。",
+  "detail": "枚举适合约束较小、状态可拆分或需要验证构造的题。先估算总状态数，再把不变量和剪枝条件写进 check 函数；多重循环容易漏边界，打印稿中建议保留半开区间写法。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "math.crt",
+  "title": "中国剩余定理",
+  "category": [
+    "数学与数论",
+    "CRT"
+  ],
+  "learningOrder": 415,
+  "tags": [
+    "math",
+    "crt",
+    "congruence"
+  ],
+  "timeComplexity": "O(k log M)",
+  "spaceComplexity": "O(1)",
+  "brief": "合并多个同余方程。",
+  "detail": "CRT 在模数两两互质时可直接合并；扩展 CRT 可处理不互质模数，但要求余数差能被 gcd 整除。合并过程中 lcm 和中间乘法可能溢出，必要时使用 __int128。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

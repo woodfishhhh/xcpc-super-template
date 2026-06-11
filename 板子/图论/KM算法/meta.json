@@ -1,0 +1,24 @@
+{
+  "id": "graph.matching.km",
+  "title": "KM 二分图最大权匹配",
+  "category": [
+    "图论",
+    "KM算法"
+  ],
+  "learningOrder": 214,
+  "tags": [
+    "graph",
+    "matching",
+    "assignment"
+  ],
+  "timeComplexity": "O(n^3)",
+  "spaceComplexity": "O(n^2)",
+  "brief": "求完全二分图最大权完美匹配。",
+  "detail": "KM 算法维护左右顶标，使所有相等子图边满足 lx[x]+ly[y]=w[x][y]，再在相等子图中增广。适合方阵指派问题；若左右点数不同或允许不匹配，需要补虚点和合适的 0/负无穷权。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

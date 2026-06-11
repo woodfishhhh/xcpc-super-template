@@ -1,0 +1,23 @@
+{
+  "id": "ds.treap",
+  "title": "Treap",
+  "category": [
+    "数据结构",
+    "Treap"
+  ],
+  "learningOrder": 182,
+  "tags": [
+    "balanced-tree",
+    "treap"
+  ],
+  "timeComplexity": "期望 O(log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "用随机优先级维护二叉搜索树平衡。",
+  "detail": "Treap 同时满足键值的 BST 性质和随机优先级的堆性质，写 split/merge 版本更适合序列和可持久化扩展。随机数质量会影响树高；多重集合要明确重复键放哪侧或维护 cnt。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

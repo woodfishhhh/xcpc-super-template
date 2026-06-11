@@ -1,0 +1,24 @@
+{
+  "id": "string.ac-automaton",
+  "title": "AC 自动机",
+  "category": [
+    "字符串",
+    "AC自动机"
+  ],
+  "learningOrder": 360,
+  "tags": [
+    "string",
+    "trie",
+    "aho-corasick"
+  ],
+  "timeComplexity": "建树 O(模式总长 * 字符集)，匹配 O(文本长)",
+  "spaceComplexity": "O(模式总长 * 字符集)",
+  "brief": "在文本中同时匹配多个模式串。",
+  "detail": "AC 自动机把 Trie 和失配指针结合，失配后跳到最长可匹配后缀。构建时通常补全转移，匹配时沿 fail 链统计输出；若模式很多，注意避免每个位置暴力沿 fail 链导致退化。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

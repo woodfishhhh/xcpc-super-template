@@ -132,6 +132,7 @@ Before tagging `v1.0.0`:
 - `npm run test:e2e` passes.
 - `npm run qa:pdf` produces no release-blocking layout errors.
 - `npm run verify:live` proves the deployed app opens online and reopens offline.
+- `npm run release:preflight` confirms the public template library has at least 50 templates.
 - GitHub CI runs both `npm run release:preflight` and `npm run qa:pdf`.
 - `npm run release:preflight:final -- --confirm-beta-triaged --confirm-ci-green --confirm-pages-live` passes.
 - GitHub CI is green on the release commit.

@@ -1,0 +1,24 @@
+{
+  "id": "string.suffix-array",
+  "title": "后缀数组",
+  "category": [
+    "字符串",
+    "后缀数组"
+  ],
+  "learningOrder": 370,
+  "tags": [
+    "string",
+    "suffix-array",
+    "lcp"
+  ],
+  "timeComplexity": "O(n log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "按字典序排序所有后缀并求 LCP。",
+  "detail": "后缀数组适合处理子串排序、最长重复子串和多串 LCP 问题。倍增算法每轮按 (rank[i], rank[i+k]) 排序；Kasai 求 height 时利用相邻后缀 LCP 至少减少一的性质。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

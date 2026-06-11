@@ -1,0 +1,23 @@
+{
+  "id": "string.suffix-automaton",
+  "title": "后缀自动机",
+  "category": [
+    "字符串",
+    "后缀自动机"
+  ],
+  "learningOrder": 375,
+  "tags": [
+    "string",
+    "sam"
+  ],
+  "timeComplexity": "O(n * 字符转移复杂度)",
+  "spaceComplexity": "O(n)",
+  "brief": "在线维护一个串的所有子串状态。",
+  "detail": "SAM 的每个状态代表一组 endpos 等价类，len 是该类最长串长度，link 指向最长真后缀。可用于不同子串数、出现次数和多串匹配；克隆状态时要复制转移并调整父链接。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

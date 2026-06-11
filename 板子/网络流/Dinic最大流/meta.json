@@ -1,13 +1,20 @@
 {
   "id": "flow.dinic",
   "title": "Dinic 最大流",
-  "category": ["网络流", "Dinic最大流"],
+  "category": [
+    "网络流",
+    "Dinic最大流"
+  ],
   "learningOrder": 710,
-  "tags": ["flow", "max-flow", "dinic"],
+  "tags": [
+    "flow",
+    "max-flow",
+    "dinic"
+  ],
   "timeComplexity": "O(n^2 m)",
   "spaceComplexity": "O(n + m)",
   "brief": "用分层图和当前弧优化求最大流。",
-  "detail": "Dinic 每轮 BFS 建分层图，再 DFS 找阻塞流。建边时必须加反向边；无向容量边需要按题意拆成两条有容量的有向边。",
+  "detail": "Dinic 每轮 BFS 建分层图，再 DFS 找阻塞流，适合大多数整数容量最大流题。建边必须加入反向边；无向容量边按题意拆成两条有容量的有向边。二分图匹配可以建源汇网络，也可用专门匹配算法。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

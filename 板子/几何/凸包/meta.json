@@ -1,13 +1,19 @@
 {
   "id": "geometry.convex-hull",
   "title": "凸包",
-  "category": ["几何", "凸包"],
+  "category": [
+    "几何",
+    "凸包"
+  ],
   "learningOrder": 630,
-  "tags": ["geometry", "convex-hull"],
+  "tags": [
+    "geometry",
+    "convex-hull"
+  ],
   "timeComplexity": "O(n log n)",
   "spaceComplexity": "O(n)",
   "brief": "求平面点集的凸包边界。",
-  "detail": "Andrew 算法先排序，再分别维护下凸壳和上凸壳。是否保留共线边界点取决于 while 中使用 <= 还是 <。",
+  "detail": "Andrew 凸包先按坐标排序，再分别维护下凸壳和上凸壳，复杂度 O(n log n)。是否保留共线边界点取决于弹栈条件使用 <= 还是 <；输入点重复时要先去重，点数小于 2 要特殊处理。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

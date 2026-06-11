@@ -1,0 +1,24 @@
+{
+  "id": "ds.persistent-segment-tree",
+  "title": "可持久化线段树",
+  "category": [
+    "数据结构",
+    "可持久化线段树"
+  ],
+  "learningOrder": 155,
+  "tags": [
+    "segment-tree",
+    "persistent",
+    "kth"
+  ],
+  "timeComplexity": "修改/查询 O(log V)",
+  "spaceComplexity": "O((n + q) log V)",
+  "brief": "用路径复制保留每个版本的线段树。",
+  "detail": "可持久化线段树常用于静态区间第 k 小、历史版本查询和主席树。每次修改只新建访问路径上的节点，其余子树共享；值域要先离散化，查询两个版本差值时注意左右边界含义。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

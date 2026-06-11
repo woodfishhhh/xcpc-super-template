@@ -1,0 +1,24 @@
+{
+  "id": "string.palindromic-automaton",
+  "title": "回文自动机",
+  "category": [
+    "字符串",
+    "回文自动机"
+  ],
+  "learningOrder": 380,
+  "tags": [
+    "string",
+    "palindrome",
+    "pam"
+  ],
+  "timeComplexity": "O(n * 字符转移复杂度)",
+  "spaceComplexity": "O(n)",
+  "brief": "在线维护一个串的所有不同回文子串。",
+  "detail": "回文自动机有长度为 -1 和 0 的两个根，fail 指向最长回文真后缀。每次加入字符时从 last 沿 fail 找可扩展节点；节点数等于不同回文子串数加两个根。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

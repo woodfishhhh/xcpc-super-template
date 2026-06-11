@@ -1,0 +1,24 @@
+{
+  "id": "graph.virtual-tree",
+  "title": "虚树",
+  "category": [
+    "图论",
+    "虚树"
+  ],
+  "learningOrder": 282,
+  "tags": [
+    "tree",
+    "virtual-tree",
+    "lca"
+  ],
+  "timeComplexity": "O(k log k)",
+  "spaceComplexity": "O(k)",
+  "brief": "把一组关键点和它们的 LCA 压缩成小树。",
+  "detail": "虚树用于每次只关心少量关键点的树上 DP。关键点按 DFS 序排序后补相邻点 LCA，再用栈按祖先关系连边；边权通常是原树距离，别忘了去重关键点和临时清图。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

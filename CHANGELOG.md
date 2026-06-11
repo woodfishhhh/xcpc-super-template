@@ -8,6 +8,7 @@ All notable changes to XCPC Super Template are tracked here.
 
 - Offline-first Vue workbench for selecting public and personal ACM/XCPC templates.
 - Public template library under `板子/` with `meta.json` and `code.md` packages.
+- Expanded public template coverage to 80+ entries across the core contest categories.
 - Template validation for metadata, category paths, code fences, license fields, and taxonomy coverage.
 - Personal template editing, local storage, import/export, public-template overrides, and conflict-safe import.
 - Draft composition with learning, alphabetical, category, manual, keyboard, and chapter-level ordering.

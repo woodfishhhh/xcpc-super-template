@@ -1,0 +1,23 @@
+{
+  "id": "ds.lazy-segment-tree",
+  "title": "懒标记线段树",
+  "category": [
+    "数据结构",
+    "懒标记线段树"
+  ],
+  "learningOrder": 145,
+  "tags": [
+    "segment-tree",
+    "lazy"
+  ],
+  "timeComplexity": "建树 O(n)，修改/查询 O(log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "支持区间加和区间求和。",
+  "detail": "懒标记线段树把整段修改先挂在节点上，只有访问子区间时再下推。标记含义必须和维护信息一致；区间赋值、区间加、区间乘混用时要特别注意标记合成顺序。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

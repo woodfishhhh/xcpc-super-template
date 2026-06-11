@@ -1,0 +1,23 @@
+{
+  "id": "ds.monotonic-stack",
+  "title": "单调栈",
+  "category": [
+    "数据结构",
+    "单调栈"
+  ],
+  "learningOrder": 170,
+  "tags": [
+    "stack",
+    "monotonic"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(n)",
+  "brief": "在线性时间找到每个位置左右最近更小或更大元素。",
+  "detail": "单调栈维护候选下标的单调性，每个元素最多入栈出栈一次。要先确定相等元素的处理策略：严格小于和小于等于会影响区间归属，常见于直方图、贡献法和笛卡尔树。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

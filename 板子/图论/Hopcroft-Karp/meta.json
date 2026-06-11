@@ -1,0 +1,24 @@
+{
+  "id": "graph.matching.hopcroft-karp",
+  "title": "Hopcroft-Karp 二分图匹配",
+  "category": [
+    "图论",
+    "Hopcroft-Karp"
+  ],
+  "learningOrder": 212,
+  "tags": [
+    "graph",
+    "bipartite",
+    "matching"
+  ],
+  "timeComplexity": "O(m sqrt n)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "分层增广求二分图最大匹配。",
+  "detail": "Hopcroft-Karp 每轮 BFS 找到最短增广路层次，再 DFS 同时增广多条不相交路径。适合比普通匈牙利更大的二分图；建图时左部和右部编号要分开，matchL/matchR 初值为 -1。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

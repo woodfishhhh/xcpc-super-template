@@ -1,0 +1,24 @@
+{
+  "id": "basic.merge-sort",
+  "title": "归并排序",
+  "category": [
+    "基础算法",
+    "归并排序"
+  ],
+  "learningOrder": 14,
+  "tags": [
+    "sort",
+    "divide-and-conquer",
+    "inversion"
+  ],
+  "timeComplexity": "O(n log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "稳定分治排序，也常用于统计逆序对。",
+  "detail": "归并排序每层把两个有序段合并，复杂度稳定，不会被输入顺序卡掉。若顺手在合并时统计右段先出元素数量，可得到逆序对；注意临时数组复用，避免每层反复分配。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

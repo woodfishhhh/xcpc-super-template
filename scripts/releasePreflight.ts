@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -43,6 +43,8 @@ const requiredTemplateFields = [
   'updatedAt'
 ]
 
+const minimumPublicTemplateCount = 50
+
 const requiredPackageScripts = [
   'validate:templates',
   'test',
@@ -85,6 +87,7 @@ export function runReleasePreflight(options: ReleasePreflightOptions = {}): Rele
   const schema = hasFile('板子/meta.schema.json')
     ? (JSON.parse(readText('板子/meta.schema.json')) as { required?: string[] })
     : { required: [] }
+  const publicTemplateCount = countFiles(resolve(workspaceRoot, '板子'), 'meta.json')
 
   for (const path of ['docs/ROADMAP.md', 'docs/USER_TRIAL_PLAN.md', '板子/TAXONOMY.md']) {
     hasFile(path)
@@ -138,6 +141,11 @@ export function runReleasePreflight(options: ReleasePreflightOptions = {}): Rele
 
   add(changelog.includes('## Unreleased') ? 'pass' : 'fail', 'CHANGELOG.md has Unreleased section')
   add(changelog.includes('Known Release Gates') ? 'pass' : 'fail', 'CHANGELOG.md lists release gates')
+  add(
+    publicTemplateCount >= minimumPublicTemplateCount ? 'pass' : 'fail',
+    `public template library has at least ${minimumPublicTemplateCount} templates`,
+    `found ${publicTemplateCount}`
+  )
 
   if (final) {
     add(packageJson.version === '1.0.0' ? 'pass' : 'fail', 'package version is 1.0.0 before final tag')
@@ -180,6 +188,16 @@ export function runReleasePreflight(options: ReleasePreflightOptions = {}): Rele
     failures,
     warnings
   }
+}
+
+function countFiles(directory: string, fileName: string): number {
+  if (!existsSync(directory)) return 0
+
+  return readdirSync(directory, { withFileTypes: true }).reduce((count, entry) => {
+    const fullPath = resolve(directory, entry.name)
+    if (entry.isDirectory()) return count + countFiles(fullPath, fileName)
+    return count + (entry.isFile() && entry.name === fileName ? 1 : 0)
+  }, 0)
 }
 
 function parseArgs(args: string[]): ReleasePreflightOptions {

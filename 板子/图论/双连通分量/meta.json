@@ -1,0 +1,24 @@
+{
+  "id": "graph.biconnected-components",
+  "title": "双连通分量",
+  "category": [
+    "图论",
+    "双连通分量"
+  ],
+  "learningOrder": 267,
+  "tags": [
+    "graph",
+    "bcc",
+    "tarjan"
+  ],
+  "timeComplexity": "O(n + m)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "分解无向图的点双连通分量。",
+  "detail": "点双连通分量用 DFS 栈保存边，当 low[v] >= dfn[u] 时弹出一组边形成一个点双。它常用于建圆方树和处理割点相关路径问题；孤立点需要额外作为单独分量处理。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

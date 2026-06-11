@@ -1,0 +1,24 @@
+{
+  "id": "ds.rollback-dsu",
+  "title": "可撤销并查集",
+  "category": [
+    "数据结构",
+    "可撤销并查集"
+  ],
+  "learningOrder": 114,
+  "tags": [
+    "dsu",
+    "rollback",
+    "offline"
+  ],
+  "timeComplexity": "合并 O(log n) 或 O(1)，撤销 O(1)",
+  "spaceComplexity": "O(n + 操作数)",
+  "brief": "支持回滚到历史快照的并查集。",
+  "detail": "可撤销并查集不能使用路径压缩，通常只按大小合并并记录被改动的父亲和集合大小。它常配合线段树分治处理动态图连通性；每段递归退出时回滚到进入前快照。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

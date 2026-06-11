@@ -1,0 +1,24 @@
+{
+  "id": "math.lucas",
+  "title": "Lucas 定理",
+  "category": [
+    "数学与数论",
+    "Lucas定理"
+  ],
+  "learningOrder": 446,
+  "tags": [
+    "math",
+    "combination",
+    "lucas"
+  ],
+  "timeComplexity": "O(p + log_p n)",
+  "spaceComplexity": "O(p)",
+  "brief": "在质数模 p 下计算大 n、小 p 的组合数。",
+  "detail": "Lucas 定理把 C(n,m) mod p 拆成各个 p 进制位上的组合数乘积，适合 n 很大而 p 可预处理的题。若模数不是质数，需要扩展 Lucas 或 CRT 分解模数。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

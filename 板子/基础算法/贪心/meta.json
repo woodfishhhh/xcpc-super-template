@@ -1,0 +1,23 @@
+{
+  "id": "basic.greedy",
+  "title": "贪心框架",
+  "category": [
+    "基础算法",
+    "贪心"
+  ],
+  "learningOrder": 70,
+  "tags": [
+    "greedy",
+    "interval"
+  ],
+  "timeComplexity": "O(n log n)",
+  "spaceComplexity": "O(1) 或 O(n)",
+  "brief": "每一步选择当前最优并保持可证明的不变量。",
+  "detail": "贪心题的核心不是写法，而是证明局部选择不会破坏最优解。常见证明方式包括交换论证、反证和维护前缀最优；实现时先排序，再只保留必要状态，避免把 DP 问题误写成贪心。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

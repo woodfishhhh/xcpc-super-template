@@ -1,0 +1,24 @@
+{
+  "id": "graph.hld",
+  "title": "树链剖分",
+  "category": [
+    "图论",
+    "树链剖分"
+  ],
+  "learningOrder": 276,
+  "tags": [
+    "tree",
+    "hld",
+    "segment-tree"
+  ],
+  "timeComplexity": "预处理 O(n)，路径拆分 O(log n) 段",
+  "spaceComplexity": "O(n)",
+  "brief": "把树上路径拆成若干连续 DFS 序区间。",
+  "detail": "树链剖分先找重儿子，再按重链优先重新编号，使每条链对应连续区间。它常和线段树结合做路径修改/查询；处理边权时通常把边权放在较深端点上，查询时排除 LCA 点。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

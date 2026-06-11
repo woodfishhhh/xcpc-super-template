@@ -10,7 +10,7 @@ XCPC Super Template v1.0.0 is the first stable release of the offline-first ACM/
 
 ## Highlights
 
-- Public template library organized as `板子/<category>/<template>/meta.json + code.md`.
+- Public template library with 80+ templates organized as `板子/<category>/<template>/meta.json + code.md`.
 - Personal template library stored locally in the browser, with JSON import/export and conflict-safe imports.
 - Public template overrides and standalone personal-template copies.
 - Draft composition with learning-order, alphabetical, category, manual, keyboard, bulk, and chapter-level ordering.

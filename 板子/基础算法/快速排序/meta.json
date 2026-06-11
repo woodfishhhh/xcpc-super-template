@@ -1,0 +1,23 @@
+{
+  "id": "basic.quick-sort",
+  "title": "快速排序",
+  "category": [
+    "基础算法",
+    "快速排序"
+  ],
+  "learningOrder": 12,
+  "tags": [
+    "sort",
+    "divide-and-conquer"
+  ],
+  "timeComplexity": "期望 O(n log n)，最坏 O(n^2)",
+  "spaceComplexity": "O(log n)",
+  "brief": "随机选取枢轴并原地划分数组。",
+  "detail": "快速排序平均常数小，但有序或重复数据可能退化，比赛中需要随机化枢轴或三路划分。若只需排序，优先使用 std::sort；手写版本常用于理解划分、求第 k 小或特殊比较逻辑。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

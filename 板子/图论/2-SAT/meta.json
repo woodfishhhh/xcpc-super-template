@@ -1,0 +1,24 @@
+{
+  "id": "graph.two-sat",
+  "title": "2-SAT",
+  "category": [
+    "图论",
+    "2-SAT"
+  ],
+  "learningOrder": 228,
+  "tags": [
+    "graph",
+    "sat",
+    "scc"
+  ],
+  "timeComplexity": "O(n + m)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "用蕴含图和 SCC 判断二元布尔约束可满足性。",
+  "detail": "2-SAT 把每个变量拆成真/假两个点，子句 (a or b) 转为 !a->b 与 !b->a。若某变量的真和假在同一 SCC 中则无解；赋值可按 SCC 拓扑逆序比较得到。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

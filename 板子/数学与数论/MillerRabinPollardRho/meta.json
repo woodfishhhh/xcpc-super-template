@@ -1,0 +1,24 @@
+{
+  "id": "math.miller-rabin-pollard-rho",
+  "title": "Miller-Rabin 与 Pollard-Rho",
+  "category": [
+    "数学与数论",
+    "MillerRabinPollardRho"
+  ],
+  "learningOrder": 438,
+  "tags": [
+    "math",
+    "prime",
+    "factorization"
+  ],
+  "timeComplexity": "Miller-Rabin O(k log n)，Pollard-Rho 期望亚线性",
+  "spaceComplexity": "O(1) 额外",
+  "brief": "判断 64 位整数素性并分解大整数。",
+  "detail": "Miller-Rabin 使用固定底数可确定性判断 64 位整数，Pollard-Rho 用随机迭代找非平凡因子。实现时乘法必须用 __int128 防溢出；分解结果需要递归直到素数。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

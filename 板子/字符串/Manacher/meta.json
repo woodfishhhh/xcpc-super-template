@@ -1,0 +1,23 @@
+{
+  "id": "string.manacher",
+  "title": "Manacher",
+  "category": [
+    "字符串",
+    "Manacher"
+  ],
+  "learningOrder": 365,
+  "tags": [
+    "string",
+    "palindrome"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(n)",
+  "brief": "线性求每个中心的最长回文半径。",
+  "detail": "Manacher 利用当前最右回文区间镜像初始化半径，再继续扩展。统一奇偶回文时可插入分隔符；如果使用奇偶两套数组，d1 表示奇回文半径，d2 表示偶回文半径。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

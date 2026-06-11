@@ -1,13 +1,19 @@
 {
   "id": "dp.interval",
   "title": "区间 DP",
-  "category": ["动态规划", "区间DP"],
+  "category": [
+    "动态规划",
+    "区间DP"
+  ],
   "learningOrder": 535,
-  "tags": ["dp", "interval"],
+  "tags": [
+    "dp",
+    "interval"
+  ],
   "timeComplexity": "O(n^3)",
   "spaceComplexity": "O(n^2)",
   "brief": "按区间长度递增，枚举断点合并子区间。",
-  "detail": "区间 DP 通常先枚举 len，再枚举 l/r，最后枚举分割点 k。常见题型包括石子合并、括号匹配、回文区间和多边形划分。",
+  "detail": "区间 DP 通常按长度递增枚举区间，再枚举断点合并左右子区间。它适合石子合并、括号匹配、回文区间和多边形划分；若转移满足四边形不等式等性质，可以再考虑优化。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

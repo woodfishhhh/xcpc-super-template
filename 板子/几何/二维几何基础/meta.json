@@ -1,13 +1,20 @@
 {
   "id": "geometry.point-vector",
   "title": "二维几何基础",
-  "category": ["几何", "二维几何基础"],
+  "category": [
+    "几何",
+    "二维几何基础"
+  ],
   "learningOrder": 610,
-  "tags": ["geometry", "point", "vector"],
+  "tags": [
+    "geometry",
+    "point",
+    "vector"
+  ],
   "timeComplexity": "O(1)",
   "spaceComplexity": "O(1)",
   "brief": "二维点、向量、点积、叉积和方向判断。",
-  "detail": "几何题先统一精度策略。整数坐标优先用 long long 叉积避免误差；浮点坐标使用 eps 判断符号。叉积符号可判断转向和点在线段哪一侧。",
+  "detail": "二维几何基础模板提供点、向量、点积、叉积和方向判断。整数坐标优先使用 long long 或 __int128 避免误差；浮点坐标必须统一 eps。叉积符号可判断转向、面积和点在线段哪一侧。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

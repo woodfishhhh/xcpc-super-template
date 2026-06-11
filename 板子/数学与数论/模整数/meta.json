@@ -1,0 +1,23 @@
+{
+  "id": "math.modint",
+  "title": "模整数",
+  "category": [
+    "数学与数论",
+    "模整数"
+  ],
+  "learningOrder": 405,
+  "tags": [
+    "math",
+    "modint"
+  ],
+  "timeComplexity": "单次运算 O(1)，逆元 O(log MOD)",
+  "spaceComplexity": "O(1)",
+  "brief": "封装取模加减乘除，减少手写取模错误。",
+  "detail": "模整数适合模数固定且需要大量组合、DP 或多项式运算的题。除法要求除数与模数互质，常见质数模可用快速幂求逆；乘法若模数接近 1e18 需要换成 __int128 或专门模乘。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

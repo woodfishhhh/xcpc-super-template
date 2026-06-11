@@ -1,0 +1,24 @@
+{
+  "id": "graph.shortest-path.spfa",
+  "title": "SPFA",
+  "category": [
+    "图论",
+    "SPFA"
+  ],
+  "learningOrder": 222,
+  "tags": [
+    "graph",
+    "shortest-path",
+    "negative-edge"
+  ],
+  "timeComplexity": "最坏 O(nm)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "队列优化 Bellman-Ford，可检测负环。",
+  "detail": "SPFA 在随机或稀疏数据上常跑得快，但最坏复杂度仍可能退化，正式题不要把它当成万能最短路。无负边优先 Dijkstra；使用 SPFA 时可记录入队松弛次数，超过 n 次说明存在可达负环。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

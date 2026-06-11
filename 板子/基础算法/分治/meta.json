@@ -1,0 +1,23 @@
+{
+  "id": "basic.divide-and-conquer",
+  "title": "分治",
+  "category": [
+    "基础算法",
+    "分治"
+  ],
+  "learningOrder": 75,
+  "tags": [
+    "divide-and-conquer",
+    "recursion"
+  ],
+  "timeComplexity": "依递推式而定",
+  "spaceComplexity": "O(递归深度)",
+  "brief": "把问题拆成子问题，分别求解后合并答案。",
+  "detail": "分治适合区间、点集、序列等能被切开的状态。实现时先明确 solve(l,r) 的闭开区间语义和合并信息；若合并阶段不是线性或对数复杂度，整体复杂度会被放大。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

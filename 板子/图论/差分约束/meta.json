@@ -1,0 +1,24 @@
+{
+  "id": "graph.difference-constraints",
+  "title": "差分约束",
+  "category": [
+    "图论",
+    "差分约束"
+  ],
+  "learningOrder": 226,
+  "tags": [
+    "graph",
+    "difference-constraints",
+    "shortest-path"
+  ],
+  "timeComplexity": "O(nm) 或 SPFA 最坏 O(nm)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "把形如 x_v - x_u <= w 的约束转成最短路。",
+  "detail": "差分约束的关键是统一不等式方向：x_v <= x_u + w 对应边 u->v 权 w。若需要求最大解通常跑最短路模型，求最小解可反向建大于等于约束；负环表示约束不可同时满足。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

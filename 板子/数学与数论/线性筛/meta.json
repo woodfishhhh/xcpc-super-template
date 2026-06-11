@@ -1,13 +1,21 @@
 {
   "id": "math.number-theory.linear-sieve",
   "title": "线性筛",
-  "category": ["数学与数论", "线性筛"],
+  "category": [
+    "数学与数论",
+    "线性筛"
+  ],
   "learningOrder": 430,
-  "tags": ["math", "number-theory", "prime", "sieve"],
+  "tags": [
+    "math",
+    "number-theory",
+    "prime",
+    "sieve"
+  ],
   "timeComplexity": "O(n)",
   "spaceComplexity": "O(n)",
   "brief": "在线性时间内筛出素数和最小质因子。",
-  "detail": "线性筛保证每个合数只被它的最小质因子筛掉一次。保留 spf 后可以快速做质因数分解，也可扩展欧拉函数、莫比乌斯函数等积性函数。",
+  "detail": "线性筛保证每个合数只被最小质因子筛掉一次，可同时预处理素数、最小质因子和积性函数。保留 spf 后能快速分解单个数；扩展 phi、mu 时要区分 i 是否能被当前质数整除。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

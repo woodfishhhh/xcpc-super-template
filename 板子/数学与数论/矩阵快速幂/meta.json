@@ -1,13 +1,20 @@
 {
   "id": "math.matrix-power",
   "title": "矩阵快速幂",
-  "category": ["数学与数论", "矩阵快速幂"],
+  "category": [
+    "数学与数论",
+    "矩阵快速幂"
+  ],
   "learningOrder": 455,
-  "tags": ["math", "matrix", "fast-power"],
+  "tags": [
+    "math",
+    "matrix",
+    "fast-power"
+  ],
   "timeComplexity": "O(n^3 log k)",
   "spaceComplexity": "O(n^2)",
   "brief": "用快速幂加速线性递推和状态转移。",
-  "detail": "把一次转移写成矩阵乘法后，可用矩阵快速幂计算第 k 次转移。注意矩阵乘法顺序和初始向量方向，模数题每次乘加都取模。",
+  "detail": "矩阵快速幂用于把线性递推或固定状态转移加速到 O(k^3 log n)。建模时要明确状态向量方向和矩阵乘法顺序；模数题每次乘加都取模，矩阵维度较大时常数会很高。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

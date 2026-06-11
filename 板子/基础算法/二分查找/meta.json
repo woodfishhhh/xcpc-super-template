@@ -1,13 +1,19 @@
 {
   "id": "basic.binary-search",
   "title": "二分查找",
-  "category": ["基础算法", "二分查找"],
+  "category": [
+    "基础算法",
+    "二分查找"
+  ],
   "learningOrder": 20,
-  "tags": ["basic", "binary-search"],
+  "tags": [
+    "basic",
+    "binary-search"
+  ],
   "timeComplexity": "O(log n)",
   "spaceComplexity": "O(1)",
   "brief": "在单调序列或单调判定函数上定位边界。",
-  "detail": "二分的核心是维护一个始终满足定义的区间不变量。lower_bound 风格返回第一个满足条件的位置，answer 风格适合在值域上找最小可行解或最大可行解。",
+  "detail": "二分查找适用于有序数组或答案可行性具有单调性的场景。实现前先确定返回的是第一个满足条件的位置、最后一个满足条件的位置，还是值域上的最优答案；循环不变量比模板长相更重要，边界建议使用半开区间减少死循环。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

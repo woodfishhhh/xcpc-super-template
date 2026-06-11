@@ -1,0 +1,23 @@
+{
+  "id": "ds.heap",
+  "title": "二叉堆",
+  "category": [
+    "数据结构",
+    "二叉堆"
+  ],
+  "learningOrder": 105,
+  "tags": [
+    "heap",
+    "priority-queue"
+  ],
+  "timeComplexity": "push/pop O(log n)，top O(1)",
+  "spaceComplexity": "O(n)",
+  "brief": "维护动态集合中的最小值或最大值。",
+  "detail": "二叉堆适合不断加入元素并取当前最优的场景，如 Dijkstra、贪心合并和调度。priority_queue 默认是大根堆，小根堆需要 greater；若需要删除任意元素，可用懒删除或可修改堆。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

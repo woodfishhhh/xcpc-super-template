@@ -1,0 +1,23 @@
+{
+  "id": "string.minimal-rotation",
+  "title": "最小表示法",
+  "category": [
+    "字符串",
+    "最小表示法"
+  ],
+  "learningOrder": 385,
+  "tags": [
+    "string",
+    "rotation"
+  ],
+  "timeComplexity": "O(n)",
+  "spaceComplexity": "O(1)",
+  "brief": "求循环同构字符串中字典序最小的旋转起点。",
+  "detail": "最小表示法用两个候选起点比较公共前缀，失败的一段起点都不可能成为最优。它常用于判断环状序列同构；若序列存在周期，返回的是最小旋转的一个最早起点。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

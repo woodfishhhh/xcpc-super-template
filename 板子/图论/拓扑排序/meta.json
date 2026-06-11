@@ -1,13 +1,20 @@
 {
   "id": "graph.topological-sort",
   "title": "拓扑排序",
-  "category": ["图论", "拓扑排序"],
+  "category": [
+    "图论",
+    "拓扑排序"
+  ],
   "learningOrder": 230,
-  "tags": ["graph", "dag", "topological-sort"],
+  "tags": [
+    "graph",
+    "dag",
+    "topological-sort"
+  ],
   "timeComplexity": "O(n + m)",
   "spaceComplexity": "O(n + m)",
   "brief": "对 DAG 中的点生成满足所有依赖关系的线性序。",
-  "detail": "Kahn 算法每次取入度为 0 的点。若最终序列长度小于 n，说明图中存在环；DAG DP 通常可以先拓扑排序再按序转移。",
+  "detail": "拓扑排序用于 DAG 上的依赖顺序、课程安排和 DAG DP。Kahn 算法从入度为 0 的点开始删除，若最终输出点数小于 n，说明存在环；多解时可用优先队列控制字典序。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

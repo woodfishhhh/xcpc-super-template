@@ -30,6 +30,7 @@ describe('v1.0 release contracts', () => {
     expect(contracts).toContain('detailLevel')
     expect(contracts).toContain('npm run qa:pdf')
     expect(contracts).toContain('npm run verify:live')
+    expect(contracts).toContain('at least 50 templates')
   })
 
   it('keeps a changelog entry ready for the first stable release', () => {

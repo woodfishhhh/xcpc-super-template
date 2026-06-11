@@ -1,13 +1,21 @@
 {
   "id": "graph.mst.kruskal",
   "title": "Kruskal 最小生成树",
-  "category": ["图论", "最小生成树"],
+  "category": [
+    "图论",
+    "最小生成树"
+  ],
   "learningOrder": 240,
-  "tags": ["graph", "mst", "kruskal", "dsu"],
+  "tags": [
+    "graph",
+    "mst",
+    "kruskal",
+    "dsu"
+  ],
   "timeComplexity": "O(m log m)",
   "spaceComplexity": "O(n + m)",
   "brief": "按边权从小到大合并连通块，得到最小生成树。",
-  "detail": "Kruskal 适合稀疏图和边列表输入。若最终选边数不是 n-1，说明图不连通；最大生成树只需要反向排序。",
+  "detail": "Kruskal 按边权排序并用并查集合并连通块，适合边列表输入和稀疏图。若最终选边数少于 n-1，图不连通；最大生成树只需反向排序。相同权边不影响总权值，但会影响具体选出的边集。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

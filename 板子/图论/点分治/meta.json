@@ -1,0 +1,23 @@
+{
+  "id": "graph.centroid-decomposition",
+  "title": "点分治",
+  "category": [
+    "图论",
+    "点分治"
+  ],
+  "learningOrder": 280,
+  "tags": [
+    "tree",
+    "centroid-decomposition"
+  ],
+  "timeComplexity": "O(n log n) 常见",
+  "spaceComplexity": "O(n)",
+  "brief": "每次选树的重心分治处理跨子树路径。",
+  "detail": "点分治适合统计树上路径类问题，重心保证递归深度 O(log n)。每层要先统计经过当前重心的答案，再递归到删除重心后的子树；注意清空临时桶和避免重复统计同一子树内部路径。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

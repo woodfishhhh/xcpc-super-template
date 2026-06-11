@@ -1,0 +1,24 @@
+{
+  "id": "graph.shortest-path.johnson",
+  "title": "Johnson 全源最短路",
+  "category": [
+    "图论",
+    "Johnson全源最短路"
+  ],
+  "learningOrder": 224,
+  "tags": [
+    "graph",
+    "shortest-path",
+    "johnson"
+  ],
+  "timeComplexity": "O(nm + n m log n)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "用势能重标边权后跑多次 Dijkstra。",
+  "detail": "Johnson 适合稀疏图全源最短路且允许负边但无负环的情况。先用 Bellman-Ford 求势能 h，再把边权变成非负的 w+h[u]-h[v]；还原答案时必须减回势能差。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

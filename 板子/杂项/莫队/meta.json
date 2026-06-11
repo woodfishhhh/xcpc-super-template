@@ -1,0 +1,24 @@
+{
+  "id": "misc.mo-algorithm",
+  "title": "莫队算法",
+  "category": [
+    "杂项",
+    "莫队"
+  ],
+  "learningOrder": 940,
+  "tags": [
+    "offline",
+    "sqrt-decomposition",
+    "mo"
+  ],
+  "timeComplexity": "O((n + q) sqrt n * 单次移动代价)",
+  "spaceComplexity": "O(n + q)",
+  "brief": "离线重排区间询问，减少左右端点移动次数。",
+  "detail": "莫队适合静态数组区间查询，且 add/remove 一个端点的代价较低。排序块大小通常取 sqrt(n)，答案维护必须支持左右端点增删；若有修改或树上路径，需要使用带修改莫队或树上莫队变体。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

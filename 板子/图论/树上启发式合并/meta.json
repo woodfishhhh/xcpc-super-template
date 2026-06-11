@@ -1,0 +1,23 @@
+{
+  "id": "graph.dsu-on-tree",
+  "title": "树上启发式合并",
+  "category": [
+    "图论",
+    "树上启发式合并"
+  ],
+  "learningOrder": 284,
+  "tags": [
+    "tree",
+    "dsu-on-tree"
+  ],
+  "timeComplexity": "O(n log n) 或 O(n) 视维护结构而定",
+  "spaceComplexity": "O(n)",
+  "brief": "保留重儿子贡献，轻儿子答案用完即清。",
+  "detail": "树上启发式合并适合回答每个子树内的颜色频次、众数或统计信息。先预处理重儿子，DFS 时轻儿子不保留，重儿子保留，再把轻儿子贡献加入；keep 标记控制是否清空当前子树贡献。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

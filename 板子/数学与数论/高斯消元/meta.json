@@ -1,0 +1,24 @@
+{
+  "id": "math.gaussian-elimination",
+  "title": "高斯消元",
+  "category": [
+    "数学与数论",
+    "高斯消元"
+  ],
+  "learningOrder": 470,
+  "tags": [
+    "math",
+    "linear-algebra",
+    "gauss"
+  ],
+  "timeComplexity": "O(n^3)",
+  "spaceComplexity": "O(n^2)",
+  "brief": "求解线性方程组或矩阵秩。",
+  "detail": "高斯消元每列选主元并消去其它行。浮点版本要用 eps 判断零并选绝对值最大主元；模意义下要用逆元，且模数非质数时不一定能除。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "dp.state-compression",
+  "title": "状态压缩 DP",
+  "category": [
+    "动态规划",
+    "状态压缩DP"
+  ],
+  "learningOrder": 545,
+  "tags": [
+    "dp",
+    "bitmask"
+  ],
+  "timeComplexity": "通常 O(2^n * poly(n))",
+  "spaceComplexity": "O(2^n)",
+  "brief": "用二进制位集合表示小规模状态。",
+  "detail": "状态压缩 DP 适合 n 不大、状态是集合或占用情况的题。转移前先估算 2^n 上限，枚举子集时可用 sub=(sub-1)&mask；若状态还包含位置，通常写成 dp[mask][last]。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

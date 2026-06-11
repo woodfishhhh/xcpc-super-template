@@ -1,13 +1,20 @@
 {
   "id": "basic.bfs-grid",
   "title": "网格 BFS",
-  "category": ["基础算法", "宽度优先搜索"],
+  "category": [
+    "基础算法",
+    "宽度优先搜索"
+  ],
   "learningOrder": 40,
-  "tags": ["basic", "bfs", "grid"],
+  "tags": [
+    "basic",
+    "bfs",
+    "grid"
+  ],
   "timeComplexity": "O(nm)",
   "spaceComplexity": "O(nm)",
   "brief": "在无权图或网格中求最短步数。",
-  "detail": "BFS 按距离层扩展，第一次到达某个状态时距离最短。网格题要统一边界、障碍、访问标记和起点初始化，多个起点时可以全部先入队。",
+  "detail": "网格 BFS 用队列按层扩展，适合无权最短路、最少步数和多源扩散问题。多个起点可以同时入队，第一次访问即得到最短距离；若边权只有 0/1，应改用 0-1 BFS。",
   "codeLanguage": "cpp",
   "source": {
     "name": "XCPC Super Template original",

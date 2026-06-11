@@ -1,0 +1,23 @@
+{
+  "id": "graph.euler-tour",
+  "title": "欧拉路径",
+  "category": [
+    "图论",
+    "欧拉路径"
+  ],
+  "learningOrder": 268,
+  "tags": [
+    "graph",
+    "euler"
+  ],
+  "timeComplexity": "O(n + m)",
+  "spaceComplexity": "O(n + m)",
+  "brief": "求经过每条边恰好一次的路径或回路。",
+  "detail": "无向图欧拉回路要求所有非孤立点连通且度数全为偶数，欧拉路径允许恰好两个奇度点。Hierholzer 算法边走边删，回溯时记录点序；无向图需要用边编号避免反向边重复使用。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ds.link-cut-tree",
+  "title": "Link-Cut Tree",
+  "category": [
+    "数据结构",
+    "Link-Cut Tree"
+  ],
+  "learningOrder": 188,
+  "tags": [
+    "dynamic-tree",
+    "lct",
+    "splay"
+  ],
+  "timeComplexity": "均摊 O(log n)",
+  "spaceComplexity": "O(n)",
+  "brief": "维护动态森林中的路径信息。",
+  "detail": "Link-Cut Tree 用一组 Splay 表示实链，支持 link、cut、makeroot 和路径查询。它适合动态图森林，不适合有环图直接维护；所有访问前要下推翻转标记，路径聚合信息必须在 rotate 后 pull。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}

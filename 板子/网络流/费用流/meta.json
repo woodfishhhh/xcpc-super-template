@@ -1,0 +1,23 @@
+{
+  "id": "flow.min-cost-max-flow",
+  "title": "最小费用最大流",
+  "category": [
+    "网络流",
+    "费用流"
+  ],
+  "learningOrder": 720,
+  "tags": [
+    "flow",
+    "min-cost-flow"
+  ],
+  "timeComplexity": "O(F m log n) 使用势能优化时常见",
+  "spaceComplexity": "O(n + m)",
+  "brief": "在最大流约束下最小化总费用。",
+  "detail": "费用流建边时容量和费用都要有反向边，反向边费用取相反数。若有负费用边，初始势能需要 Bellman-Ford/SPFA 或保证无负边；每轮按最短增广路增广，注意费用可能溢出 int。",
+  "codeLanguage": "cpp",
+  "source": {
+    "name": "XCPC Super Template original",
+    "license": "GPL-3.0-only"
+  },
+  "updatedAt": "2026-06-11"
+}
