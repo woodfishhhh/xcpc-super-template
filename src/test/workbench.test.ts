@@ -11,6 +11,11 @@ import { inspectDraftComposition } from '@/lib/draftChecks'
 import { normalizeEditorDraftState } from '@/lib/editorDraftStore'
 import { stripCodeFence } from '@/lib/code'
 import {
+  applyDraftPresetSelections,
+  draftPresetPacks,
+  getDraftPresetAddedCount
+} from '@/lib/presets'
+import {
   buildTemplateCategoryOptions,
   cloneTemplateAsPersonal,
   filterTemplatesForLibrary,
@@ -394,5 +399,42 @@ describe('workbench document model', () => {
       'missing-complexity',
       'long-code'
     ])
+  })
+
+  it('defines common contest preset packs and applies missing templates without duplicates', () => {
+    expect(draftPresetPacks.map((pack) => pack.title)).toEqual([
+      '新生版',
+      '区域赛版',
+      '图论强化版',
+      '数学强化版'
+    ])
+
+    const freshmanPack = draftPresetPacks.find((pack) => pack.id === 'freshman')
+    expect(freshmanPack?.templateIds).toContain('basic.binary-search')
+    expect(freshmanPack?.templateIds).toContain('misc.fast-io')
+
+    const availableIds = new Set([
+      'basic.binary-search',
+      'basic.prefix-difference',
+      'basic.bfs-grid',
+      'misc.fast-io'
+    ])
+    const current: PrintSelection[] = [
+      { templateId: 'basic.binary-search', detailLevel: 'detail' },
+      { templateId: 'personal.team-template', detailLevel: 'brief' }
+    ]
+
+    const next = applyDraftPresetSelections(current, freshmanPack!, availableIds)
+
+    expect(next.map((selection) => selection.templateId)).toEqual([
+      'basic.binary-search',
+      'personal.team-template',
+      'basic.prefix-difference',
+      'basic.bfs-grid',
+      'misc.fast-io'
+    ])
+    expect(next[0]?.detailLevel).toBe('detail')
+    expect(next.slice(2).every((selection) => selection.detailLevel === 'brief')).toBe(true)
+    expect(getDraftPresetAddedCount(current, freshmanPack!, availableIds)).toBe(3)
   })
 })

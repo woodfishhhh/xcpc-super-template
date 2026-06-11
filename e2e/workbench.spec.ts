@@ -81,6 +81,24 @@ test('draft batch move controls move checked rows as a group', async ({ page }) 
   await expect(headingLocator).toHaveText([initialTitles[0] ?? '', initialTitles[2] ?? '', initialTitles[1] ?? ''])
 })
 
+test('draft preset packs add common contest templates', async ({ page }) => {
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await nav('打印稿').click()
+  await page.getByRole('button', { name: '应用 新生版', exact: true }).click()
+
+  await expect(page.getByRole('status')).toHaveText(/已应用 新生版，新增 \d+ 条/)
+  await expect(page.locator('article.draft-row')).toHaveCount(9)
+  await expect(page.locator('article.draft-row h3')).toContainText([
+    '二分查找',
+    '网格 BFS',
+    '深度优先搜索'
+  ])
+
+  await page.getByRole('button', { name: '应用 新生版', exact: true }).click()
+  await expect(page.locator('article.draft-row')).toHaveCount(9)
+})
+
 test('chapter controls move whole draft sections', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 

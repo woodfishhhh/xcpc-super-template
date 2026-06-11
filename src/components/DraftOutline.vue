@@ -2,8 +2,10 @@
 import { computed } from 'vue'
 import { ArrowDown, ArrowDownToLine, ArrowUp, ArrowUpToLine, GripVertical, Trash2 } from '@lucide/vue'
 import { VueDraggable } from 'vue-draggable-plus'
+import DraftPresetPanel from '@/components/DraftPresetPanel.vue'
 import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
+import type { DraftPresetPack } from '@/lib/presets'
 import type { DetailLevel, MoveDirection, PrintSelection, TemplateEntry } from '@/types/template'
 
 type CheckedMoveDirection = Extract<MoveDirection, 'top' | 'bottom'>
@@ -17,9 +19,11 @@ const props = defineProps<{
   items: DraftItem[]
   checkedIds: Set<string>
   density: 'compact' | 'comfortable' | 'large'
+  presetPacks: DraftPresetPack[]
 }>()
 
 const emit = defineEmits<{
+  applyPreset: [presetId: DraftPresetPack['id']]
   reorder: [items: PrintSelection[]]
   move: [templateId: string, direction: MoveDirection]
   moveChapter: [chapterKey: string, direction: MoveDirection]
@@ -130,6 +134,8 @@ const chapters = computed(() => {
           </Button>
         </div>
       </div>
+
+      <DraftPresetPanel :packs="props.presetPacks" @apply-preset="emit('applyPreset', $event)" />
 
       <div v-if="chapters.length > 1" class="mt-4 grid gap-2" aria-label="章节顺序">
         <article

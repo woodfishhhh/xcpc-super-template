@@ -17,6 +17,12 @@ import { exportSingleTemplate } from '@/lib/importExport'
 import { generateMarkdown } from '@/lib/markdown'
 import { resolvePrintSections } from '@/lib/printDocument'
 import {
+  applyDraftPresetSelections,
+  draftPresetPacks,
+  getDraftPresetAddedCount,
+  type DraftPresetPack
+} from '@/lib/presets'
+import {
   buildTemplateCategoryOptions,
   cloneTemplateAsPersonal,
   hasDefaultTemplate,
@@ -94,6 +100,7 @@ const standalonePersonalTemplates = computed(() =>
 const existingTemplateIds = computed(
   () => new Set([...publicTemplates, ...personalTemplates.value].map((template) => template.id))
 )
+const availableTemplateIds = computed(() => new Set(allTemplates.value.map((template) => template.id)))
 const personalCategorySuggestions = computed(() =>
   buildTemplateCategoryOptions(personalTemplates.value, 'personal').map((option) => option.label)
 )
@@ -186,6 +193,21 @@ function removeCheckedDrafts(): void {
 function applyDetailToCheckedOrAll(detailLevel: DetailLevel): void {
   if (checkedDraftIds.value.size === 0) return
   changeManyDetails([...checkedDraftIds.value], detailLevel)
+}
+
+function applyDraftPreset(presetId: DraftPresetPack['id']): void {
+  const preset = draftPresetPacks.find((item) => item.id === presetId)
+  if (!preset) return
+
+  const addedCount = getDraftPresetAddedCount(selections.value, preset, availableTemplateIds.value)
+  if (addedCount === 0) {
+    status.value = `已在打印稿中：${preset.title}`
+    return
+  }
+
+  const next = applyDraftPresetSelections(selections.value, preset, availableTemplateIds.value)
+  selections.value = reorderSelections(next, config.sortMode)
+  status.value = `已应用 ${preset.title}，新增 ${addedCount} 条`
 }
 
 function updateConfig(patch: Partial<PrintConfig>): void {
@@ -469,6 +491,8 @@ watch(
           :items="draftItems"
           :checked-ids="checkedDraftIds"
           :density="draftDensity"
+          :preset-packs="draftPresetPacks"
+          @apply-preset="applyDraftPreset"
           @reorder="reorderDraft"
           @move="moveDraft"
           @move-chapter="moveDraftChapter"
