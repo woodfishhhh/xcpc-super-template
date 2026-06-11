@@ -1,6 +1,7 @@
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
 import { Previewer } from 'pagedjs'
+import { decoratePagedPages } from '@/lib/pageChrome'
 import { buildPrintableHtml, resolvePrintSections, type PrintSection } from '@/lib/printDocument'
 import { createPdfLayoutReport, type PdfLayoutReport, type PdfLayoutWarning } from '@/lib/pdfReport'
 import { sanitizeFilename } from '@/lib/utils'
@@ -124,6 +125,7 @@ async function paginate(
   const html = buildPrintableHtml(config, templates, selections, pageMap)
   const previewer = new Previewer()
   await previewer.preview(html, [], host)
+  decoratePagedPages(host, config)
   return {
     sections,
     pageMap: readSectionPages(host)
@@ -152,6 +154,27 @@ function readVisualLayoutWarnings(host: HTMLElement, pageMap: Map<string, number
   const pages = [...host.querySelectorAll<HTMLElement>('.pagedjs_page')]
 
   pages.forEach((page, pageIndex) => {
+    const header = page.querySelector<HTMLElement>('.print-page-header')
+    const footer = page.querySelector<HTMLElement>('.print-page-footer')
+
+    if (!header?.textContent?.trim()) {
+      warnings.push({
+        code: 'missing-page-header',
+        severity: 'error',
+        message: `第 ${pageIndex + 1} 页缺少页眉。`,
+        page: pageIndex + 1
+      })
+    }
+
+    if (!footer?.textContent?.includes(`第 ${pageIndex + 1} 页`)) {
+      warnings.push({
+        code: 'missing-page-footer',
+        severity: 'error',
+        message: `第 ${pageIndex + 1} 页缺少可信页码。`,
+        page: pageIndex + 1
+      })
+    }
+
     page.querySelectorAll<HTMLElement>('pre').forEach((block) => {
       if (block.scrollWidth > block.clientWidth + 2) {
         const section = block.closest<HTMLElement>('[data-template-id]')

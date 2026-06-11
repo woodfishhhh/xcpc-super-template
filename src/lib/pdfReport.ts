@@ -14,6 +14,8 @@ export interface PdfTocEntry {
 export interface PdfLayoutWarning {
   code:
     | 'missing-page'
+    | 'missing-page-header'
+    | 'missing-page-footer'
     | 'horizontal-overflow'
     | 'orphan-heading'
     | 'long-code-line'

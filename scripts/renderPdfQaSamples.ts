@@ -149,6 +149,9 @@ async function paginate(
     </html>`,
     { waitUntil: 'load' }
   )
+  await page.evaluate(() => {
+    ;(window as typeof window & { __name?: <T>(value: T) => T }).__name = (value) => value
+  })
   await page.addScriptTag({ path: pagedScriptPath })
   await page.evaluate(async (html) => {
     const Paged = (window as typeof window & { Paged?: { Previewer: new () => { preview: (content: string, stylesheets: string[], renderTo: Element) => Promise<unknown> } } }).Paged
@@ -166,7 +169,59 @@ async function paginate(
     await previewer.preview(html, [], preview)
     await document.fonts.ready
   }, printableHtml)
+  await decoratePagedPages(page, config)
   await page.waitForSelector('.pagedjs_page')
+}
+
+async function decoratePagedPages(page: Page, config: PrintConfig): Promise<void> {
+  await page.evaluate(({ title, layout }) => {
+    const layoutLabel = layout === 'book' ? '书籍章节版' : '紧凑比赛版'
+    const applyChromeStyle = (element: HTMLElement) => {
+      Object.assign(element.style, {
+        position: 'absolute',
+        zIndex: '5',
+        maxWidth: 'calc(100% - 88px)',
+        overflow: 'hidden',
+        color: '#475569',
+        fontFamily: '"Microsoft YaHei", "Noto Sans SC", "PingFang SC", sans-serif',
+        fontSize: '10px',
+        letterSpacing: '0',
+        lineHeight: '1.2',
+        pointerEvents: 'none',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
+      })
+    }
+
+    document.querySelectorAll<HTMLElement>('.pagedjs_page').forEach((pagedPage, index) => {
+      pagedPage.querySelectorAll('.print-page-chrome').forEach((node) => node.remove())
+      pagedPage.style.position = 'relative'
+
+      const header = document.createElement('div')
+      header.className = 'print-page-chrome print-page-header'
+      header.textContent = `${title || 'XCPC 打印稿'} · ${layoutLabel}`
+      applyChromeStyle(header)
+      Object.assign(header.style, {
+        top: '18px',
+        left: '44px',
+        right: '44px',
+        textAlign: 'left'
+      })
+
+      const footer = document.createElement('div')
+      footer.className = 'print-page-chrome print-page-footer'
+      footer.textContent = `第 ${index + 1} 页`
+      applyChromeStyle(footer)
+      Object.assign(footer.style, {
+        right: '0',
+        bottom: '16px',
+        left: '0',
+        textAlign: 'center'
+      })
+
+      pagedPage.append(header, footer)
+    })
+  }, { title: config.title.trim(), layout: config.layout })
 }
 
 async function readSectionPages(page: Page): Promise<Map<string, number>> {
@@ -196,6 +251,27 @@ async function readVisualWarnings(page: Page, pageMap: Map<string, number>): Pro
     const pages = [...document.querySelectorAll<HTMLElement>('.pagedjs_page')]
 
     pages.forEach((pagedPage, pageIndex) => {
+      const header = pagedPage.querySelector<HTMLElement>('.print-page-header')
+      const footer = pagedPage.querySelector<HTMLElement>('.print-page-footer')
+
+      if (!header?.textContent?.trim()) {
+        warnings.push({
+          code: 'missing-page-header',
+          severity: 'error',
+          message: `第 ${pageIndex + 1} 页缺少页眉。`,
+          page: pageIndex + 1
+        })
+      }
+
+      if (!footer?.textContent?.includes(`第 ${pageIndex + 1} 页`)) {
+        warnings.push({
+          code: 'missing-page-footer',
+          severity: 'error',
+          message: `第 ${pageIndex + 1} 页缺少可信页码。`,
+          page: pageIndex + 1
+        })
+      }
+
       pagedPage.querySelectorAll<HTMLElement>('.pagedjs_page_content pre').forEach((block) => {
         if (block.scrollWidth > block.clientWidth + 2) {
           const section = block.closest<HTMLElement>('[data-template-id]')
