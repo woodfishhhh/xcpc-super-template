@@ -156,6 +156,8 @@ const printCss = `
     font-family: "Microsoft YaHei", "Noto Sans SC", "PingFang SC", sans-serif;
     font-size: 10pt;
     line-height: 1.42;
+    orphans: 3;
+    widows: 3;
   }
   .cover {
     break-after: page;
@@ -182,7 +184,8 @@ const printCss = `
   .chapter h2 {
     margin: 0 0 10pt;
     font-size: 18pt;
-    break-after: avoid;
+    break-after: avoid-page;
+    break-inside: avoid;
   }
   .toc ol {
     list-style: none;
@@ -208,14 +211,17 @@ const printCss = `
   }
   .template-section {
     margin: 0 0 11pt;
+    break-inside: avoid-page;
   }
   .book-layout .template-section {
     break-before: page;
+    break-inside: auto;
   }
   .template-section h3 {
     margin: 0 0 4pt;
     font-size: 13pt;
-    break-after: avoid;
+    break-after: avoid-page;
+    break-inside: avoid;
   }
   .complexity {
     display: flex;
@@ -230,6 +236,7 @@ const printCss = `
     color: #1e293b;
   }
   pre {
+    max-width: 100%;
     margin: 0;
     padding: 6pt;
     border: 0.75pt solid #cbd5e1;
@@ -237,6 +244,8 @@ const printCss = `
     color: #020617;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: none;
     font-family: "Cascadia Mono", "Consolas", "Courier New", monospace;
     font-size: 7.7pt;
     line-height: 1.32;

@@ -59,6 +59,22 @@ test('draft bulk actions affect only checked rows', async ({ page }) => {
   await expect(kmpRow.locator('select[aria-label="介绍详细度"]')).toHaveValue('brief')
 })
 
+test('pdf inspection reports paged toc before download', async ({ page }) => {
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await templateCard(page, 'Dijkstra').getByTitle('加入打印稿').click()
+  await templateCard(page, 'KMP').getByTitle('加入打印稿').click()
+  await nav('生成').click()
+
+  await page.getByRole('button', { name: '检查', exact: true }).click()
+
+  const report = page.locator('.pdf-report')
+  await expect(report).toContainText(/可导出|建议复核/)
+  await expect(report).toContainText(/页/)
+  await expect(report.locator('.pdf-report__toc')).toContainText('Dijkstra')
+  await expect(report.locator('.pdf-report__toc')).toContainText('KMP')
+})
+
 test('all public templates can be opened and selected from the library', async ({ page }) => {
   const titles = await page.locator('article.template-row h4').allInnerTexts()
   expect(titles.length).toBeGreaterThanOrEqual(30)

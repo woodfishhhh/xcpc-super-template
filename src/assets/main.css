@@ -541,6 +541,98 @@ button:disabled {
   color: #fffcf5;
 }
 
+.pdf-report {
+  border: 1px solid var(--ink);
+  background: rgba(255, 252, 245, 0.78);
+}
+
+.pdf-report__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border-bottom: 1px solid var(--ink);
+  padding: 0.85rem;
+}
+
+.pdf-report__head strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 760;
+  line-height: 1;
+}
+
+.pdf-report__body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem;
+}
+
+.pdf-report__stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.pdf-report__stats span {
+  min-width: 0;
+  border: 1px solid var(--ink);
+  padding: 0.45rem 0.35rem;
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 760;
+}
+
+.pdf-report__toc,
+.pdf-report__warnings {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pdf-report__toc li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  border-bottom: 1px dotted var(--hairline);
+  padding-bottom: 0.28rem;
+  font-size: 0.74rem;
+}
+
+.pdf-report__toc li span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdf-report__toc li strong {
+  font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
+}
+
+.pdf-report__warnings li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.45rem;
+  align-items: start;
+  border: 1px solid var(--ink);
+  padding: 0.48rem 0.55rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.pdf-report__warnings li[data-severity="error"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.pdf-report__warnings li[data-severity="warning"] {
+  background: rgba(235, 232, 223, 0.9);
+}
+
 .code-editor-shell {
   min-height: clamp(19rem, 46vh, 34rem);
   overflow: hidden;

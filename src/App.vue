@@ -17,6 +17,7 @@ import { resolvePrintSections } from '@/lib/printDocument'
 import { hasDefaultTemplate, mergeTemplateOverrides, moveSelection, sortTemplates } from '@/lib/templates'
 import { sanitizeFilename } from '@/lib/utils'
 import { loadWorkbenchState, saveWorkbenchState, type DraftDensity } from '@/lib/workbenchStore'
+import type { PdfLayoutReport } from '@/lib/pdfReport'
 import type { DetailLevel, MoveDirection, PrintConfig, PrintSelection, SortMode, TemplateEntry } from '@/types/template'
 import 'swiper/css'
 
@@ -37,6 +38,8 @@ const config = reactive<PrintConfig>({ ...defaultConfig })
 const selections = shallowRef<PrintSelection[]>([])
 const status = shallowRef('准备就绪')
 const isExportingPdf = shallowRef(false)
+const isInspectingPdf = shallowRef(false)
+const pdfReport = shallowRef<PdfLayoutReport | null>(null)
 const activeSlide = shallowRef(0)
 const swiperInstance = shallowRef<SwiperInstance | null>(null)
 const activeTemplateId = shallowRef(publicTemplates[0]?.id ?? '')
@@ -197,12 +200,30 @@ async function downloadPdf(): Promise<void> {
   status.value = '正在分页并生成 PDF'
   try {
     const { exportPdf } = await import('@/lib/pdf')
-    await exportPdf(config, allTemplates.value, selections.value)
+    pdfReport.value = await exportPdf(config, allTemplates.value, selections.value)
     status.value = 'PDF 已生成'
   } catch (cause) {
+    if (cause instanceof Error && 'report' in cause) {
+      pdfReport.value = (cause as Error & { report: PdfLayoutReport }).report
+    }
     status.value = cause instanceof Error ? cause.message : 'PDF 生成失败'
   } finally {
     isExportingPdf.value = false
+  }
+}
+
+async function inspectPdf(): Promise<void> {
+  isInspectingPdf.value = true
+  status.value = '正在检查 PDF 分页'
+  try {
+    const { inspectPdfLayout } = await import('@/lib/pdf')
+    pdfReport.value = await inspectPdfLayout(config, allTemplates.value, selections.value)
+    const issueCount = pdfReport.value.warnings.length
+    status.value = issueCount > 0 ? `PDF 检查完成：${issueCount} 个提示` : 'PDF 检查完成'
+  } catch (cause) {
+    status.value = cause instanceof Error ? cause.message : 'PDF 检查失败'
+  } finally {
+    isInspectingPdf.value = false
   }
 }
 
@@ -262,6 +283,17 @@ watch(
   }),
   (state) => {
     saveWorkbenchState(state)
+  },
+  { deep: true }
+)
+
+watch(
+  () => ({
+    config: { ...config },
+    selections: selections.value
+  }),
+  () => {
+    pdfReport.value = null
   },
   { deep: true }
 )
@@ -368,10 +400,13 @@ watch(
               :markdown="markdown"
               :selected-count="selections.length"
               :is-exporting-pdf="isExportingPdf"
+              :is-inspecting-pdf="isInspectingPdf"
+              :pdf-report="pdfReport"
               :show-preview="false"
               @update-config="updateConfig"
               @download-markdown="downloadMarkdown"
               @export-pdf="downloadPdf"
+              @inspect-pdf="inspectPdf"
             />
           </template>
           <template #second>

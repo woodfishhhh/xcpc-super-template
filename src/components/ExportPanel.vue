@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Download, FileDown, FileText, Printer } from '@lucide/vue'
+import { AlertTriangle, CheckCircle2, Download, FileDown, FileText, Printer } from '@lucide/vue'
 import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
 import TextInput from '@/components/ui/TextInput.vue'
+import type { PdfLayoutReport } from '@/lib/pdfReport'
 import type { OutputMode, PrintConfig, PrintLayout, SortMode } from '@/types/template'
 
 const props = withDefaults(
@@ -12,6 +13,8 @@ const props = withDefaults(
     markdown: string
     selectedCount: number
     isExportingPdf: boolean
+    isInspectingPdf: boolean
+    pdfReport: PdfLayoutReport | null
     showPreview?: boolean
   }>(),
   {
@@ -23,6 +26,7 @@ const emit = defineEmits<{
   updateConfig: [patch: Partial<PrintConfig>]
   downloadMarkdown: []
   exportPdf: []
+  inspectPdf: []
 }>()
 
 const titleModel = computed({
@@ -32,6 +36,16 @@ const titleModel = computed({
 
 const canDownloadMarkdown = computed(() => props.config.output === 'markdown' || props.config.output === 'both')
 const canDownloadPdf = computed(() => props.config.output === 'pdf' || props.config.output === 'both')
+const tocPreviewEntries = computed(() => props.pdfReport?.tocEntries.slice(0, 8) ?? [])
+const errorCount = computed(() => props.pdfReport?.warnings.filter((warning) => warning.severity === 'error').length ?? 0)
+const warningCount = computed(() => props.pdfReport?.warnings.filter((warning) => warning.severity === 'warning').length ?? 0)
+const infoCount = computed(() => props.pdfReport?.warnings.filter((warning) => warning.severity === 'info').length ?? 0)
+const reportStatusLabel = computed(() => {
+  if (!props.pdfReport) return '未检查'
+  if (errorCount.value > 0) return '需要处理'
+  if (warningCount.value > 0) return '建议复核'
+  return '可导出'
+})
 </script>
 
 <template>
@@ -126,6 +140,53 @@ const canDownloadPdf = computed(() => props.config.output === 'pdf' || props.con
             <FileDown class="h-4 w-4" />
             {{ props.isExportingPdf ? '生成中' : 'PDF' }}
           </Button>
+        </div>
+
+        <div class="pdf-report">
+          <div class="pdf-report__head">
+            <div>
+              <span class="field-label">PDF 检查</span>
+              <strong>{{ reportStatusLabel }}</strong>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              :disabled="props.selectedCount === 0 || props.isInspectingPdf || props.isExportingPdf"
+              @click="emit('inspectPdf')"
+            >
+              <Printer class="h-4 w-4" />
+              {{ props.isInspectingPdf ? '检查中' : '检查' }}
+            </Button>
+          </div>
+
+          <div v-if="props.pdfReport" class="pdf-report__body">
+            <div class="pdf-report__stats">
+              <span>{{ props.pdfReport.pageCount }} 页</span>
+              <span>{{ props.pdfReport.templateCount }} 条</span>
+              <span>{{ errorCount }} 错误</span>
+              <span>{{ warningCount }} 警告</span>
+              <span>{{ infoCount }} 提示</span>
+            </div>
+
+            <ol v-if="props.config.includeToc && tocPreviewEntries.length > 0" class="pdf-report__toc">
+              <li v-for="entry in tocPreviewEntries" :key="entry.templateId">
+                <span>{{ entry.title }}</span>
+                <strong>{{ entry.page ?? '-' }}</strong>
+              </li>
+            </ol>
+
+            <ul v-if="props.pdfReport.warnings.length > 0" class="pdf-report__warnings">
+              <li
+                v-for="warning in props.pdfReport.warnings.slice(0, 5)"
+                :key="`${warning.code}-${warning.templateId ?? 'global'}-${warning.page ?? 'x'}-${warning.message}`"
+                :data-severity="warning.severity"
+              >
+                <AlertTriangle v-if="warning.severity !== 'info'" class="h-3.5 w-3.5" />
+                <CheckCircle2 v-else class="h-3.5 w-3.5" />
+                <span>{{ warning.message }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div v-if="props.showPreview" class="preview-slab overflow-hidden">
