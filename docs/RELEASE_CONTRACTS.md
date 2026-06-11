@@ -131,6 +131,7 @@ Before tagging `v1.0.0`:
 - `npm run build` passes.
 - `npm run test:e2e` passes.
 - `npm run qa:pdf` produces no release-blocking layout errors.
+- `npm run release:preflight:final -- --confirm-beta-triaged --confirm-ci-green --confirm-pages-live` passes.
 - GitHub CI is green on the release commit.
 - Public beta release blockers from #9 are fixed or explicitly deferred.
 - `CHANGELOG.md` contains the final `v1.0.0` entry.

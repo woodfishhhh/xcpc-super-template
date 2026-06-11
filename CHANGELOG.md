@@ -16,6 +16,7 @@ All notable changes to XCPC Super Template are tracked here.
 - PDF layout reporting and QA sample rendering for TOC page numbers, page chrome, and layout warnings.
 - PWA offline caching and GitHub Pages deployment.
 - GitHub issue templates for bugs, features, template contributions, and beta feedback.
+- v1.0 release notes draft and release preflight scripts.
 
 ### Release Candidates
 

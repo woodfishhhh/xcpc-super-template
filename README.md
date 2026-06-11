@@ -73,6 +73,7 @@ layout warnings.
 - Product requirements: [`docs/PRD.md`](docs/PRD.md)
 - Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - Release contracts: [`docs/RELEASE_CONTRACTS.md`](docs/RELEASE_CONTRACTS.md)
+- Release notes draft: [`docs/RELEASE_NOTES_DRAFT.md`](docs/RELEASE_NOTES_DRAFT.md)
 - Changelog: [`CHANGELOG.md`](CHANGELOG.md)
 - User trial plan: [`docs/USER_TRIAL_PLAN.md`](docs/USER_TRIAL_PLAN.md)
 - Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
