@@ -145,6 +145,26 @@ test('public template overrides can be saved and reverted', async ({ page }) => 
   await expect(page.getByRole('button', { name: '默认' })).toBeDisabled()
 })
 
+test('unsaved editor changes are autosaved and restored after reload', async ({ page }) => {
+  await clickTemplateBody(page, 'Dijkstra')
+  const editor = page.locator('aside.template-editor')
+  const titleInput = editor.locator('input[aria-label="标题"]')
+  const editorStatus = editor.locator('[aria-label="编辑状态"]')
+
+  await titleInput.fill('Dijkstra 未保存草稿')
+  await expect(editorStatus).toHaveText('未保存，已自动保存草稿')
+
+  await page.reload()
+  await page.waitForSelector('article.template-row')
+
+  await expect(titleInput).toHaveValue('Dijkstra 未保存草稿')
+  await expect(editorStatus).toHaveText('草稿已恢复')
+
+  await page.getByRole('button', { name: '保存', exact: true }).click()
+  await expect(page.getByRole('status')).toHaveText('已保存：Dijkstra 未保存草稿')
+  await expect(editorStatus).toHaveText('已保存')
+})
+
 test('public templates can be copied into editable personal templates', async ({ page }) => {
   const titleInput = page.locator('aside.template-editor input[aria-label="标题"]')
   const categoryInput = page.locator('aside.template-editor input[aria-label="分类路径"]')

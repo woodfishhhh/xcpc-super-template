@@ -7,6 +7,7 @@ import {
   importPersonalLibraryWithReport
 } from '@/lib/importExport'
 import { generateMarkdown } from '@/lib/markdown'
+import { normalizeEditorDraftState } from '@/lib/editorDraftStore'
 import { stripCodeFence } from '@/lib/code'
 import {
   buildTemplateCategoryOptions,
@@ -265,5 +266,38 @@ describe('workbench document model', () => {
     expect(saved?.config.output).toBe('pdf')
     expect(saved?.config.tocDepth).toBe(2)
     expect(saved?.selections).toEqual([{ templateId: 'graph.dijkstra', detailLevel: 'detail' }])
+  })
+
+  it('normalizes editor autosave drafts and drops malformed entries', () => {
+    const normalized = normalizeEditorDraftState({
+      schemaVersion: 1,
+      drafts: [
+        {
+          templateId: 'graph.dijkstra',
+          savedAt: '2026-06-11T00:00:00.000Z',
+          draft: {
+            id: 'graph.dijkstra',
+            title: 'Dijkstra 草稿版',
+            categoryPath: '图论/最短路',
+            timeComplexity: 'O(m log n)',
+            spaceComplexity: 'O(n + m)',
+            brief: '改过的简略介绍',
+            detail: '改过的详细介绍',
+            codeLanguage: 'cpp',
+            code: '```cpp\nvoid draft();\n```'
+          }
+        },
+        {
+          templateId: '',
+          savedAt: '2026-06-11T00:00:00.000Z',
+          draft: { title: '' }
+        }
+      ]
+    })
+
+    expect(normalized?.drafts).toHaveLength(1)
+    expect(normalized?.drafts[0]?.templateId).toBe('graph.dijkstra')
+    expect(normalized?.drafts[0]?.draft.title).toBe('Dijkstra 草稿版')
+    expect(normalized?.drafts[0]?.draft.code).toBe('void draft();')
   })
 })

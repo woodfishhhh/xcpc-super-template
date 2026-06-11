@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, reactive, shallowRef, watch, useTemplateRef } from 'vue'
+import { computed, defineAsyncComponent, nextTick, reactive, shallowRef, watch, useTemplateRef } from 'vue'
 import { Copy, FileInput, FileOutput, Plus, RotateCcw, Save, Trash2 } from '@lucide/vue'
 import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
 import TextInput from '@/components/ui/TextInput.vue'
 import { stripCodeFence } from '@/lib/code'
+import {
+  deleteEditorDraft,
+  getEditorDraftKey,
+  loadEditorDraft,
+  saveEditorDraft,
+  type EditorTemplateDraft
+} from '@/lib/editorDraftStore'
 import { normalizeCategoryPath } from '@/lib/templates'
 import type { TemplateEntry } from '@/types/template'
 
@@ -33,6 +40,10 @@ const emit = defineEmits<{
 
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
 const codeWrap = shallowRef(false)
+const isApplyingTemplate = shallowRef(false)
+const restoredDraft = shallowRef(false)
+const currentDraftKey = shallowRef(getEditorDraftKey(''))
+const baselineDraft = shallowRef<EditorTemplateDraft>(createBlankEditorDraft())
 const form = reactive({
   id: '',
   title: '',
@@ -49,6 +60,14 @@ const canDelete = computed(() => Boolean(form.id) && !props.isDefaultTemplate)
 const canRevert = computed(() => Boolean(form.id) && props.isDefaultTemplate && props.isOverride)
 const canCopy = computed(() => Boolean(form.id) && props.isDefaultTemplate)
 const canExportCurrent = computed(() => Boolean(form.id))
+const currentDraft = computed(() => serializeForm())
+const hasUnsavedChanges = computed(() => !areEditorDraftsEqual(currentDraft.value, baselineDraft.value))
+const editorStateLabel = computed(() => {
+  if (restoredDraft.value) return '草稿已恢复'
+  if (hasUnsavedChanges.value) return '未保存，已自动保存草稿'
+  if (!form.id && !form.title.trim()) return '空白草稿'
+  return '已保存'
+})
 const visibleCategorySuggestions = computed(() =>
   props.categorySuggestions.filter((path) => path !== form.categoryPath).slice(0, 8)
 )
@@ -56,37 +75,28 @@ const visibleCategorySuggestions = computed(() =>
 watch(
   () => props.template,
   (template) => {
-    if (!template) {
-      resetForm()
-      return
-    }
-    form.id = template.id
-    form.title = template.title
-    form.categoryPath = template.category.join('/')
-    form.timeComplexity = template.timeComplexity
-    form.spaceComplexity = template.spaceComplexity
-    form.brief = template.brief
-    form.detail = template.detail
-    form.codeLanguage = template.codeLanguage
-    form.code = stripCodeFence(template.code)
+    applyTemplateToForm(template)
   },
   { immediate: true }
 )
 
-function resetForm(): void {
-  form.id = ''
-  form.title = ''
-  form.categoryPath = '个人模板'
-  form.timeComplexity = '未注明'
-  form.spaceComplexity = '未注明'
-  form.brief = ''
-  form.detail = ''
-  form.codeLanguage = 'cpp'
-  form.code = ''
-}
+watch(
+  currentDraft,
+  (draft) => {
+    if (isApplyingTemplate.value) return
+
+    restoredDraft.value = false
+    if (areEditorDraftsEqual(draft, baselineDraft.value)) {
+      deleteEditorDraft(currentDraftKey.value)
+      return
+    }
+
+    saveEditorDraft(currentDraftKey.value, draft)
+  },
+  { deep: true }
+)
 
 function createNew(): void {
-  resetForm()
   emit('new')
 }
 
@@ -113,7 +123,24 @@ function save(): void {
     updatedAt: new Date().toISOString()
   }
 
+  baselineDraft.value = currentDraft.value
+  restoredDraft.value = false
+  deleteEditorDraft(currentDraftKey.value)
   emit('save', draft)
+}
+
+function deleteCurrentTemplate(): void {
+  if (!form.id) return
+  deleteEditorDraft(currentDraftKey.value)
+  restoredDraft.value = false
+  emit('delete', form.id)
+}
+
+function revertCurrentTemplate(): void {
+  if (!form.id) return
+  deleteEditorDraft(currentDraftKey.value)
+  restoredDraft.value = false
+  emit('revert', form.id)
 }
 
 function openImport(): void {
@@ -127,13 +154,91 @@ async function readImportFile(event: Event): Promise<void> {
   emit('importJson', await file.text())
   input.value = ''
 }
+
+function applyTemplateToForm(template: TemplateEntry | null): void {
+  const baseDraft = createEditorDraftFromTemplate(template)
+  const draftKey = getEditorDraftKey(template?.id)
+  const savedDraft = loadEditorDraft(draftKey)
+  const nextDraft = savedDraft?.draft ?? baseDraft
+
+  isApplyingTemplate.value = true
+  currentDraftKey.value = draftKey
+  baselineDraft.value = baseDraft
+  restoredDraft.value = Boolean(savedDraft && !areEditorDraftsEqual(savedDraft.draft, baseDraft))
+  applyDraftToForm(nextDraft)
+  void nextTick(() => {
+    isApplyingTemplate.value = false
+  })
+}
+
+function applyDraftToForm(draft: EditorTemplateDraft): void {
+  form.id = draft.id ?? ''
+  form.title = draft.title
+  form.categoryPath = draft.categoryPath
+  form.timeComplexity = draft.timeComplexity
+  form.spaceComplexity = draft.spaceComplexity
+  form.brief = draft.brief
+  form.detail = draft.detail
+  form.codeLanguage = draft.codeLanguage
+  form.code = stripCodeFence(draft.code)
+}
+
+function createEditorDraftFromTemplate(template: TemplateEntry | null): EditorTemplateDraft {
+  if (!template) return createBlankEditorDraft()
+
+  return {
+    id: template.id,
+    title: template.title,
+    categoryPath: template.category.join('/'),
+    timeComplexity: template.timeComplexity,
+    spaceComplexity: template.spaceComplexity,
+    brief: template.brief,
+    detail: template.detail,
+    codeLanguage: template.codeLanguage,
+    code: stripCodeFence(template.code)
+  }
+}
+
+function createBlankEditorDraft(): EditorTemplateDraft {
+  return {
+    title: '',
+    categoryPath: '个人模板',
+    timeComplexity: '未注明',
+    spaceComplexity: '未注明',
+    brief: '',
+    detail: '',
+    codeLanguage: 'cpp',
+    code: ''
+  }
+}
+
+function serializeForm(): EditorTemplateDraft {
+  return {
+    id: form.id || undefined,
+    title: form.title,
+    categoryPath: form.categoryPath,
+    timeComplexity: form.timeComplexity,
+    spaceComplexity: form.spaceComplexity,
+    brief: form.brief,
+    detail: form.detail,
+    codeLanguage: form.codeLanguage,
+    code: stripCodeFence(form.code)
+  }
+}
+
+function areEditorDraftsEqual(left: EditorTemplateDraft, right: EditorTemplateDraft): boolean {
+  return JSON.stringify(left) === JSON.stringify(right)
+}
 </script>
 
 <template>
   <aside class="template-editor flex min-h-0 flex-col bg-[rgba(255,252,245,0.74)]">
     <div class="panel-head">
       <div class="flex items-start justify-between gap-3">
-        <h2 class="panel-title">编辑</h2>
+        <div class="min-w-0">
+          <h2 class="panel-title">编辑</h2>
+          <p aria-label="编辑状态" class="mt-1 text-xs text-muted-foreground">{{ editorStateLabel }}</p>
+        </div>
         <Button variant="outline" size="sm" @click="createNew">
           <Plus class="h-4 w-4" />
           新建
@@ -215,11 +320,11 @@ async function readImportFile(event: Event): Promise<void> {
         </div>
 
         <div class="grid grid-cols-2 gap-2">
-          <Button variant="outline" :disabled="!canRevert" @click="form.id && emit('revert', form.id)">
+          <Button variant="outline" :disabled="!canRevert" @click="revertCurrentTemplate">
             <RotateCcw class="h-4 w-4" />
             默认
           </Button>
-          <Button variant="destructive" :disabled="!canDelete" @click="form.id && emit('delete', form.id)">
+          <Button variant="destructive" :disabled="!canDelete" @click="deleteCurrentTemplate">
             <Trash2 class="h-4 w-4" />
             删除
           </Button>
