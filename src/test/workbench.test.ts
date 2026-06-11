@@ -79,6 +79,54 @@ describe('workbench document model', () => {
     ])
   })
 
+  it('sorts templates by category path with learning order inside categories', () => {
+    const categoryTemplates: TemplateEntry[] = [
+      {
+        ...templates[0],
+        id: 'string.kmp',
+        title: 'KMP',
+        category: ['字符串', '字符串匹配'],
+        learningOrder: 310
+      },
+      {
+        ...templates[0],
+        id: 'basic.binary-search',
+        title: '二分查找',
+        category: ['基础算法', '二分查找'],
+        learningOrder: 10
+      },
+      {
+        ...templates[0],
+        id: 'graph.group-b',
+        title: 'Graph B',
+        category: ['图论', 'B'],
+        learningOrder: 210
+      },
+      {
+        ...templates[1],
+        id: 'graph.group-a-late',
+        title: 'Graph A Late',
+        category: ['图论', 'A'],
+        learningOrder: 240
+      },
+      {
+        ...templates[1],
+        id: 'graph.group-a-early',
+        title: 'Graph A Early',
+        category: ['图论', 'A'],
+        learningOrder: 230
+      }
+    ]
+
+    expect(sortTemplates(categoryTemplates, 'category').map((item) => item.id)).toEqual([
+      'basic.binary-search',
+      'graph.group-a-early',
+      'graph.group-a-late',
+      'graph.group-b',
+      'string.kmp'
+    ])
+  })
+
   it('moves selected entries with keyboard controls', () => {
     const selections: PrintSelection[] = [
       { templateId: 'a', detailLevel: 'brief' },
@@ -314,6 +362,7 @@ describe('workbench document model', () => {
         config: {
           ...config,
           output: 'pdf',
+          sortMode: 'category',
           tocDepth: 3
         },
         selections: [
@@ -328,6 +377,7 @@ describe('workbench document model', () => {
     expect(saved?.activeTemplateId).toBe('graph.dijkstra')
     expect(saved?.draftDensity).toBe('large')
     expect(saved?.config.output).toBe('pdf')
+    expect(saved?.config.sortMode).toBe('category')
     expect(saved?.config.tocDepth).toBe(2)
     expect(saved?.selections).toEqual([{ templateId: 'graph.dijkstra', detailLevel: 'detail' }])
   })

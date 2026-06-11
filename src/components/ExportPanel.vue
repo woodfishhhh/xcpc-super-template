@@ -105,6 +105,7 @@ const draftCheckStatusLabel = computed(() => {
           >
             <option value="learning">学习顺序</option>
             <option value="alphabetical">字典序</option>
+            <option value="category">分类顺序</option>
             <option value="manual">手动顺序</option>
           </select>
         </FieldControl>

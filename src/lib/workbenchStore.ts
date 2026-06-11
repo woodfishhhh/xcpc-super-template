@@ -14,7 +14,7 @@ export interface WorkbenchState {
 }
 
 const detailLevels = new Set<DetailLevel>(['none', 'brief', 'detail'])
-const sortModes = new Set<SortMode>(['learning', 'alphabetical', 'manual'])
+const sortModes = new Set<SortMode>(['learning', 'alphabetical', 'category', 'manual'])
 const layouts = new Set<PrintLayout>(['compact', 'book'])
 const outputModes = new Set<OutputMode>(['markdown', 'pdf', 'both'])
 const densities = new Set<DraftDensity>(['compact', 'comfortable', 'large'])

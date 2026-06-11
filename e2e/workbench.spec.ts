@@ -99,6 +99,25 @@ test('draft preset packs add common contest templates', async ({ page }) => {
   await expect(page.locator('article.draft-row')).toHaveCount(9)
 })
 
+test('category sort mode groups the current draft by template category', async ({ page }) => {
+  const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
+
+  await templateCard(page, 'Dijkstra').getByTitle('加入打印稿').click()
+  await templateCard(page, 'KMP').getByTitle('加入打印稿').click()
+  await templateCard(page, '二分查找').getByTitle('加入打印稿').click()
+  await nav('生成').click()
+
+  const sortSelect = page.locator('select[aria-label="排序方式"]')
+  await sortSelect.selectOption('alphabetical')
+  await nav('打印稿').click()
+  await expect(page.locator('article.draft-row h3')).toHaveText(['Dijkstra', 'KMP', '二分查找'])
+
+  await nav('生成').click()
+  await sortSelect.selectOption('category')
+  await nav('打印稿').click()
+  await expect(page.locator('article.draft-row h3')).toHaveText(['二分查找', 'Dijkstra', 'KMP'])
+})
+
 test('chapter controls move whole draft sections', async ({ page }) => {
   const nav = (name: string) => page.locator('nav.page-tabs').getByRole('button', { name, exact: true })
 

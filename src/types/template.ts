@@ -2,7 +2,7 @@ export type TemplateSource = 'public' | 'personal'
 
 export type DetailLevel = 'none' | 'brief' | 'detail'
 
-export type SortMode = 'learning' | 'alphabetical' | 'manual'
+export type SortMode = 'learning' | 'alphabetical' | 'category' | 'manual'
 
 export type PrintLayout = 'compact' | 'book'
 

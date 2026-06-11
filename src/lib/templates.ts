@@ -1,6 +1,7 @@
 import type { MoveDirection, SortMode, TemplateEntry } from '@/types/template'
 import type { PrintSelection } from '@/types/template'
 import { stripCodeFence } from '@/lib/code'
+import { templateTopCategories } from '@/lib/templateTaxonomy'
 
 export type TemplateSourceFilter = 'all' | 'public' | 'personal'
 
@@ -30,6 +31,7 @@ const collator = new Intl.Collator('zh-CN', {
   numeric: true,
   sensitivity: 'base'
 })
+const categoryRanks = new Map<string, number>(templateTopCategories.map((category, index) => [category, index]))
 
 export function sortTemplates(templates: TemplateEntry[], sortMode: SortMode): TemplateEntry[] {
   if (sortMode === 'manual') {
@@ -37,6 +39,14 @@ export function sortTemplates(templates: TemplateEntry[], sortMode: SortMode): T
   }
 
   return [...templates].sort((a, b) => {
+    if (sortMode === 'category') {
+      const categoryDiff = compareCategoryPath(a.category, b.category)
+      if (categoryDiff !== 0) return categoryDiff
+
+      const orderDiff = a.learningOrder - b.learningOrder
+      if (orderDiff !== 0) return orderDiff
+    }
+
     if (sortMode === 'learning') {
       const orderDiff = a.learningOrder - b.learningOrder
       if (orderDiff !== 0) return orderDiff
@@ -263,6 +273,30 @@ function compareTitle(a: string, b: string): number {
   }
 
   return collator.compare(a, b)
+}
+
+function compareCategoryPath(aCategory: readonly string[], bCategory: readonly string[]): number {
+  const a = cleanCategory(aCategory)
+  const b = cleanCategory(bCategory)
+  const aRank = getCategoryRank(a[0] ?? '')
+  const bRank = getCategoryRank(b[0] ?? '')
+  const rankDiff = aRank - bRank
+  if (rankDiff !== 0) return rankDiff
+  if (aRank === Number.MAX_SAFE_INTEGER && a[0] !== b[0]) {
+    return collator.compare(a[0] ?? '', b[0] ?? '')
+  }
+
+  const length = Math.min(a.length, b.length)
+  for (let index = 1; index < length; index += 1) {
+    const diff = collator.compare(a[index] ?? '', b[index] ?? '')
+    if (diff !== 0) return diff
+  }
+
+  return a.length - b.length
+}
+
+function getCategoryRank(category: string): number {
+  return categoryRanks.get(category) ?? Number.MAX_SAFE_INTEGER
 }
 
 function matchesSource(template: TemplateEntry, source: TemplateSourceFilter): boolean {
