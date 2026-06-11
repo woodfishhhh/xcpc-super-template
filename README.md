@@ -4,6 +4,8 @@ An offline-first ACM/XCPC template print generator.
 
 超级板子是一个静态 Web 工作台，用来从公共板子库和本地个人板子库中勾选模板，调整顺序，配置目录/版式/介绍详细度，并导出 Markdown 或 PDF。
 
+![XCPC Super Template workbench](docs/assets/workbench.png)
+
 ## Prototype
 
 - Vue 3 + TypeScript + Vite + Tailwind CSS + shadcn-style local components.
@@ -28,6 +30,28 @@ Production preview:
 npm run build
 npm run preview -- --host 127.0.0.1 --port 4173
 ```
+
+## Deployment
+
+The app is a static Vite/PWA build. For most static hosts:
+
+```bash
+npm ci
+npm run build
+```
+
+Publish the generated `dist/` directory.
+
+Recommended settings:
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Node.js: 22
+- Deploy at the domain root when possible.
+
+For Cloudflare Pages, Netlify, Vercel static output, Nginx, or any plain static server, the same `dist/` directory is enough. Because the app registers a service worker, production offline mode requires HTTPS except on `localhost`.
+
+If deploying under a subpath instead of the domain root, set Vite `base` in [`vite.config.ts`](vite.config.ts) before building so asset and service-worker paths match the final URL.
 
 Verification:
 
