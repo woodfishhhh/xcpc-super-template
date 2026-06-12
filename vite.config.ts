@@ -6,6 +6,38 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 const appBase = process.env.GITHUB_PAGES === 'true' ? '/xcpc-super-template/' : '/'
 
+const manualChunks = (id: string) => {
+  const normalizedId = id.replace(/\\/g, '/')
+
+  if (!normalizedId.includes('/node_modules/')) {
+    return undefined
+  }
+
+  if (
+    normalizedId.includes('/node_modules/vue/') ||
+    normalizedId.includes('/node_modules/@vue/')
+  ) {
+    return 'vendor-vue'
+  }
+
+  if (normalizedId.includes('/node_modules/swiper/')) {
+    return 'vendor-swiper'
+  }
+
+  if (normalizedId.includes('/node_modules/@lucide/vue/')) {
+    return 'vendor-icons'
+  }
+
+  if (
+    normalizedId.includes('/node_modules/vue-draggable-plus/') ||
+    normalizedId.includes('/node_modules/sortablejs/')
+  ) {
+    return 'vendor-dnd'
+  }
+
+  return undefined
+}
+
 export default defineConfig({
   base: appBase,
   plugins: [
@@ -40,6 +72,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
+    }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks
+      }
     }
   }
 })
