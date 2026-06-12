@@ -9,7 +9,7 @@ An offline-first ACM/XCPC template print generator.
 ## Prototype
 
 - Vue 3 + TypeScript + Vite + Tailwind CSS + shadcn-style local components.
-- Public templates live in `板子/` as `meta.json + code.md`.
+- Public templates live in 板子/ as meta.json + code.md.
 - Personal templates are stored in browser IndexedDB.
 - Personal library supports JSON import/export.
 - Sorting supports learning order, alphabetical order, manual drag-and-drop, and keyboard move buttons.
@@ -19,67 +19,70 @@ An offline-first ACM/XCPC template print generator.
 
 ## Development
 
-```bash
+`ash
 npm install
 npm run dev
-```
+`
 
 Production preview:
 
-```bash
+`ash
 npm run build
 npm run preview -- --host 127.0.0.1 --port 4173
-```
+`
 
 ## Deployment
 
 The app is a static Vite/PWA build. For most static hosts:
 
-```bash
+`ash
 npm ci
 npm run build
-```
+`
 
-Publish the generated `dist/` directory.
+Publish the generated dist/ directory.
 
 Recommended settings:
 
-- Build command: `npm run build`
-- Output directory: `dist`
+- Build command: 
+pm run build
+- Output directory: dist
 - Node.js: 22
 - Deploy at the domain root when possible.
 
-For Cloudflare Pages, Netlify, Vercel static output, Nginx, or any plain static server, the same `dist/` directory is enough. Because the app registers a service worker, production offline mode requires HTTPS except on `localhost`.
+For Cloudflare Pages, Netlify, Vercel static output, Nginx, or any plain static server, the same dist/ directory is enough. Because the app registers a service worker, production offline mode requires HTTPS except on localhost.
 
-If deploying under a subpath instead of the domain root, set Vite `base` in [`vite.config.ts`](vite.config.ts) before building so asset and service-worker paths match the final URL.
+If deploying under a subpath instead of the domain root, set Vite ase in [ite.config.ts](vite.config.ts) before building so asset and service-worker paths match the final URL.
 
 Verification:
 
-```bash
+`ash
 npm run validate:templates
 npm test
 npm run build
 npm run test:e2e
 npm run qa:pdf
 npm audit --audit-level=high
-```
+`
 
-`npm run qa:pdf` writes paginated visual QA samples to `output/pdf-qa/`, including
-compact/book PNG page screenshots and a `report.json` with TOC page numbers and
+
+pm run qa:pdf writes paginated visual QA samples to output/pdf-qa/, including
+compact/book PNG page screenshots and a eport.json with TOC page numbers and
 layout warnings.
 
 ## Project Docs
 
-- Product requirements: [`docs/PRD.md`](docs/PRD.md)
-- Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
-- Release contracts: [`docs/RELEASE_CONTRACTS.md`](docs/RELEASE_CONTRACTS.md)
-- Release notes draft: [`docs/RELEASE_NOTES_DRAFT.md`](docs/RELEASE_NOTES_DRAFT.md)
-- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
-- User trial plan: [`docs/USER_TRIAL_PLAN.md`](docs/USER_TRIAL_PLAN.md)
-- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- Sample template PR: [`docs/SAMPLE_TEMPLATE_PR.md`](docs/SAMPLE_TEMPLATE_PR.md)
-- Public template schema: [`板子/meta.schema.json`](板子/meta.schema.json)
-- Public template taxonomy: [`板子/TAXONOMY.md`](板子/TAXONOMY.md)
+- Product requirements: [docs/PRD.md](docs/PRD.md)
+- Roadmap: [docs/ROADMAP.md](docs/ROADMAP.md)
+- Release contracts: [docs/RELEASE_CONTRACTS.md](docs/RELEASE_CONTRACTS.md)
+- Release notes draft: [docs/RELEASE_NOTES_DRAFT.md](docs/RELEASE_NOTES_DRAFT.md)
+- Changelog: [CHANGELOG.md](CHANGELOG.md)
+- User trial plan: [docs/USER_TRIAL_PLAN.md](docs/USER_TRIAL_PLAN.md)
+- Beta trial packet: [docs/BETA_TRIAL_PACKET.md](docs/BETA_TRIAL_PACKET.md)
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Sample template PR: [docs/SAMPLE_TEMPLATE_PR.md](docs/SAMPLE_TEMPLATE_PR.md)
+- Public template schema: [板子/meta.schema.json](板子/meta.schema.json)
+- Public template taxonomy: [板子/TAXONOMY.md](板子/TAXONOMY.md)
 
 ## License
 
