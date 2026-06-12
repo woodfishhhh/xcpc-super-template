@@ -11,6 +11,7 @@
     "validate:templates": "tsx scripts/validateTemplates.ts",
     "qa:pdf": "tsx scripts/renderPdfQaSamples.ts",
     "verify:live": "tsx scripts/verifyLivePwa.ts",
+    "beta:status": "tsx scripts/checkBetaFeedback.ts",
     "release:preflight": "tsx scripts/releasePreflight.ts",
     "release:preflight:final": "tsx scripts/releasePreflight.ts --final",
     "test": "vitest run",

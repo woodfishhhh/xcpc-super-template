@@ -48,6 +48,8 @@ Prefer one GitHub issue per distinct problem. Use:
 
 Each beta issue should include browser/OS, the exact workflow tried, exported format, expected behavior, actual behavior, and screenshots or generated files when useful.
 
+Maintainers can run `npm run beta:status` after feedback arrives to count real trial summaries, spot incomplete coverage, and identify beta issues that request bug, feature, template, or docs follow-ups.
+
 ## v0.7 Exit Criteria
 
 v0.7 can close when:

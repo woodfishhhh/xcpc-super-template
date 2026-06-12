@@ -65,12 +65,13 @@ A `Yes, release blocker` answer routes the issue to the v0.7 / v1.0 release tria
 
 Maintainers reviewing a beta issue should follow this order:
 
-1. Read the `Trial coverage` and `Export quality` fields first to know which flows were tested.
-2. If the issue mixes multiple findings, split them into separate `Bug report` / `Feature request` / `Template contribution` issues, and link them back to the original beta issue.
-3. For any finding marked `Yes, release blocker`, label it `v1-blocker` and assign it to the v0.7 milestone so it lands in [`docs/RELEASE_NOTES_DRAFT.md`](RELEASE_NOTES_DRAFT.md) triage.
-4. For a `Bug report` that needs reproduction, capture the browser/OS, the exact exported file (Markdown or PDF), and the smallest set of clicks that triggers it.
-5. For a `Feature request`, confirm it cannot already be done via the existing print config, draft composition, or sort controls before opening a follow-up.
-6. For a `Template contribution`, link the beta issue to the follow-up PR so the triager can credit the original tester.
+1. Run `npm run beta:status` to see how many real trial summaries exist, which summaries are incomplete, and which issues need follow-up triage.
+2. Read the `Trial coverage` and `Export quality` fields first to know which flows were tested.
+3. If the issue mixes multiple findings, split them into separate `Bug report` / `Feature request` / `Template contribution` issues, and link them back to the original beta issue.
+4. For any finding marked `Yes, release blocker`, label it `v1-blocker` and assign it to the v0.7 milestone so it lands in [`docs/RELEASE_NOTES_DRAFT.md`](RELEASE_NOTES_DRAFT.md) triage.
+5. For a `Bug report` that needs reproduction, capture the browser/OS, the exact exported file (Markdown or PDF), and the smallest set of clicks that triggers it.
+6. For a `Feature request`, confirm it cannot already be done via the existing print config, draft composition, or sort controls before opening a follow-up.
+7. For a `Template contribution`, link the beta issue to the follow-up PR so the triager can credit the original tester.
 
 ## Related Links
 

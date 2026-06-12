@@ -52,6 +52,7 @@ const requiredPackageScripts = [
   'test:e2e',
   'qa:pdf',
   'verify:live',
+  'beta:status',
   'release:preflight',
   'release:preflight:final'
 ]

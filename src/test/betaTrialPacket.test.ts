@@ -34,6 +34,7 @@ describe('Beta trial packet', () => {
     expect(packet).toContain('Beta feedback')
     expect(packet).toContain('Yes, release blocker')
     expect(packet).toContain('Maintainer Triage Steps')
+    expect(packet).toContain('npm run beta:status')
     expect(packet).toContain('issues/9')
   })
 
