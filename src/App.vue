@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight, MessageSquare } from '@lucide/vue'
 import type { Swiper as SwiperInstance } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import type { DraftItem } from '@/components/DraftOutline.vue'
-import ExportPanel from '@/components/ExportPanel.vue'
 import TemplateEditorPanel, { type TemplateDraft } from '@/components/TemplateEditorPanel.vue'
 import TemplateLibraryPanel from '@/components/TemplateLibraryPanel.vue'
 import Button from '@/components/ui/Button.vue'
@@ -40,6 +39,7 @@ import type { DetailLevel, MoveDirection, PrintConfig, PrintSelection, SortMode,
 import 'swiper/css'
 
 const DraftOutline = defineAsyncComponent(() => import('@/components/DraftOutline.vue'))
+const ExportPanel = defineAsyncComponent(() => import('@/components/ExportPanel.vue'))
 const publicTemplates = loadPublicTemplates()
 const personalLibrary = usePersonalTemplates(publicTemplates)
 
@@ -524,6 +524,7 @@ watch(
         <SplitPane class="h-full" :default-size="34" :min-size="28" :max-size="62" label="调整生成设置和预览尺寸">
           <template #first>
             <ExportPanel
+              v-if="activeSlide === 2"
               class="studio-panel h-full"
               :config="config"
               :markdown="markdown"

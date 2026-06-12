@@ -73,6 +73,7 @@ test('draft batch move controls move checked rows as a group', async ({ page }) 
   await selectFirstTemplates(page, 3)
   await nav('打印稿').click()
 
+  await expect(page.locator('article.draft-row')).toHaveCount(3)
   const headingLocator = page.locator('article.draft-row h3')
   const initialTitles = await headingLocator.allInnerTexts()
   expect(initialTitles).toHaveLength(3)
@@ -82,7 +83,9 @@ test('draft batch move controls move checked rows as a group', async ({ page }) 
 
   await page.getByRole('button', { name: '置底', exact: true }).click()
   await expect(headingLocator).toHaveText([initialTitles[1] ?? '', initialTitles[0] ?? '', initialTitles[2] ?? ''])
+  await nav('生成').click()
   await expect(page.locator('select[aria-label="排序方式"]')).toHaveValue('manual')
+  await nav('打印稿').click()
 
   await page.getByRole('button', { name: '置顶', exact: true }).click()
   await expect(headingLocator).toHaveText([initialTitles[0] ?? '', initialTitles[2] ?? '', initialTitles[1] ?? ''])
@@ -142,6 +145,7 @@ test('chapter controls move whole draft sections', async ({ page }) => {
   await expect(page.locator('article.draft-row h3')).toHaveText(['Dijkstra', 'KMP'])
   await page.getByTitle('图论 下移').click()
   await expect(page.locator('article.draft-row h3')).toHaveText(['KMP', 'Dijkstra'])
+  await nav('生成').click()
   await expect(page.locator('select[aria-label="排序方式"]')).toHaveValue('manual')
 })
 
