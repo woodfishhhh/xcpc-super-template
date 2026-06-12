@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, nextTick, reactive, shallowRef, watch, useTemplateRef } from 'vue'
+import { computed, nextTick, reactive, shallowRef, watch, useTemplateRef } from 'vue'
 import { Copy, FileInput, FileOutput, Plus, RotateCcw, Save, Trash2 } from '@lucide/vue'
+import LazyCppCodeEditor from '@/components/LazyCppCodeEditor.vue'
 import Button from '@/components/ui/Button.vue'
 import FieldControl from '@/components/ui/FieldControl.vue'
 import TextInput from '@/components/ui/TextInput.vue'
@@ -16,8 +17,6 @@ import { normalizeCategoryPath } from '@/lib/templates'
 import type { TemplateEntry } from '@/types/template'
 
 export type TemplateDraft = Omit<TemplateEntry, 'id' | 'source'> & { id?: string }
-
-const CppCodeEditor = defineAsyncComponent(() => import('@/components/CppCodeEditor.vue'))
 
 const props = defineProps<{
   template: TemplateEntry | null
@@ -305,7 +304,7 @@ function areEditorDraftsEqual(left: EditorTemplateDraft, right: EditorTemplateDr
               </button>
             </div>
           </div>
-          <CppCodeEditor v-model="form.code" language="cpp" :wrap="codeWrap" />
+          <LazyCppCodeEditor v-model="form.code" language="cpp" :wrap="codeWrap" />
         </FieldControl>
 
         <div class="grid grid-cols-2 gap-2">

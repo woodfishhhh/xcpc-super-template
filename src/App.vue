@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, shallowRef, watch } from 'vue'
+import { computed, defineAsyncComponent, onMounted, reactive, shallowRef, watch } from 'vue'
 import { ChevronLeft, ChevronRight, MessageSquare } from '@lucide/vue'
 import type { Swiper as SwiperInstance } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import DraftOutline, { type DraftItem } from '@/components/DraftOutline.vue'
+import type { DraftItem } from '@/components/DraftOutline.vue'
 import ExportPanel from '@/components/ExportPanel.vue'
 import TemplateEditorPanel, { type TemplateDraft } from '@/components/TemplateEditorPanel.vue'
 import TemplateLibraryPanel from '@/components/TemplateLibraryPanel.vue'
@@ -39,6 +39,7 @@ import type { PdfLayoutReport } from '@/lib/pdfReport'
 import type { DetailLevel, MoveDirection, PrintConfig, PrintSelection, SortMode, TemplateEntry } from '@/types/template'
 import 'swiper/css'
 
+const DraftOutline = defineAsyncComponent(() => import('@/components/DraftOutline.vue'))
 const publicTemplates = loadPublicTemplates()
 const personalLibrary = usePersonalTemplates(publicTemplates)
 
@@ -348,6 +349,7 @@ function setSwiper(swiper: SwiperInstance): void {
 }
 
 function goToSlide(index: number): void {
+  activeSlide.value = index
   swiperInstance.value?.slideTo(index)
 }
 
@@ -497,6 +499,7 @@ watch(
 
       <SwiperSlide>
         <DraftOutline
+          v-if="activeSlide === 1"
           class="studio-panel h-full min-h-[720px]"
           :items="draftItems"
           :checked-ids="checkedDraftIds"
